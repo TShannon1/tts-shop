@@ -1,0 +1,144 @@
+{
+  "_comment": "Tony's Tech Support shop settings. Prices are AUD. Edit this file to change markup, services and payment details, then the next nightly build picks it up.",
+  "site": {
+    "title": "Tony's Tech Support Shop",
+    "url": "https://shop.tonystechsupport.com.au",
+    "mainSite": "https://www.tonystechsupport.com.au",
+    "logo": "https://images.squarespace-cdn.com/content/v1/678504f3a7c02036ab1e0f82/464a61ed-930e-4de3-a253-02c0bae1f111/Tonys+Tech+Support+logo+Background+Removed+Small.png?format=300w",
+    "favicon": "https://images.squarespace-cdn.com/content/v1/678504f3a7c02036ab1e0f82/562c9000-0521-4b32-8870-198f9255f484/favicon.ico?format=100w",
+    "phone": "+61 480 079 649",
+    "phoneHref": "tel:+61480079649",
+    "smsHref": "sms:+61480079649",
+    "email": "tony@tonystechsupport.com.au",
+    "abn": "89 792 481 545",
+    "address": "10 McMullan View, Hazelmere WA 6055",
+    "hours": "Monday to Friday, 9am to 5pm"
+  },
+  "pricing": {
+    "markup": 1.25,
+    "gst": 0.1,
+    "capAtRRP": false,
+    "_capAtRRP": "If true, a product is never priced above the supplier's recommended retail price (RRP).",
+    "maxPriceIncGst": 6000,
+    "freightExGst": {
+      "laptops": 15,
+      "desktops": 20,
+      "tablets": 12,
+      "monitors": 20,
+      "backup": 8,
+      "printers": 20,
+      "networking": 10,
+      "accessories": 8
+    },
+    "_freightExGst": "Estimated freight from the distributor to you, per item, before GST. It is added to cost before the markup. Adjust to match your real freight charges.",
+    "perthPreferencePct": 2,
+    "_perthPreferencePct": "When both distributors stock an item, stock held in Perth wins unless the other is more than this % cheaper.",
+    "roundTo": 5,
+    "_roundTo": "All product prices and calculated charges are rounded up to the nearest $5."
+  },
+  "leadTimes": {
+    "_comment": "Supplier days to reach Tony, before the extra handling days are added. Shown to clients as a range in calendar days.",
+    "perth": [
+      2,
+      3
+    ],
+    "interstate": [
+      5,
+      9
+    ],
+    "extraDays": 7
+  },
+  "services": {
+    "ratePerHour": 99,
+    "setupBase": 50,
+    "_setupBase": "Hand delivery and setup = setupBase + callout fee, includes 1 hour of setup and walkthrough.",
+    "courierFactor": 0.5,
+    "_courierFactor": "Standard Uber Courier delivery = callout fee x this factor.",
+    "migration": {
+      "sendIn": 50,
+      "remote": 100,
+      "onsiteBase": 200
+    },
+    "addons": [
+      {
+        "id": "emsisoft",
+        "name": "Emsisoft Anti-Malware, 1-year licence, installed and set up",
+        "price": 55,
+        "note": "per year",
+        "windowsOnly": true
+      },
+      {
+        "id": "office2024",
+        "name": "Microsoft Office Home 2024, installed (one-off purchase, no subscription)",
+        "price": 200,
+        "note": "for personal/home use",
+        "windowsOnly": true
+      },
+      {
+        "id": "localai",
+        "name": "Private local AI assistant, installed and tuned for this device (no subscription)",
+        "price": 50,
+        "note": "",
+        "windowsOnly": false
+      }
+    ],
+    "freeApps": [
+      {
+        "id": "adblock",
+        "name": "Ad blocker for your web browser"
+      },
+      {
+        "id": "rustdesk",
+        "name": "RustDesk remote support (so Tony can help you remotely)"
+      },
+      {
+        "id": "seraph",
+        "name": "Seraph Secure (blocks unwanted remote logins)",
+        "windowsOnly": true
+      },
+      {
+        "id": "win10look",
+        "name": "Make Windows 11 look and feel like Windows 10",
+        "windowsOnly": true
+      },
+      {
+        "id": "nocopilot",
+        "name": "Remove Microsoft Copilot",
+        "windowsOnly": true
+      }
+    ],
+    "browsers": [
+      "Google Chrome",
+      "Mozilla Firefox",
+      "Microsoft Edge",
+      "Brave"
+    ],
+    "emailApps": [
+      "Microsoft Outlook (free version)",
+      "Mozilla Thunderbird"
+    ]
+  },
+  "callout": {
+    "origin": "Hazelmere WA 6055",
+    "freeDistanceKm": 2,
+    "ratePerKm": 1.45,
+    "minFee": 10,
+    "roundTo": 5,
+    "googleMapsKey": "AIzaSyB9gyrNFkS-61b8XRBITX3olu2Oo4SvsM4"
+  },
+  "payments": {
+    "paypalMe": "",
+    "_paypalMe": "Your PayPal.me name, e.g. TonysTechSupport (from paypal.me/TonysTechSupport). Leave blank to hide PayPal.",
+    "payId": "",
+    "accountName": "Tony's Tech Support",
+    "bsb": "",
+    "accountNumber": "",
+    "_bank": "Fill in PayID and/or BSB + account number. Leave blank to hide.",
+    "stripeWorker": "",
+    "_stripeWorker": "URL of your Cloudflare Worker for card payments (see stripe-worker/README.md). Leave blank to hide card payments."
+  },
+  "orders": {
+    "webhookUrl": "",
+    "_webhookUrl": "Paste your Tech Automation (GoHighLevel) Inbound Webhook URL here. Each order is sent there so the workflow can text you."
+  }
+}
