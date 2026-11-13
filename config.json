@@ -34,7 +34,9 @@
     "perthPreferencePct": 2,
     "_perthPreferencePct": "When both distributors stock an item, stock held in Perth wins unless the other is more than this % cheaper.",
     "roundTo": 5,
-    "_roundTo": "All product prices and calculated charges are rounded up to the nearest $5."
+    "_roundTo": "All product prices and calculated charges are rounded up to the nearest $5.",
+    "hideWithoutPhoto": false,
+    "_hideWithoutPhoto": "true hides products that have no photo yet. Add your own photos to the photos/ folder named after the part number, e.g. photos/B9GD4PT.jpg."
   },
   "leadTimes": {
     "_comment": "Supplier days to reach Tony, before the extra handling days are added. Shown to clients as a range in calendar days.",
@@ -119,23 +121,31 @@
     ]
   },
   "callout": {
+    "_comment": "Callout fee = straight-line distance from Hazelmere x roadFactor x 2 (round trip) x ratePerKm, rounded up to roundTo, minimum minFee, free within freeDistanceKm round trip. Distances come from site_src/suburbs.json (WA suburbs).",
     "origin": "Hazelmere WA 6055",
     "freeDistanceKm": 2,
     "ratePerKm": 1.45,
     "minFee": 10,
     "roundTo": 5,
-    "googleMapsKey": "AIzaSyB9gyrNFkS-61b8XRBITX3olu2Oo4SvsM4"
+    "roadFactor": 1.3,
+    "maxOneWayKm": 120,
+    "_maxOneWayKm": "Suburbs further than this (straight line) show 'Tony will confirm the cost'."
   },
   "payments": {
-    "paypalMe": "",
-    "_paypalMe": "Your PayPal.me name, e.g. TonysTechSupport (from paypal.me/TonysTechSupport). Leave blank to hide PayPal.",
-    "payId": "",
-    "accountName": "Tony's Tech Support",
-    "bsb": "",
-    "accountNumber": "",
-    "_bank": "Fill in PayID and/or BSB + account number. Leave blank to hide.",
+    "_comment": "Shown at checkout and on the order confirmation page. Bank details only appear after an order is placed. Leave a value blank to hide that option.",
+    "payId": "tony@tonystechsupport.com.au",
+    "bankName": "UBank",
+    "bsb": "670864",
+    "accountNumber": "26645107",
+    "accountName": "Anthony Gerald Shannon",
+    "nameNote": "Your bank may display my name as Anthony Gerald Shannon or A.G.S.",
+    "zeller": true,
+    "paypalMe": "TonysTS",
+    "cash": true,
+    "screenshotSms": "sms:+61483937558",
+    "screenshotNumber": "0483 937 558",
     "stripeWorker": "",
-    "_stripeWorker": "URL of your Cloudflare Worker for card payments (see stripe-worker/README.md). Leave blank to hide card payments."
+    "_stripeWorker": "Optional: URL of your Cloudflare Worker for instant card payments (see stripe-worker/README.md)."
   },
   "orders": {
     "webhookUrl": "",

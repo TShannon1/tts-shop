@@ -321,7 +321,7 @@ def lead_time(item):
 # ---------------------------------------------------------------- product photos and names (Open Icecat)
 ICECAT_USER = os.environ.get("ICECAT_USER", "openIcecat-live")  # public Open Icecat login, no account needed
 ICECAT_CACHE = os.environ.get("ICECAT_CACHE", os.path.join(ROOT, ".cache", "icecat.json"))
-ICECAT_MAX = int(os.environ.get("ICECAT_MAX", "1500"))  # new lookups per nightly run
+ICECAT_MAX = int(os.environ.get("ICECAT_MAX", "5000"))  # new lookups per nightly run
 BRAND_ALIASES = {"DLINK": "D-Link", "WD": "Western Digital", "STARTECH": "StarTech.com", "TPLINK": "TP-Link"}
 
 
@@ -349,44 +349,78 @@ def icecat_lookup(brand, mpn):
             "sum": summ.get("LongSummaryDescription") or summ.get("ShortSummaryDescription") or ""}
 
 
+def icecat_variants(brand, mpn):
+    """Other part-number spellings worth trying when the exact code isn't in Icecat."""
+    m = re.sub(r"^\d*(PROMO|BONUS)-", "", mpn or "", flags=re.I)
+    out = []  # (code, name_is_reliable)
+    base = m.split("-")[0]
+    if "-" in m and len(base) >= 6:
+        out.append((base, False))             # bundle codes like ABC123-HEADSET
+    b = norm_mpn(brand)
+    if b == "HP" and "#" not in m:
+        out.append((base + "#ABG", True))     # HP's Australian locale suffix
+    if b == "LENOVO" and re.fullmatch(r"[0-9A-Z]{8}AU", base):
+        out += [(base[:-2] + "US", False), (base[:-2] + "UK", False)]  # same model, other region (photo only)
+    return out
+
+
+def lookup_with_variants(brand, mpn):
+    c = icecat_lookup(brand, mpn)
+    if c.get("ok"):
+        return c
+    for code, reliable in icecat_variants(brand, mpn):
+        v = icecat_lookup(brand, code)
+        if v.get("ok"):
+            if not reliable:
+                v["base"] = 1  # photo is right, but keep the distributor's own name
+            return v
+    return c
+
+
 def enrich_from_icecat(products):
     """Add photos, clearer names and descriptions from Open Icecat. Results are cached between runs."""
     if os.environ.get("ICECAT_OFF"):
         return
+    from concurrent.futures import ThreadPoolExecutor
     try:
         cache = json.load(open(ICECAT_CACHE))
     except Exception:
         cache = {}
     today = datetime.date.today().toordinal()
-    done = hits = 0
+    todo = []
     for pr in products:
-        key = pr["id"]
-        c = cache.get(key)
-        fresh = c and today - c.get("d", 0) < (60 if c.get("ok") else 21)
-        if not fresh and done < ICECAT_MAX and "urllib" in globals():
-            brand = BRAND_ALIASES.get(norm_mpn(pr["_brand"]), pr["_brand"] or pr["b"])
-            try:
-                c = icecat_lookup(brand, pr["_mpn"])
-                base = re.sub(r"^\d*(PROMO|BONUS)-", "", pr["_mpn"] or "", flags=re.I).split("-")[0]
-                if not c.get("ok") and "-" in (pr["_mpn"] or "") and len(base) >= 6:
-                    c = icecat_lookup(brand, base)  # bundle codes like ABC123-HEADSET
-                    c["base"] = 1  # photo is right, but keep the distributor name so the bundle extras stay visible
-            except Exception as e:  # network trouble: keep going without photos
-                print(f"Icecat lookup stopped: {e}", file=sys.stderr)
-                done = ICECAT_MAX
-                c = cache.get(key)
-            else:
-                c["d"] = today
-                cache[key] = c
-                done += 1
-                time.sleep(0.15)
+        c = cache.get(pr["id"])
+        fresh = c and (c.get("ok") or c.get("v") == 2) and today - c.get("d", 0) < (60 if c.get("ok") else 21)
+        if not fresh and not pr["img"]:
+            todo.append(pr)
+    todo = todo[:ICECAT_MAX]
+
+    def work(pr):
+        brand = BRAND_ALIASES.get(norm_mpn(pr["_brand"]), pr["_brand"] or pr["b"])
+        try:
+            return pr["id"], lookup_with_variants(brand, pr["_mpn"])
+        except Exception as e:
+            return pr["id"], {"ok": 0, "err": str(e)[:80]}
+
+    errors = 0
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        for key, c in ex.map(work, todo):
+            if c.get("err"):
+                errors += 1
+                continue  # network trouble: try again next run
+            c["d"] = today
+            c["v"] = 2
+            cache[key] = c
+    hits = 0
+    for pr in products:
+        c = cache.get(pr["id"])
         if c and c.get("ok"):
             pr["_ice"] = c
             hits += 1
     os.makedirs(os.path.dirname(ICECAT_CACHE), exist_ok=True)
     with open(ICECAT_CACHE, "w") as f:
         json.dump(cache, f, separators=(",", ":"))
-    print(f"Icecat: {done} new lookups, {hits}/{len(products)} products matched", file=sys.stderr)
+    print(f"Icecat: {len(todo)} new lookups ({errors} failed), {hits}/{len(products)} products matched", file=sys.stderr)
 
 
 # ---------------------------------------------------------------- pages for Google
@@ -524,6 +558,13 @@ def build(leader_text, dicker_text, out_dir):
         })
 
     enrich_from_icecat(products)
+    overrides = {}
+    pdir = os.path.join(ROOT, "photos")
+    if os.path.isdir(pdir):
+        for fn in os.listdir(pdir):
+            stem, ext = os.path.splitext(fn)
+            if ext.lower() in (".jpg", ".jpeg", ".png", ".webp"):
+                overrides[norm_mpn(stem)] = fn
 
     for pr in products:
         raw, ice = pr.pop("_raw"), pr.pop("_ice", None)
@@ -547,8 +588,14 @@ def build(leader_text, dicker_text, out_dir):
                 pr["img"] = ice["img"]
             if not pr["d"] and ice.get("sum"):
                 pr["d"] = ice["sum"][:1500]
+        if pr["id"] in overrides:
+            pr["img"] = "/photos/" + overrides[pr["id"]]
         pr["os"] = pr["os"] or os_for(brand_raw, name, pr["c"])
         pr["s"] = slug(pr["id"])
+    if CFG["pricing"].get("hideWithoutPhoto"):
+        before = len(products)
+        products = [p for p in products if p["img"]]
+        print(f"Hid {before - len(products)} products without a photo", file=sys.stderr)
     products.sort(key=lambda x: (x["c"], x["p"]))
     stats["kept"] = len(products)
 
@@ -556,6 +603,8 @@ def build(leader_text, dicker_text, out_dir):
     if os.path.exists(out_dir):
         shutil.rmtree(out_dir)
     shutil.copytree(os.path.join(ROOT, "site_src"), out_dir)
+    if os.path.isdir(os.path.join(ROOT, "photos")):
+        shutil.copytree(os.path.join(ROOT, "photos"), os.path.join(out_dir, "photos"))
     os.makedirs(os.path.join(out_dir, "data"), exist_ok=True)
     now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8)))
     public_cfg = {

@@ -47,8 +47,8 @@ Then go to the **Actions** tab, click **Update shop → Run workflow** to build 
 3. Wait up to an hour, then back in GitHub Pages tick **Enforce HTTPS**.
 4. Add a **Shop** link to your Squarespace navigation pointing to https://shop.tonystechsupport.com.au.
 
-### 5. Delivery cost calculator (Google Maps)
-The shop uses the same Google Maps key and rules as your callout fee calculator ($1.45/km round trip from Hazelmere, rounded up to $5, $10 minimum, free within 2 km). If your key is restricted to certain websites in Google Cloud Console (**APIs & Services → Credentials**), add `https://shop.tonystechsupport.com.au/*` to its allowed websites. If the calculator ever fails, clients can still order and you text them the delivery cost.
+### 5. Delivery cost calculator
+Built in, so there's nothing to set up. It uses a table of every WA suburb (`site_src/suburbs.json`) with its distance from Hazelmere, and your callout rules: round trip × $1.45/km, rounded up to $5, $10 minimum, free within 2 km. Straight-line distance is multiplied by `callout.roadFactor` (1.3) to allow for real roads. That matches your calculator for Huntingdale ($80). Suburbs more than 120 km away show "I'll confirm the cost". Adjust these in `config.json` → `callout`.
 
 ### 6. Get a text for every order (Tech Automation)
 1. In Tech Automation, go to **Automation → Workflows → Create workflow → Start from scratch**.
@@ -61,10 +61,7 @@ The shop uses the same Google Maps key and rules as your callout fee calculator 
 If no webhook is set, or the browser can't send it, the confirmation page asks the client to email or text the order to you instead.
 
 ### 7. Payment details
-Edit `config.json` → `"payments"`:
-- `paypalMe`: your PayPal.me name (shows a "Pay with PayPal" button for the exact amount).
-- `payId`, `bsb`, `accountNumber`: shown for PayID or bank transfer.
-Anything left blank is hidden. A "text me the payment details" option is always available.
+Already filled in from your payment options (PayID, UBank transfer, card via a Zeller link, PayPal, cash by arrangement). Bank details only appear on the order confirmation page, never in Google. Edit `config.json` → `payments` to change them.
 
 ### 8. Get the shop on Google (10 minutes)
 1. Go to **search.google.com/search-console** and sign in with your business Google account.
@@ -77,7 +74,12 @@ Google usually starts showing new pages within a few days to a few weeks.
 ### 9. Card payments (optional)
 See `stripe-worker/README.md`. You'll need free Stripe and Cloudflare accounts (I can't create accounts for you). Once set up, a "Credit or debit card" option appears at checkout.
 
-### Product photos (automatic)
+### Product photos
+- **Automatic:** photos come from Open Icecat. Each night the shop looks up every product that doesn't have a photo yet, including other spellings of the part number (HP's Australian codes and Lenovo's other-region codes), six at a time. After the first couple of runs, every product will have been checked.
+- **Add your own:** put a photo in the `photos` folder named after the part number shown on the product page, e.g. `photos/B9GD4PT.jpg` (on GitHub: open the folder → **Add file → Upload files**). It's used from the next update.
+- **Hide products without photos:** set `pricing.hideWithoutPhoto` to `true` in `config.json`.
+
+### Product photos (more detail)
 Photos and clearer product names come from Open Icecat using its public login, so you don't need to do anything. In a test with your Dicker Data stock, about half the products got a photo and a proper name. Leader's feed adds its own photos once it's active. Results are saved between nightly runs, so each product is only looked up once (unmatched items are retried every 3 weeks). If you ever want more photos, you can register a free Icecat account and add `ICECAT_USER` to the workflow.
 
 ---

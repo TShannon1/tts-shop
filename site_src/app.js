@@ -130,7 +130,7 @@
     h += '<div class="toolbar"><span>' + list.length + ' products</span><label class="sr" for="use">Use</label><select id="use"><option value="">Any use</option>' + USES.map(function (u) { return '<option value="' + u[0] + '"' + (useF === u[0] ? " selected" : "") + ">" + esc(u[1]) + "</option>"; }).join("") + '</select><label class="sr" for="sort">Sort</label><select id="sort"><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="name">Name</option></select><label class="opt" style="border:0;padding:0"><input type="checkbox" id="perthOnly"' + (perthF ? " checked" : "") + '><span class="t">In stock in Perth only</span></label></div>';
     if (useF) h += '<p class="hint">Showing laptops and desktops suited to: ' + esc(useName(useF)) + '. Other products are hidden while this filter is on.</p>';
     if (!list.length) h += '<div class="empty">Nothing matches that right now. Try another search, or <a href="' + esc(CFG.site.smsHref) + '">text Tony</a> and I\'ll find it for you.</div>';
-    h += '<div class="grid" id="grid"></div><p style="text-align:center;margin:18px 0"><button class="btn ghost" id="more" hidden>Show more</button></p>';
+    h += '<div class="grid" id="grid"></div><div class="sentinel" id="sentinel"></div><p class="loadingmore" id="more" hidden>Loading more…</p>';
     app.innerHTML = h;
     var s = document.getElementById("sort"); s.value = sort;
     s.onchange = function () { save("tts-sort", s.value); render(); };
@@ -142,7 +142,16 @@
       grid.insertAdjacentHTML("beforeend", list.slice(shown, shown + PAGE).map(card).join(""));
       shown += PAGE; more.hidden = shown >= list.length;
     }
-    more.onclick = page; page();
+    page();
+    // Infinite scroll: load the next batch as the bottom of the list comes into view.
+    if (window.__io) window.__io.disconnect();
+    if ("IntersectionObserver" in window) {
+      window.__io = new IntersectionObserver(function (es) { if (es[0].isIntersecting && shown < list.length) page(); }, { rootMargin: "800px 0px" });
+      window.__io.observe(document.getElementById("sentinel"));
+    } else {
+      more.outerHTML = '<p style="text-align:center"><button class="btn ghost" id="moreBtn">Show more</button></p>';
+      document.getElementById("moreBtn").onclick = page;
+    }
   }
   function pickPopular() {
     var out = [];
@@ -336,7 +345,8 @@
 
     // delivery
     h += "<fieldset><legend>Delivery or setup</legend>";
-    h += '<div class="field"><label for="sub">Your suburb or postcode</label><div class="calc"><input id="sub" autocomplete="address-level2" placeholder="e.g. Midland, 6056" value="' + esc(opts.suburb) + '"><button class="btn small" id="calcBtn" type="button">Work out cost</button></div><div class="status" id="calcStatus" role="status">' + (opts.callout != null ? "Based on " + esc(opts.suburb) + "." : "") + "</div></div>";
+    h += '<div class="calcbox"><div class="field" style="margin:0"><label for="sub">Your suburb or postcode</label><div class="calc"><input id="sub" list="suburbList" autocomplete="off" placeholder="Start typing, e.g. Midland" value="' + esc(opts.suburb) + '"><button class="btn small" id="calcBtn" type="button">Work out cost</button></div><datalist id="suburbList"></datalist>' +
+      '<div class="status' + (opts.callout != null ? " ok" : "") + '" id="calcStatus" role="status">' + calcMsg() + '</div><div class="hint">Estimated from the distance between Hazelmere and your suburb (round trip at $' + CFG.callout.ratePerKm.toFixed(2) + '/km, rounded up to the nearest $' + CFG.callout.roundTo + ').</div></div></div>';
     h += optRadio("delivery", "courier", "<b>Standard delivery by Uber Courier</b><br><span class=\"hint\">Once your order is ready, I'll text you to choose the best place and time, at home or at your workplace during opening hours on a day you're there. No expensive devices left on a porch or next to a mailbox.</span>", opts.callout != null ? money(r5(opts.callout * s.courierFactor)) : "");
     h += optRadio("delivery", "setup", "<b>Hand delivery and setup by Tony</b><br><span class=\"hint\">I'll bring it to you, set it up and give you a 1-hour walkthrough. Extra time is about " + money(r5(s.ratePerHour)) + " an hour.</span>", opts.callout != null ? money(r5(s.setupBase + opts.callout)) : money(r5(s.setupBase)) + " + callout");
     if (opts.delivery === "setup" || opts.migration === "onsite") {
@@ -367,6 +377,11 @@
     app.innerHTML = h;
     bindCart();
   }
+  function calcMsg() {
+    if (opts.callout != null) return "Callout fee for " + esc(opts.suburb) + ": " + money(opts.callout) + (opts.callout === 0 ? " (you're in my free area)" : "") + ". Added to your order below.";
+    if (opts.suburb) return "I'll confirm the delivery cost for " + esc(opts.suburb) + " by text.";
+    return "";
+  }
   function optRadio(name, val, label, amt) {
     var on = opts[name] === val;
     return '<label class="opt"><input type="radio" name="' + name + '" value="' + val + '"' + (on ? " checked" : "") + '><span class="t">' + label + '</span><span class="amt">' + amt + "</span></label>";
@@ -391,53 +406,65 @@
     var br = document.getElementById("br"); if (br) br.onchange = function () { opts.browser = br.value; persist(); render(); };
     var em = document.getElementById("em"); if (em) em.onchange = function () { opts.emailApp = em.value; persist(); render(); };
     var sub = document.getElementById("sub");
+    loadSuburbs().then(function (d) {
+      var dl = document.getElementById("suburbList");
+      if (dl && !dl.childNodes.length) dl.innerHTML = d.filter(function (x) { return x[2] <= CFG.callout.maxOneWayKm; }).map(function (x) { return '<option value="' + esc(x[0] + " " + x[1]) + '">'; }).join("");
+    }).catch(function () {});
+    sub.onchange = function () { if (sub.value.trim()) calcCallout(sub.value.trim()); };
     document.getElementById("calcBtn").onclick = function () { calcCallout(sub.value.trim()); };
     sub.onkeydown = function (e) { if (e.key === "Enter") { e.preventDefault(); calcCallout(sub.value.trim()); } };
     bindDriveButtons();
   }
 
-  // ---------------------------------------------------------------- callout fee (same rules as Tony's calculator)
-  var mapsLoading = null;
-  function loadMaps() {
-    if (window.google && google.maps && google.maps.DistanceMatrixService) return Promise.resolve();
-    if (mapsLoading) return mapsLoading;
-    mapsLoading = new Promise(function (res, rej) {
-      if (!CFG.callout.googleMapsKey) return rej(new Error("no key"));
-      window.__mapsReady = res;
-      var s = document.createElement("script");
-      s.src = "https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(CFG.callout.googleMapsKey) + "&callback=__mapsReady";
-      s.async = true; s.onerror = function () { rej(new Error("maps failed")); };
-      document.head.appendChild(s);
-      setTimeout(function () { rej(new Error("timeout")); }, 12000);
-    });
-    return mapsLoading;
+  // ---------------------------------------------------------------- callout fee (built in: no Google, works offline)
+  // Distances come from suburbs.json: [suburb, postcode, straight-line km from Hazelmere].
+  var SUBURBS = null;
+  function loadSuburbs() {
+    if (SUBURBS) return Promise.resolve(SUBURBS);
+    return fetch("/suburbs.json").then(function (r) { return r.json(); }).then(function (d) { SUBURBS = d; return d; });
   }
   function calloutFee(roundTripKm) {
     var c = CFG.callout;
     if (roundTripKm <= c.freeDistanceKm) return 0;
-    return Math.max(c.minFee, Math.ceil(roundTripKm * c.ratePerKm / c.roundTo) * c.roundTo);
+    return Math.max(c.minFee, Math.ceil(roundTripKm * c.ratePerKm / c.roundTo - 1e-9) * c.roundTo);
+  }
+  function findSuburb(text) {
+    var t = text.toLowerCase().replace(/,?\s*(wa|western australia)\b/g, "").replace(/\s+/g, " ").trim();
+    var pc = (t.match(/\b6\d{3}\b/) || [])[0];
+    var name = t.replace(/\b6\d{3}\b/, "").replace(/[,]/g, " ").replace(/\s+/g, " ").trim();
+    var hits = SUBURBS.filter(function (x) { return (!name || x[0].toLowerCase() === name) && (!pc || x[1] === pc); });
+    if (!hits.length && name) hits = SUBURBS.filter(function (x) { return x[0].toLowerCase().indexOf(name) === 0 && (!pc || x[1] === pc); });
+    hits.sort(function (a, b) { return a[2] - b[2]; });
+    return hits[0] || null;
   }
   function calcCallout(dest) {
     var st = document.getElementById("calcStatus");
     if (!dest) { st.className = "status err"; st.textContent = "Please enter your suburb or postcode."; return; }
-    st.className = "status"; st.textContent = "Working it out…";
-    var q = /\b(WA|western australia)\b/i.test(dest) ? dest : dest + " WA, Australia";
-    loadMaps().then(function () {
-      new google.maps.DistanceMatrixService().getDistanceMatrix({ origins: [CFG.callout.origin], destinations: [q], travelMode: google.maps.TravelMode.DRIVING, unitSystem: google.maps.UnitSystem.METRIC }, function (r, status) {
-        var el = r && r.rows && r.rows[0] && r.rows[0].elements[0];
-        if (status !== "OK" || !el || el.status !== "OK") { fail(); return; }
-        var km = el.distance.value / 1000 * 2;
-        opts.suburb = dest; opts.calloutKm = Math.round(km); opts.callout = calloutFee(km); persist(); render();
-      });
-    }).catch(fail);
-    function fail() {
-      opts.suburb = dest; opts.callout = null; persist();
-      st.className = "status err";
-      st.textContent = "Sorry, I couldn't work out the distance automatically. You can still order and I'll text you the delivery cost.";
-    }
+    loadSuburbs().then(function () {
+      var hit = findSuburb(dest), c = CFG.callout;
+      if (!hit) { opts.suburb = dest; opts.callout = null; persist(); st.className = "status err"; st.textContent = "I couldn't find that suburb. Please check the spelling or try your postcode, or just order and I'll text you the delivery cost."; return; }
+      opts.suburb = hit[0] + " " + hit[1];
+      if (hit[2] > c.maxOneWayKm) { opts.callout = null; opts.calloutKm = null; persist(); render(); return; }
+      var rt = hit[2] * c.roadFactor * 2;
+      opts.calloutKm = Math.round(rt); opts.callout = calloutFee(rt); persist(); render();
+    }).catch(function () {
+      st.className = "status err"; st.textContent = "Sorry, the calculator didn't load. You can still order and I'll text you the delivery cost.";
+    });
   }
 
   // ---------------------------------------------------------------- checkout
+  var PM_NAMES = { payid: "PayID", bank: "Bank transfer", zeller: "Card (Zeller payment link)", paypal: "PayPal", cash: "Cash", card: "Card (online)", later: "Decide later" };
+  function payMethods(t) {
+    var pay = CFG.payments, m = [];
+    if (pay.stripeWorker) m.push(["card", "<b>Card, paid online now</b><br><span class=\"hint\">" + (t.tbc ? "Enter your suburb in the cart first so the delivery cost is included." : "Secure card payment with an emailed receipt.") + "</span>", t.tbc]);
+    if (pay.payId) m.push(["payid", "<b>PayID</b><br><span class=\"hint\">Instant from most Australian banks.</span>"]);
+    if (pay.bsb) m.push(["bank", "<b>Bank transfer</b><br><span class=\"hint\">" + esc(pay.bankName || "") + " account details shown after you order.</span>"]);
+    if (pay.zeller) m.push(["zeller", "<b>Card, no surcharge</b><br><span class=\"hint\">I'll text you a secure Zeller payment link once I've confirmed stock.</span>"]);
+    if (pay.paypalMe) m.push(["paypal", "<b>PayPal</b><br><span class=\"hint\">Pay from your PayPal account or a card through PayPal.</span>"]);
+    if (pay.cash) m.push(["cash", "<b>Cash</b><br><span class=\"hint\">By arrangement, when I deliver or set up your device.</span>"]);
+    m.push(["later", "<b>Not sure yet</b><br><span class=\"hint\">I'll text you the payment options with your final total.</span>"]);
+    return m;
+  }
   function viewCheckout() {
     var lines = inCart();
     if (!lines.length) { go("#/cart"); return; }
@@ -448,12 +475,11 @@
     h += field("email", "Email (for your receipt)", "email", d.email, "email", false);
     h += field("addr", "Street address" + (opts.suburb ? " in " + opts.suburb : ""), "text", d.addr, "street-address", false, "Only needed for delivery. We'll confirm the best place and time by text.");
     h += '<div class="field"><label for="notes">Anything I should know?</label><textarea id="notes" rows="3" placeholder="e.g. best days for delivery, what you\'ll use it for, your old computer\'s make">' + esc(d.notes || "") + "</textarea></div></div>";
-    var methods = [];
-    if (pay.stripeWorker) methods.push(["card", "<b>Credit or debit card</b><br><span class=\"hint\">" + (t.tbc ? "To pay by card now, go back to the cart and enter your suburb so the delivery cost can be worked out." : "Secure card payment. You'll get an emailed receipt straight away.") + "</span>", t.tbc]);
-    if (pay.paypalMe) methods.push(["paypal", "<b>PayPal or card through PayPal</b><br><span class=\"hint\">Fastest. Your order is confirmed as soon as payment arrives.</span>"]);
-    if (pay.payId || pay.bsb) methods.push(["bank", "<b>PayID or bank transfer</b><br><span class=\"hint\">Your order is held until payment arrives. If a low-stock item sells out in the meantime, I'll offer an equivalent replacement or a full refund.</span>"]);
-    methods.push(["text", "<b>Text me the payment details</b><br><span class=\"hint\">I'll confirm stock and the final total first, then text you how to pay.</span>"]);
-    h += "<fieldset><legend>How would you like to pay?</legend>" + methods.map(function (m) { var first = methods.filter(function (x) { return !x[2]; })[0][0]; var sel = methods.some(function (x) { return x[0] === d.pm && !x[2]; }) ? d.pm : first; return '<label class="opt"><input type="radio" name="pm" value="' + m[0] + '"' + (sel === m[0] ? " checked" : "") + (m[2] ? " disabled" : "") + '><span class="t">' + m[1] + "</span></label>"; }).join("") + "</fieldset>";
+    var methods = payMethods(t);
+    var first = methods.filter(function (x) { return !x[2]; })[0][0];
+    var sel = methods.some(function (x) { return x[0] === d.pm && !x[2]; }) ? d.pm : first;
+    h += "<fieldset><legend>How would you like to pay?</legend>" + methods.map(function (m) { return '<label class="opt"><input type="radio" name="pm" value="' + m[0] + '"' + (sel === m[0] ? " checked" : "") + (m[2] ? " disabled" : "") + '><span class="t">' + m[1] + "</span></label>"; }).join("") +
+      '<p class="hint" style="margin:8px 0 0">Payment details are shown after you place your order. Please send me a screenshot once you\'ve paid.</p></fieldset>';
     h += '<div class="note">I confirm stock with my supplier before ordering. If something has sold out, I\'ll offer you an equivalent replacement or a full refund.</div>';
     h += '<p><button class="btn" id="place">Place order</button></p><div class="status" id="coStatus" role="status"></div></form>';
     h += summaryHtml(lines, t) + "</div></div></div>" + guarantee();
@@ -505,39 +531,68 @@
       viewConfirm(order, sent);
     }
   }
+  function fullAddr(o) {
+    var a = (o.customer.addr || "").trim(), sub = (o.options.suburb || "").trim();
+    if (!a) return sub;
+    if (!sub || a.toLowerCase().indexOf(sub.split(" ")[0].toLowerCase()) >= 0) return a;
+    return a + ", " + sub;
+  }
   function orderText(o) {
-    var L = ["New shop order " + o.ref, o.customer.name + " " + o.customer.phone + (o.customer.email ? " " + o.customer.email : ""), (o.customer.addr || "") + " " + (o.options.suburb || "")];
+    var L = ["New shop order " + o.ref, o.customer.name + " " + o.customer.phone + (o.customer.email ? " " + o.customer.email : ""), fullAddr(o)];
     o.items.forEach(function (i) { L.push(i.qty + " x " + i.name + " [" + i.part + "] " + money(i.price * i.qty) + " (supplier " + i.supplier + ")"); });
     o.extras.forEach(function (e) { L.push(e.item + ": " + (typeof e.price === "number" ? money(e.price) : e.price)); });
     if (o.options.freeApps.length) L.push("Apps: " + o.options.freeApps.join(", "));
     if (o.options.browser) L.push("Browser: " + o.options.browser);
     if (o.options.emailApp) L.push("Email app: " + o.options.emailApp);
     L.push("Total: " + money(o.total) + (o.deliveryToConfirm ? " + delivery TBC" : ""));
-    L.push("Payment: " + o.customer.pm);
+    L.push("Payment: " + (PM_NAMES[o.customer.pm] || o.customer.pm));
     if (o.customer.notes) L.push("Notes: " + o.customer.notes);
     return L.join("\n");
   }
   function viewConfirm(o, sent) {
-    var pay = CFG.payments, h = '<div class="panel" style="margin-top:24px"><h2>Thanks, ' + esc(o.customer.name.split(" ")[0]) + '! Your order is in.</h2><p>Your order number is <b>' + esc(o.ref) + "</b>.</p>";
-    if (!sent) {
-      h += '<div class="note"><b>One more step:</b> please send your order to Tony so he receives it.<br><a class="btn small" href="mailto:' + esc(CFG.site.email) + "?subject=" + encodeURIComponent("Shop order " + o.ref) + "&body=" + encodeURIComponent(o.summary) + '">Email my order to Tony</a> <a class="btn small ghost" href="' + esc(CFG.site.smsHref) + "?&body=" + encodeURIComponent("Hi Tony, I've placed shop order " + o.ref + ".") + '">Text Tony</a></div>';
-    }
-    if (sent) h += '<p class="hint">If you haven\'t heard from me within one business day, please <a href="' + esc(CFG.site.smsHref) + '">text me</a> your order number.</p>';
-    h += "<h3>What happens next</h3><ol><li>I'll confirm stock with my supplier and text you, usually within one business day.</li><li>Once your device arrives, I'll update it, set it up with the options you chose and charge it to 100%.</li><li>I'll text you to arrange delivery or setup at a time and place that suits you.</li><li>A week later, I'll check in to make sure everything's working well.</li></ol>";
-    var amount = o.total.toFixed(2);
-    if (o.paid) {
-      h += '<div class="paybox"><h3>Payment received</h3><p>Thanks, your card payment of ' + money(o.total) + ' went through. Your receipt has been emailed to you.</p></div>';
-    } else if (o.customer.pm === "card") {
-      h += '<div class="paybox"><h3>Payment</h3><p>Your card payment wasn\'t completed. I\'ll text you the final total and a payment link.</p></div>';
-    } else if (!o.deliveryToConfirm && o.customer.pm === "paypal" && pay.paypalMe) {
-      h += '<div class="paybox"><h3>Pay with PayPal</h3><p>Total to pay: <b>' + money(o.total) + '</b></p><p><a class="btn" target="_blank" rel="noopener" href="https://www.paypal.com/paypalme/' + encodeURIComponent(pay.paypalMe) + "/" + amount + 'AUD">Pay ' + money(o.total) + " with PayPal</a></p><p class=\"hint\">Please add your order number " + esc(o.ref) + " in the note.</p></div>";
-    } else if (!o.deliveryToConfirm && o.customer.pm === "bank" && (pay.payId || pay.bsb)) {
-      h += '<div class="paybox"><h3>Pay by PayID or bank transfer</h3><dl><dt>Amount</dt><dd>' + money(o.total) + "</dd>" + (pay.payId ? "<dt>PayID</dt><dd>" + esc(pay.payId) + "</dd>" : "") + "<dt>Account name</dt><dd>" + esc(pay.accountName) + "</dd>" + (pay.bsb ? "<dt>BSB</dt><dd>" + esc(pay.bsb) + "</dd><dt>Account</dt><dd>" + esc(pay.accountNumber) + "</dd>" : "") + "<dt>Reference</dt><dd>" + esc(o.ref) + '</dd></dl><p class="hint">Your order is held until payment arrives. If a low-stock item sells out in the meantime, I\'ll offer an equivalent replacement or a full refund.</p></div>';
+    var pay = CFG.payments, first = esc(o.customer.name.split(" ")[0]), pm = o.customer.pm, tbc = o.deliveryToConfirm;
+    var placed = new Date(o.placed);
+    var h = '<div class="panel" style="margin-top:24px">';
+    h += '<div class="steps"><span class="on">1. Order placed</span><span>2. Stock confirmed</span><span>3. Payment</span><span>4. Delivery or setup</span></div>';
+    if (sent) {
+      h += "<h2>Thanks, " + first + "! Your order is in.</h2><p>I'll text you on " + esc(o.customer.phone) + " to confirm stock, usually within one business day.</p>";
     } else {
-      h += '<div class="paybox"><h3>Payment</h3><p>I\'ll text you the final total and how to pay once I\'ve confirmed stock' + (o.deliveryToConfirm ? " and your delivery cost" : "") + ".</p></div>";
+      var smsBody = encodeURIComponent(o.summary);
+      h += "<h2>Almost done, " + first + ". Please send your order to me.</h2><p>Tap the button below to send your order details straight to my phone. Your message app will open with everything filled in, so you just press send.</p>";
+      h += '<div class="bigactions"><a class="btn" href="' + esc(CFG.site.smsHref) + "?&body=" + smsBody + '">Text my order to Tony</a><a class="btn ghost" href="mailto:' + esc(CFG.site.email) + "?subject=" + encodeURIComponent("Shop order " + o.ref) + "&body=" + smsBody + '">Email it instead</a></div>';
     }
-    h += '<p style="margin-top:18px"><a class="btn ghost" href="/#/">Back to the shop</a> <button class="btn ghost noprint" onclick="window.print()">Print this page</button></p></div>' + guarantee();
+    // receipt
+    h += '<h3 style="margin-top:20px">Order ' + esc(o.ref) + '</h3><p class="hint">Placed ' + placed.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) + "</p>";
+    h += '<table class="receipt">';
+    o.items.forEach(function (i) { h += "<tr><td>" + esc(i.name) + (i.qty > 1 ? " × " + i.qty : "") + "</td><td>" + money(i.price * i.qty) + "</td></tr>"; });
+    o.extras.forEach(function (e) { h += "<tr><td>" + esc(e.item) + "</td><td>" + (typeof e.price === "number" ? (e.price ? money(e.price) : "Free") : "To be confirmed") + "</td></tr>"; });
+    h += '<tr class="total"><td>Total' + (tbc ? " (plus delivery, to be confirmed)" : "") + "</td><td>" + money(o.total) + "</td></tr></table>";
+    var addr = fullAddr(o);
+    h += '<p class="hint">' + esc(o.customer.name) + " · " + esc(o.customer.phone) + (addr ? " · " + esc(addr) : "") + "</p>";
+
+    // payment
+    h += '<div class="paybox" style="margin-top:18px"><h3>Payment: ' + esc(PM_NAMES[pm] || "") + "</h3>";
+    var ref = "<dt>Reference</dt><dd>" + esc(o.ref) + "</dd>";
+    var amt = "<dt>Amount</dt><dd>" + (tbc ? "I'll text you the final total first" : money(o.total)) + "</dd>";
+    var holdNote = '<p class="hint">Your order is held until payment arrives. If a low-stock item sells out in the meantime, I\'ll offer an equivalent replacement or a full refund.</p>';
+    if (o.paid) h += "<p>Thanks, your card payment of " + money(o.total) + " went through. Your receipt has been emailed to you.</p>";
+    else if (pm === "card") h += "<p>Your card payment wasn't completed. I'll text you the final total and a payment link.</p>";
+    else if (pm === "payid") h += "<dl><dt>PayID</dt><dd>" + esc(pay.payId) + "</dd>" + amt + ref + "</dl>" + (pay.nameNote ? '<p class="hint">' + esc(pay.nameNote) + "</p>" : "") + holdNote;
+    else if (pm === "bank") h += "<dl><dt>Bank</dt><dd>" + esc(pay.bankName || "") + "</dd><dt>Account name</dt><dd>" + esc(pay.accountName) + "</dd><dt>BSB</dt><dd>" + esc(pay.bsb) + "</dd><dt>Account</dt><dd>" + esc(pay.accountNumber) + "</dd>" + amt + ref + "</dl>" + (pay.nameNote ? '<p class="hint">' + esc(pay.nameNote) + "</p>" : "") + holdNote;
+    else if (pm === "zeller") h += "<p>Once I've confirmed stock, I'll text you a secure card payment link from Zeller. There's no card surcharge.</p>";
+    else if (pm === "paypal") h += tbc ? "<p>I'll text you the final total, including delivery, before you pay. Then pay at <b>paypal.me/" + esc(pay.paypalMe) + "</b> with your order number " + esc(o.ref) + " in the note.</p>"
+      : '<p><a class="btn" target="_blank" rel="noopener" href="https://www.paypal.com/paypalme/' + encodeURIComponent(pay.paypalMe) + "/" + o.total.toFixed(2) + 'AUD">Pay ' + money(o.total) + ' with PayPal</a></p><p class="hint">Please add your order number ' + esc(o.ref) + " in the note.</p>" + holdNote;
+    else if (pm === "cash") h += "<p>Cash on delivery or setup, by arrangement. I'll confirm the exact amount when I text you.</p>";
+    else h += "<p>I'll text you the payment options with your final total once I've confirmed stock.</p>";
+    if (!o.paid && (pm === "payid" || pm === "bank" || pm === "paypal")) {
+      h += '<p><b>Once you\'ve paid,</b> please send me a screenshot of the payment: <a href="' + esc(pay.screenshotSms || CFG.site.smsHref) + '">text it to ' + esc(pay.screenshotNumber || CFG.site.phone) + '</a> (this number can receive photos) or email it to <a href="mailto:' + esc(CFG.site.email) + '">' + esc(CFG.site.email) + "</a>.</p>";
+    }
+    h += "</div>";
+
+    h += "<h3 style=\"margin-top:20px\">What happens next</h3><ol><li>I'll confirm stock with my supplier and text you, usually within one business day.</li><li>Once your device arrives, I'll update it, set it up with the options you chose and charge it to 100%.</li><li>I'll text you to arrange delivery or setup at a time and place that suits you.</li><li>A week later, I'll check in to make sure everything's working well.</li></ol>";
+    h += '<p class="noprint" style="margin-top:18px"><a class="btn ghost" href="/#/">Back to the shop</a> <button class="btn ghost" onclick="window.print()">Print or save this receipt</button></p></div>' + guarantee();
     app.innerHTML = h;
+    window.scrollTo(0, 0);
     if (location.pathname === "/" && location.hash.indexOf("#/paid") !== 0) location.hash = "#/done";
   }
 
