@@ -1,0 +1,52 @@
+name: Update shop
+
+on:
+  schedule:
+    # 1:37 am Perth time every day (17:37 UTC), after both distributor feeds have refreshed overnight.
+    - cron: "37 17 * * *"
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Restore product photo cache
+        uses: actions/cache@v4
+        with:
+          path: .cache
+          key: icecat-${{ github.run_id }}
+          restore-keys: icecat-
+      - name: Build shop from distributor feeds
+        env:
+          LEADER_FEED_URL: ${{ secrets.LEADER_FEED_URL }}
+          DICKER_FEED_URL: ${{ secrets.DICKER_FEED_URL }}
+        run: python3 scripts/build.py --out site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
