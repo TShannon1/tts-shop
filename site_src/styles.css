@@ -355,3 +355,29 @@ header.site .shopdrop .wrap { display: block; min-height: 0; padding-top: 0; pad
   .cats .cat { flex: 0 0 132px; scroll-snap-align: start; padding: 12px; }
   .cats .cat svg { width: 28px; height: 28px; }
 }
+
+/* v7.1 – "Can't find what you're looking for?" and printing */
+.cantfind { margin-top: 34px; }
+.cf { border: 2px solid var(--accent); background: linear-gradient(180deg, #fff, var(--accent-soft)); }
+.cf .cfhead { display: flex; gap: 16px 24px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.cf .cfhead h2 { margin: 0 0 .2em; }
+.cf .cfhead p { margin: 0; max-width: 720px; }
+.cf form { margin-top: 16px; }
+#printdoc .pd-h2 { font-size: 14pt; color: #000; margin: 16px 0 6px; letter-spacing: -.02em; }
+#printdoc .pd-ans { margin: 4px 0 0; padding-left: 18px; }
+#printdoc .pd-ans li { margin: 1px 0; }
+#printdoc .pd-why { margin: 4px 0; padding-left: 16px; font-size: 10pt; }
+#printdoc .pd-picks td.pd-lab { width: 70px; font-size: 12pt; }
+#printdoc .pd-items tr { break-inside: avoid; page-break-inside: avoid; }
+#printdoc .pd-note { font-size: 10pt; margin-top: 12px; }
+@media print {
+  .beta, .gbar, header.site, footer.site, .cmpbar, .cantfind, .guarantee, .noprint, .cmp, .gnav, .gthumbs, .pickcta, .cats, .toolbar { display: none !important; }
+  body { background: #fff; }
+  .card, .tier, .panel, .cmpwrap { box-shadow: none !important; break-inside: avoid; page-break-inside: avoid; }
+  .card .pic { background: #fff; }
+  .grid { grid-template-columns: repeat(3, 1fr) !important; }
+  a { color: #000; text-decoration: none; }
+}
+#printdoc .pd-picks th:nth-child(2), #printdoc .pd-picks td:nth-child(2) { text-align: left; white-space: normal; }
+#printdoc .pd-h2 { break-after: avoid; page-break-after: avoid; }
+#cantfind, #send, #bundle { scroll-margin-top: 100px; }

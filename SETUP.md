@@ -1,5 +1,5 @@
 # Tony's Tech Support Shop – setup guide
-Version v7.0 (14 Nov 2026). See CHANGELOG.md for what changed.
+Version v7.1 (15 Nov 2026). See CHANGELOG.md for what changed.
 
 This folder builds **shop.tonystechsupport.com.au**. It is hosted free on GitHub Pages. Every night at about 1:40 am (Perth time), GitHub:
 
@@ -59,7 +59,7 @@ The order fields available in the workflow are: `ref`, `name`, `first_name`, `ph
 If the alert can't be reached, the confirmation page falls back to the "send your order to Tony" button.
 
 ### 6b. Quote requests by email – done
-**Help me choose** sends custom quote requests, repair/upgrade quote requests and "send a copy to Tony" questions by **email only**, through a second workflow: **Shop quote request email (shop.tonystechsupport.com.au)**. It emails tony@tonystechsupport.com.au with the client's answers, the options they saw, their special requests and a link to their results. The webhook URL is in `config.json` → `quotes.webhookUrl`. The first test landed in Gmail's **Promotions** tab: drag it to Primary (or make a filter for "Help me choose page") so you don't miss them.
+The **"Can't find what you're looking for?"** form at the bottom of every page (and the "Get a free custom quote" button in Help me choose) sends requests by **email only**, through a second workflow: **Shop quote request email (shop.tonystechsupport.com.au)**. It emails tony@tonystechsupport.com.au with the client's answers, the options they saw, their special requests and a link to their results. The webhook URL is in `config.json` → `quotes.webhookUrl`. The first test landed in Gmail's **Promotions** tab: drag it to Primary (or make a filter for "Help me choose page") so you don't miss them.
 
 ### 7. Payment details
 Already filled in from your payment options (PayID, UBank transfer, card via a Zeller link, PayPal, cash by arrangement). Bank details only appear on the order confirmation page, never in Google. Edit `config.json` → `payments` to change them.

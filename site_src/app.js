@@ -1,7 +1,7 @@
-/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v7.0 · 2026-11-14 */
+/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v7.1 · 2026-11-15 */
 (function () {
   "use strict";
-  var APP_VERSION = "v7.0";
+  var APP_VERSION = "v7.1";
   var P = [], CFG = null, BYID = {};
   var app = document.getElementById("app");
   var COMPUTER_CATS = { laptops: 1, desktops: 1, handhelds: 1 };
@@ -564,9 +564,9 @@
     h += '<fieldset><legend>6. New or refurbished?</legend><p class="hint">Refurbished computers are checked, cleaned and graded, and cost much less. I set them up just like new ones.</p>' +
       radios("rf", [["both", "Show me both"], ["new", "Brand new only"], ["refurb", "Refurbished only"]], q.refurb) +
       '<label class="opt"><input type="checkbox" id="gradeA"' + (q.gradeA ? " checked" : "") + '><span class="t">Refurbished must be Grade A (looks like new)</span></label></fieldset>';
-    // 7. extras + special requests
+    // 7. extras (special requests now go in the free custom quote form)
     h += '<fieldset><legend>7. Anything else that matters?</legend>' + checks("extra", [["portable", "Light and easy to carry (14\" or smaller)"], ["bigscreen", "A big screen"], ["tch", "A touchscreen"], ["perth", "Ready quickly (already in stock in Perth)"]], q.extras) +
-      '<div class="field" style="margin-top:12px"><label for="special">Special requests</label><textarea id="special" rows="3" placeholder="e.g. needs a CD/DVD drive, must run a particular game or app, Grade A only, a big keyboard, works with my printer…">' + esc(q.special) + "</textarea><div class=\"hint\">I read every one of these and include them in your custom quote.</div></div></fieldset>";
+      "</fieldset>";
     h += '<p><button class="btn">Show me my options</button></p><div class="status" id="pkStatus" role="status"></div></form><div id="pkres" aria-live="polite"></div>' + guarantee();
     app.innerHTML = h;
     var form = document.getElementById("pk"), bc = form.querySelector(".budcustom"), budc = document.getElementById("budc");
@@ -586,7 +586,7 @@
         uses: vals("use"), type: (form.querySelector("input[name=type]:checked") || { value: "any" }).value,
         budget: b === "custom" ? Math.max(0, Math.round(Number(budc.value) || 0)) : Number(b),
         extras: vals("extra"), refurb: (form.querySelector("input[name=rf]:checked") || { value: "both" }).value,
-        gradeA: document.getElementById("gradeA").checked, special: val("special")
+        gradeA: document.getElementById("gradeA").checked, special: q.special || ""
       };
     }
     form.onsubmit = function (e) {
@@ -745,7 +745,8 @@
       if (dvd) h += '<div class="note"><b>CD/DVD drive:</b> most new computers don\'t have one built in. This plugs into a USB port: <a href="' + prodUrl(dvd) + '">' + esc(dvd.n) + "</a>, " + money(dvd.p) + ".</div>";
     }
     h += mbBlurb();
-    h += saveSendPanel(q, !within.length ? "quote" : adv && adv.repair ? "repair" : "results");
+    h += saveSendPanel(q);
+    pickState = { q: q, tiers: within.length ? t : [], labels: within.length ? labels : [], rest: within.length ? rest : (over || []) };
     box.innerHTML = h;
     if (rest && rest.length) {
       var n = 0, rg = document.getElementById("restGrid");
@@ -753,7 +754,7 @@
       more(); document.getElementById("restMore").onclick = more;
     }
     Array.prototype.forEach.call(box.querySelectorAll("[data-ask]"), function (b) {
-      b.onclick = function () { var r = document.querySelector("input[name=purpose][value=" + b.getAttribute("data-ask") + "]"); if (r) r.checked = true; document.getElementById("send").scrollIntoView({ behavior: "smooth" }); setTimeout(function () { var f = document.getElementById("sname"); if (f) f.focus({ preventScroll: true }); }, 400); };
+      b.onclick = function () { openQuote(b.getAttribute("data-ask") === "repair" ? "I'd like a quote to repair or upgrade my current computer instead of replacing it. " : ""); };
     });
     bindBundle(); bindSaveSend(q); cmpBar();
   }
@@ -772,22 +773,19 @@
     if (q.special) L.push("Special requests: " + q.special);
     return L;
   }
-  function saveSendPanel(q, purpose) {
-    var d = load("tts-cust", {}), link = pickLink(q);
+  var pickState = null;
+  function saveSendPanel(q) {
+    var link = pickLink(q);
     var shareText = "My computer options from Tony's Tech Support: " + link;
-    var h = '<section class="panel send" id="send"><h2 style="margin-top:0">Save or send my results</h2>' +
+    return '<section class="panel send noprint" id="send"><h2 style="margin-top:0">Save or send my results</h2>' +
       '<p>Keep this link to come back to your options, or send it to someone helping you decide.</p>' +
       '<div class="sharerow"><input id="plink" type="text" readonly value="' + esc(link) + '" aria-label="Link to your results"><button type="button" class="btn small" id="copyLink">Copy link</button></div>' +
       '<p class="sharebtns">' + (navigator.share ? '<button type="button" class="btn ghost small" id="shareBtn">Share…</button>' : "") +
       '<a class="btn ghost small" href="sms:?&body=' + encodeURIComponent(shareText) + '">Text it to someone</a>' +
       '<a class="btn ghost small" href="mailto:?subject=' + encodeURIComponent("Computer options from Tony's Tech Support") + "&body=" + encodeURIComponent(shareText) + '">Email it to someone</a>' +
-      '<button type="button" class="btn ghost small" id="printRes">Print</button></p>';
-    h += '<h3 style="margin-top:22px">Send a copy to Tony</h3><p>I\'ll get your answers, the options above and anything you ask. It may take me up to ' + esc((CFG.quotes && CFG.quotes.responseTime) || "1 business day") + " to put together suitable options and reply by email.</p>" +
-      '<form id="sf2" novalidate>' + radios("purpose", [["results", "I have a question about these options"], ["quote", "Please find me something: free custom quote"], ["repair", "Quote me to repair or upgrade my current computer"]], purpose) +
-      '<div class="qgrid">' + field("sname", "Your name", "text", d.name, "name", true) + field("semail", "Email", "email", d.email, "email", true) + field("sphone", "Mobile (optional)", "tel", d.phone, "tel", false) + "</div>" +
-      '<div class="field"><label for="squest">Your questions or anything else I should know</label><textarea id="squest" rows="3" placeholder="e.g. Is the Better option fine for Zoom? Can you transfer my photos?"></textarea></div>' +
-      '<p><button class="btn">Email it to Tony</button></p><div class="status" id="sStatus" role="status"></div></form></section>';
-    return h;
+      '<button type="button" class="btn ghost small" id="printRes">Print</button></p>' +
+      '<h3 style="margin-top:22px">Not quite right? Get a free custom quote</h3><p>Tell me what you\'re after, including any special requests, and I\'ll send you some options, even for computers that aren\'t in the shop yet. Your answers above are included automatically.</p>' +
+      '<p><button type="button" class="btn" id="toQuote">Get a free custom quote</button></p></section>';
   }
   function bindSaveSend(q) {
     var link = pickLink(q);
@@ -795,34 +793,64 @@
     if (cb) cb.onclick = function () { var i = document.getElementById("plink"); i.select(); var ok = false; try { if (navigator.clipboard) { navigator.clipboard.writeText(link); ok = true; } else ok = document.execCommand("copy"); } catch (e) {} cb.textContent = ok ? "Copied ✓" : "Select and copy"; };
     var sb = document.getElementById("shareBtn");
     if (sb) sb.onclick = function () { navigator.share({ title: "My computer options", text: "My computer options from Tony's Tech Support", url: link }).catch(function () {}); };
-    document.getElementById("printRes").onclick = function () { window.print(); };
-    var f = document.getElementById("sf2"); if (!f) return;
-    f.onsubmit = function (e) {
-      e.preventDefault();
-      var st = document.getElementById("sStatus"), c = { name: val("sname"), email: val("semail"), phone: val("sphone"), quest: val("squest") };
-      var purpose = (f.querySelector("input[name=purpose]:checked") || { value: "results" }).value;
-      if (!c.name || !/.+@.+\..+/.test(c.email)) { st.className = "status err"; st.textContent = "Please enter your name and email so I can reply."; return; }
-      var old = load("tts-cust", {}); old.name = c.name; old.email = c.email; if (c.phone) old.phone = c.phone; save("tts-cust", old);
-      var ref = "Q-" + Math.random().toString(36).slice(2, 7).toUpperCase();
-      var kind = { results: "Question about picker results", quote: "Free custom quote request", repair: "Repair or upgrade quote request" }[purpose];
-      var shownList = [].map.call(document.querySelectorAll("#pkres .tier, #pkres .budgetgap ~ .grid .card"), function (el) {
-        var lab = el.querySelector(".tlabel"); var a = el.querySelector("a.card") || el; var href = a.getAttribute("href") || "";
-        var id = Object.keys(BYID).filter(function (k) { return prodUrl(BYID[k]) === href; })[0]; var p = BYID[id];
-        return p ? (lab ? lab.textContent.replace("Tony's pick", "(Tony's pick)") + ": " : "") + p.n + " " + money(p.p) + " [" + p.id + "]" : "";
-      }).filter(Boolean);
-      var lines = [kind + " " + ref, "From: " + c.name + " <" + c.email + ">" + (c.phone ? " " + c.phone : ""), ""].concat(pickSummary(q)).concat(shownList.length ? ["", "Options shown:"].concat(shownList) : []).concat(c.quest ? ["", "Their message: " + c.quest] : []).concat(["", "Their results: " + link]);
-      var flat = { type: purpose, ref: ref, subject: kind + " from " + c.name + " (" + ref + ")", name: c.name, first_name: c.name.split(" ")[0], email: c.email, phone: c.phone,
-        summary: lines.join("\n"), html: lines.map(esc).join("<br>").replace(esc(link), '<a href="' + esc(link) + '">' + esc(link) + "</a>"), link: link, source: "shop picker" };
-      var btn = f.querySelector("button"); btn.disabled = true; st.className = "status"; st.textContent = "Sending…";
-      var url = CFG.quotes && CFG.quotes.webhookUrl;
-      var mail = "mailto:" + ((CFG.quotes && CFG.quotes.email) || CFG.site.email) + "?subject=" + encodeURIComponent(flat.subject) + "&body=" + encodeURIComponent(flat.summary);
-      (url ? postFlat(url, flat) : Promise.reject(new Error("no webhook"))).then(function () {
-        f.innerHTML = '<div class="status ok"><b>Thanks, ' + esc(flat.first_name) + "!</b> Your " + (purpose === "results" ? "question is" : "request is") + " with me. It may take me up to " + esc((CFG.quotes && CFG.quotes.responseTime) || "1 business day") + " to put together suitable options, and I'll reply to " + esc(c.email) + ".</div>";
-      }, function () {
-        btn.disabled = false; st.className = "status err";
-        st.innerHTML = 'Sorry, that didn\'t send. Please <a href="' + esc(mail) + '">email it from your own email app</a> instead; everything will be filled in for you.';
-      });
-    };
+    document.getElementById("printRes").onclick = function () { if (pickState) printPicks(pickState.q, pickState.tiers, pickState.labels, pickState.rest); };
+    document.getElementById("toQuote").onclick = function () { openQuote(""); };
+  }
+
+  // ---------------------------------------------------------------- "Can't find what you're looking for?" (bottom of every page)
+  function quoteTime() { return (CFG.quotes && CFG.quotes.responseTime) || "1 business day"; }
+  function renderCantFind(open) {
+    var box = document.getElementById("cantfind"); if (!box) return;
+    if (box.getAttribute("data-sent") === "1") return;
+    var d = load("tts-cust", {}), onPicker = !!(pickState && document.getElementById("pkres"));
+    var h = '<div class="panel cf"><div class="cfhead"><div><h2>Can\'t find what you\'re looking for?</h2><p>I can get plenty of things that aren\'t in the shop yet. Describe what you need and I\'ll get back to you within ' + esc(quoteTime()) + " with some options. It\'s free, with no obligation.</p></div>" +
+      (open ? "" : '<button type="button" class="btn" id="cfOpen">Ask Tony for a free custom quote</button>') + "</div>";
+    if (open) {
+      h += '<form id="cfForm" novalidate><div class="field"><label for="cfWhat">What are you looking for? *</label><textarea id="cfWhat" rows="4" placeholder="e.g. I need a light laptop for emails, online banking and video calls with the grandkids. It must have a DVD drive for my old photo discs, and I\'d like a nice big, clear screen."></textarea>' +
+        '<div class="hint">Include any special requests, such as a CD/DVD drive, Grade A refurbished only, or a game or app it must run.' + (onPicker ? " Your Help me choose answers and the options you were shown are included automatically." : "") + "</div></div>" +
+        '<div class="qgrid">' + '<div class="field"><label for="cfBudget">Budget (optional)</label><input id="cfBudget" type="number" inputmode="numeric" min="0" step="50" placeholder="e.g. 800"' + (onPicker && pickState.q.budget ? ' value="' + pickState.q.budget + '"' : "") + "></div>" +
+        field("cfName", "Your name", "text", d.name, "name", true) + field("cfEmail", "Email", "email", d.email, "email", true) + field("cfPhone", "Mobile (optional)", "tel", d.phone, "tel", false) + "</div>" +
+        '<p><button class="btn">Send my request to Tony</button></p><div class="status" id="cfStatus" role="status"></div></form>';
+    }
+    box.innerHTML = h + "</div>";
+    var ob = document.getElementById("cfOpen"); if (ob) ob.onclick = function () { openQuote(""); };
+    var f = document.getElementById("cfForm"); if (f) f.onsubmit = sendCantFind;
+  }
+  function openQuote(prefill) {
+    renderCantFind(true);
+    var box = document.getElementById("cantfind"); box.scrollIntoView({ behavior: "smooth", block: "start" });
+    var w = document.getElementById("cfWhat");
+    if (w) { if (prefill && !w.value) w.value = prefill; setTimeout(function () { w.focus({ preventScroll: true }); }, 450); }
+  }
+  function sendCantFind(e) {
+    e.preventDefault();
+    var f = e.target, st = document.getElementById("cfStatus");
+    var c = { what: val("cfWhat"), budget: val("cfBudget"), name: val("cfName"), email: val("cfEmail"), phone: val("cfPhone") };
+    if (!c.what) { st.className = "status err"; st.textContent = "Please tell me what you're looking for."; document.getElementById("cfWhat").focus(); return; }
+    if (!c.name || !/.+@.+\..+/.test(c.email)) { st.className = "status err"; st.textContent = "Please enter your name and email so I can reply."; return; }
+    var old = load("tts-cust", {}); old.name = c.name; old.email = c.email; if (c.phone) old.phone = c.phone; save("tts-cust", old);
+    var ref = "Q-" + Math.random().toString(36).slice(2, 7).toUpperCase();
+    var lines = ["Free custom quote request " + ref, "From: " + c.name + " <" + c.email + ">" + (c.phone ? " " + c.phone : ""), "Budget: " + (c.budget ? money(Number(c.budget)) : "not given"), "", "What they're looking for:", c.what];
+    var link = "";
+    if (pickState && document.getElementById("pkres")) {
+      link = pickLink(pickState.q);
+      var shown = pickState.tiers.map(function (p, i) { return pickState.labels[i] + ": " + p.n + " " + money(p.p) + " [" + p.id + "]"; });
+      lines = lines.concat(["", "Their Help me choose answers:"]).concat(pickSummary(pickState.q)).concat(shown.length ? ["", "Options they were shown:"].concat(shown) : []).concat(["", "Their results: " + link]);
+    } else {
+      lines = lines.concat(["", "Sent from: " + location.href]);
+    }
+    var flat = { type: "custom-quote", ref: ref, subject: "Free custom quote request from " + c.name + " (" + ref + ")", name: c.name, first_name: c.name.split(" ")[0], email: c.email, phone: c.phone, budget: c.budget,
+      summary: lines.join("\n"), html: lines.map(esc).join("<br>"), link: link || location.href, source: "shop custom quote" };
+    var btn = f.querySelector("button"); btn.disabled = true; st.className = "status"; st.textContent = "Sending…";
+    var url = CFG.quotes && CFG.quotes.webhookUrl;
+    var mail = "mailto:" + ((CFG.quotes && CFG.quotes.email) || CFG.site.email) + "?subject=" + encodeURIComponent(flat.subject) + "&body=" + encodeURIComponent(flat.summary);
+    (url ? postFlat(url, flat) : Promise.reject(new Error("no webhook"))).then(function () {
+      var box = document.getElementById("cantfind"); box.setAttribute("data-sent", "1");
+      box.innerHTML = '<div class="panel cf"><div class="status ok"><b>Thanks, ' + esc(flat.first_name) + "!</b> Your request is with me. I'll get back to you at " + esc(c.email) + " within " + esc(quoteTime()) + " with some options.</div></div>";
+    }, function () {
+      btn.disabled = false; st.className = "status err";
+      st.innerHTML = 'Sorry, that didn\'t send. Please <a href="' + esc(mail) + '">email it from your own email app</a> instead; everything will be filled in for you.';
+    });
   }
   function tipFor(q) {
     if (q.uses.indexOf("creative") >= 0) return "For photo and video work, aim for at least 16GB of memory, a Core i7, Ultra 7 or Ryzen 7 processor, and 512GB or more of storage. A backup drive is a must for your photos.";
@@ -1183,6 +1211,9 @@
       h += '<div class="pd-pay"><b>How to pay</b>' + (quote ? " (once I've confirmed stock)" : "") + "<ul>" + p.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul><small>Please use " + esc(o.ref) + " as the reference. " + esc(pay.nameNote || "") + "</small></div>";
     }
     h += '<p class="pd-foot">Thank you for supporting a local business. Every product is checked, set up and supported by Tony. If a low-stock item sells out, I\'ll offer an equivalent replacement or a full refund.<br>' + esc(s.url.replace(/^https?:\/\//, "")) + " · " + APP_VERSION + "</p>";
+    printHtml(h);
+  }
+  function printHtml(h) {
     var d = document.getElementById("printdoc");
     if (!d) { d = document.createElement("div"); d.id = "printdoc"; document.body.appendChild(d); }
     d.innerHTML = h;
@@ -1192,6 +1223,35 @@
     var img = d.querySelector("img");
     var go = function () { window.print(); setTimeout(done, 1000); };
     if (img && !img.complete) { img.onload = img.onerror = go; setTimeout(function () { if (document.body.classList.contains("printing")) go(); }, 1500); } else go();
+  }
+  function printHead(title, sub) {
+    var s = CFG.site;
+    return '<div class="pd-head"><div><img src="' + esc(s.logo) + '" alt="" width="64" height="64"><div><b>Tony\'s Tech Support</b><br>' + esc(s.address) + "<br>" + esc(s.phone) + " · " + esc(s.email) + "<br>ABN " + esc(s.abn) + "</div></div>" +
+      '<div class="pd-title"><h1>' + esc(title) + "</h1><table><tr><td>Date</td><td>" + new Date().toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" }) + "</td></tr>" + (sub || "") + "</table></div></div>";
+  }
+  function specLine(p) {
+    return [cpuText(p), p.ram ? p.ram + "GB memory" : "", p.sto ? (p.sto >= 1000 ? p.sto / 1000 + "TB" : p.sto + "GB") + " storage" : "", p.scr ? p.scr + '" screen' : "", p.tch ? "touchscreen" : "", p.rf ? "Refurbished" + (p.gr ? " (" + gradeName(p.gr) + ")" : "") : ""].filter(Boolean).join(" · ");
+  }
+  // Printer-friendly version of the Help me choose results: answers, Good/Better/Best and a short list of other options.
+  function printPicks(q, tiers, labels, rest) {
+    var h = printHead("Your computer options");
+    h += '<div class="pd-to"><b>What you told me</b><ul class="pd-ans">' + pickSummary(q).map(function (l) { return "<li>" + esc(l) + "</li>"; }).join("") + "</ul></div>";
+    if (tiers.length) {
+      h += '<h2 class="pd-h2">My recommendations</h2><table class="pd-items pd-picks"><thead><tr><th>Option</th><th>Computer</th><th>Price</th></tr></thead><tbody>';
+      tiers.forEach(function (p, i) {
+        h += '<tr><td class="pd-lab"><b>' + esc(labels[i]) + "</b>" + (labels.length === 3 && i === 1 ? "<br><small>Tony's pick</small>" : "") + "</td><td><b>" + esc(p.n) + "</b><br><small>" + esc(specLine(p)) + "</small>" +
+          '<ul class="pd-why">' + whyLines(p, q).map(function (l) { return "<li>" + esc(l) + "</li>"; }).join("") + "</ul><small>" + esc(availText(p)) + ", ready in about " + eta(p) + " · Part no. " + esc(p.id) + "</small></td><td>" + money(p.p) + "</td></tr>";
+      });
+      h += "</tbody></table>";
+    }
+    if (rest && rest.length) {
+      h += '<h2 class="pd-h2">Other options that suit you</h2><table class="pd-items"><thead><tr><th>Computer</th><th>Price</th></tr></thead><tbody>' +
+        rest.slice(0, 8).map(function (p) { return "<tr><td>" + esc(p.n) + "<br><small>" + esc(specLine(p)) + " · Part no. " + esc(p.id) + "</small></td><td>" + money(p.p) + "</td></tr>"; }).join("") + "</tbody></table>" +
+        (rest.length > 8 ? '<p class="pd-note">Plus ' + (rest.length - 8) + " more on the website.</p>" : "");
+    }
+    h += '<p class="pd-note"><b>See these options online:</b> ' + esc(pickLink(q).replace(/^https?:\/\//, "").slice(0, 60)) + "…<br>Prices include GST and can change daily. Every computer is checked, set up and supported by Tony. Questions? Call or text " + esc(CFG.site.phone) + ".</p>";
+    h += '<p class="pd-foot">' + esc(CFG.site.url.replace(/^https?:\/\//, "")) + " · " + APP_VERSION + "</p>";
+    printHtml(h);
   }
   function cartAsQuote(lines, t) {
     var d = load("tts-cust", {}), now = new Date();
@@ -1210,6 +1270,9 @@
     var h = location.hash.replace(/^#/, "") || "/";
     var parts = h.split("/").filter(Boolean);
     syncSearch(parts[0] === "s" ? decodeURIComponent(parts.slice(1).join("/")) : "");
+    pickState = null;
+    var cfb = document.getElementById("cantfind"); if (cfb) { cfb.removeAttribute("data-sent"); }
+    setTimeout(function () { if (!document.getElementById("cfForm") || !document.getElementById("pkres")) renderCantFind(false); }, 0);
     if (parts[0] === "done") { var o = load("tts-last-order", null); if (o && app.querySelector(".paybox")) return; if (o) { viewConfirm(o, true); return; } }
     if (parts[0] === "paid") { var po = load("tts-last-order", null); if (po) { po.paid = true; viewConfirm(po, true); } else viewHome(); return; }
     if (parts[0] === "picker") { viewPicker(); return; }

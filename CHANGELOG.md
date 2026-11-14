@@ -1,5 +1,11 @@
 # Changelog – Tony's Tech Support Shop
 
+## v7.1 · 15 Nov 2026
+- Every page now ends with "Can't find what you're looking for?": clients describe what they want (with any special requests and an optional budget) and it's emailed to Tony, who replies within 1 business day, including items not in the shop yet
+- Help me choose: "Special requests" moved into that custom quote form; the old "Send a copy to Tony" section and its three options are gone. "Get a free custom quote" opens the form and includes the client's answers and the options they were shown
+- Help me choose: "Print" now prints a clean summary (your answers, Good/Better/Best with reasons and part numbers, and other options) instead of the web page
+- Better printing for every other page (no menus, banners or split cards)
+
 ## v7.0 · 14 Nov 2026
 - New shop sections: USB Hubs & Docks, Adapters, Bags & Cases, Keyboards & Mice (everything still shows in Accessories too)
 - Hubs & Docks and Adapters have a "What do you want to plug into what?" filter: pick your computer's port, then tick what you want to connect (HDMI, DisplayPort, Ethernet, SD card…)
