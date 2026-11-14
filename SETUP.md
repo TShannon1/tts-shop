@@ -1,5 +1,5 @@
 # Tony's Tech Support Shop – setup guide
-Version v6.0 (14 Nov 2026). See CHANGELOG.md for what changed.
+Version v6.1 (14 Nov 2026). See CHANGELOG.md for what changed.
 
 This folder builds **shop.tonystechsupport.com.au**. It is hosted free on GitHub Pages. Every night at about 1:40 am (Perth time), GitHub:
 
@@ -85,6 +85,9 @@ See `stripe-worker/README.md`. You'll need free Stripe and Cloudflare accounts (
 ### Product photos
 - **Automatic:** photos come from Open Icecat. Each night the shop looks up every product that doesn't have a photo yet, including other spellings of the part number (HP's Australian codes and Lenovo's other-region codes), six at a time. After the first couple of runs, every product will have been checked.
 - **Add your own:** put a photo in the `photos` folder named after the part number shown on the product page, e.g. `photos/B9GD4PT.jpg` (on GitHub: open the folder → **Add file → Upload files**). It's used from the next update.
+- **Same model, different configuration:** if one configuration of a model has a photo, the others borrow it (the product page notes that colour and ports can vary).
+- **Barcodes:** once Leader's feed is active, its barcodes are used to look up photos as well.
+- **What's still missing:** after every update, open https://shop.tonystechsupport.com.au/missing-photos.csv (opens in Excel). It lists every product without a photo, laptops and desktops first, with the exact file name to use in the `photos` folder. It's hidden from Google.
 - **Hide products without photos:** set `pricing.hideWithoutPhoto` to `true` in `config.json`.
 
 ### Product photos (more detail)

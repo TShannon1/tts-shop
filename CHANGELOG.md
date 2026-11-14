@@ -1,5 +1,14 @@
 # Changelog – Tony's Tech Support Shop
 
+## v6.1 · 14 Nov 2026
+- Search bar moved into the top menu, so it stays at the top of every page as you scroll (phones too)
+- Shop button opens a menu of all categories (with item counts), Refurbished, "View all items" and Help me choose; it opens on hover with a mouse, and on tap on phones and tablets
+- New "All items" page (/#/all)
+- On smaller screens, Main website and Contact Tony move into the Shop menu to make room for the search bar
+- Photos: products without a photo now borrow the photo of the same model in another configuration, with a note saying colour and ports can vary
+- Photos: once Leader's feed is active, barcodes are used to look up photos too (finds many that part numbers miss)
+- Photos: every update writes a list of products still missing a photo, most important first: shop.tonystechsupport.com.au/missing-photos.csv
+
 ## v6.0 · 14 Nov 2026
 - Help me choose starts with "What are you replacing?" (age, memory, storage, model) and "Why are you replacing it?"
 - "Check this computer for me" button reads what the browser can see (Windows/Mac, memory, processor threads, screen) and explains how to find the storage size

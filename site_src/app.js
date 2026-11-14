@@ -1,7 +1,7 @@
-/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v6.0 · 2026-11-14 */
+/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v6.1 · 2026-11-14 */
 (function () {
   "use strict";
-  var APP_VERSION = "v6.0";
+  var APP_VERSION = "v6.1";
   var P = [], CFG = null, BYID = {};
   var app = document.getElementById("app");
   var COMPUTER_CATS = { laptops: 1, desktops: 1, handhelds: 1 };
@@ -99,7 +99,7 @@
   function faq(q, a) { return "<details><summary>" + esc(q) + "</summary><p>" + esc(a) + "</p></details>"; }
 
   // ---------------------------------------------------------------- views
-  function viewHome(cat, query) {
+  function viewHome(cat, query, all) {
     var list = P.filter(function (p) { return !cat || (cat === "refurbished" ? p.rf : p.c === cat); });
     var useF = load("tts-use", ""), perthF = load("tts-perth", false);
     if (useF) list = list.filter(function (p) { return (p.u || []).indexOf(useF) >= 0; });
@@ -113,13 +113,13 @@
     var counts = {}; P.forEach(function (p) { counts[p.c] = (counts[p.c] || 0) + 1; if (p.rf) counts.refurbished = (counts.refurbished || 0) + 1; });
     var cats = CFG.categories.concat([{ id: "refurbished", name: "Refurbished" }]);
     var h = "";
-    if (!cat && !query) {
-      h += '<section class="hero"><h1>Tech that\'s ready to use</h1><p class="lead">New and refurbished laptops, computers, monitors, printers and backup drives, checked, set up and delivered by Tony. Not sure what you need? <a href="' + esc(CFG.site.smsHref) + '">Send me a text</a> or <a href="' + esc(CFG.site.phoneHref) + '">give me a call</a> and I\'ll help you choose.</p>' + searchBox("") + "</section>";
+    if (!cat && !query && !all) {
+      h += '<section class="hero"><h1>Tech that\'s ready to use</h1><p class="lead">New and refurbished laptops, computers, monitors, printers and backup drives, checked, set up and delivered by Tony. Not sure what you need? <a href="' + esc(CFG.site.smsHref) + '">Send me a text</a> or <a href="' + esc(CFG.site.phoneHref) + '">give me a call</a> and I\'ll help you choose.</p></section>';
     } else {
-      h += '<div class="crumbs"><a href="/#/">Shop</a> › ' + esc(cat ? catName(cat) : 'Search results for "' + query + '"') + "</div>";
-      h += "<h2>" + esc(cat ? catName(cat) : "Search results") + "</h2>" + searchBox(query || "");
+      h += '<div class="crumbs"><a href="/#/">Shop</a> › ' + esc(cat ? catName(cat) : all ? "All items" : 'Search results for "' + query + '"') + "</div>";
+      h += "<h2>" + esc(cat ? catName(cat) : all ? "All items" : "Search results" + (query ? " for \u201c" + query + "\u201d" : "")) + "</h2>";
     }
-    if ((!cat && !query) || COMPUTER_CATS[cat]) {
+    if ((!cat && !query && !all) || COMPUTER_CATS[cat]) {
       h += '<section class="panel pickcta"><div><h2>Not sure which computer to get?</h2><p>Tell me what it\'s for and your budget, and I\'ll show you the best options. If nothing fits, I\'ll send you a free custom quote.</p></div>' +
         '<div class="quickuse"><span class="hint">Start with what it\'s for:</span>' + USES.slice(0, 4).map(function (u) { return '<button type="button" class="btn ghost small" data-quse="' + u[0] + '">' + esc(u[1].split(/[:,&]/)[0].trim()) + "</button>"; }).join("") +
         '<a class="btn" href="/picker.html">Help me choose</a></div></section>';
@@ -127,7 +127,7 @@
     h += '<nav class="cats" aria-label="Categories">' + cats.filter(function (c) { return counts[c.id]; }).map(function (c) {
       return '<a class="cat' + (c.id === cat ? " on" : "") + '" href="/#/c/' + c.id + '">' + ICON(c.id) + "<b>" + esc(c.name) + "</b><small>" + counts[c.id] + " available</small></a>";
     }).join("") + "</nav>";
-    var home = !cat && !query && !useF && !perthF;
+    var home = !cat && !query && !all && !useF && !perthF;
     if (home) {
       h += '<div class="panel"><h2>Why buy from Tony?</h2>' + supportList() + "</div>" + elsewhereNote();
       h += "<h2>Popular picks</h2>";
@@ -170,13 +170,34 @@
     });
     return out;
   }
-  function searchBox(v) {
-    return '<form class="search" id="sf" role="search"><label class="sr" for="q">Search products</label><input id="q" type="search" placeholder="Search, e.g. 14 inch laptop, 2TB drive, printer" value="' + esc(v) + '"><button class="btn">Search</button></form>';
+  function bindSearch() { /* search now lives in the header (see setupHeader) */ }
+  function setupHeader() {
+    var f = document.getElementById("hsf"), q = document.getElementById("hq");
+    f.onsubmit = function (e) { e.preventDefault(); var v = q.value.trim(); q.blur(); go(v ? "#/s/" + encodeURIComponent(v) : "#/all"); return false; };
+    // Shop menu: categories + "View all items". Opens on hover (mouse) or tap/click/keyboard.
+    var btn = document.getElementById("shopBtn"), drop = document.getElementById("shopDrop"), grid = document.getElementById("dropGrid"), timer;
+    var counts = {}; P.forEach(function (p) { counts[p.c] = (counts[p.c] || 0) + 1; if (p.rf) counts.refurbished = (counts.refurbished || 0) + 1; });
+    var cats = CFG.categories.concat([{ id: "refurbished", name: "Refurbished" }]).filter(function (c) { return counts[c.id]; });
+    grid.innerHTML = cats.map(function (c) { return '<a href="/#/c/' + c.id + '">' + ICON(c.id) + "<span>" + esc(c.name) + "<small>" + counts[c.id] + " items</small></span></a>"; }).join("") +
+      '<a href="/#/all" class="all"><span>View all items<small>' + P.length + ' items</small></span></a><a href="/picker.html" class="pick"><span>Help me choose<small>Answer a few questions</small></span></a>' +
+      '<a class="extra" href="' + esc(CFG.site.mainSite) + '" target="_blank" rel="noopener"><span>Main website<small>tonystechsupport.com.au</small></span></a><a class="extra" href="' + esc(CFG.site.mainSite.replace(/\/$/, "")) + '/contact" target="_blank" rel="noopener"><span>Contact Tony<small>' + esc(CFG.site.phone) + "</small></span></a>";
+    function open() { clearTimeout(timer); drop.hidden = false; btn.setAttribute("aria-expanded", "true"); place(); }
+    function close() { clearTimeout(timer); drop.hidden = true; btn.setAttribute("aria-expanded", "false"); }
+    function later() { clearTimeout(timer); timer = setTimeout(close, 250); }
+    function place() { if (window.innerWidth > 820) { var r = btn.getBoundingClientRect(); grid.style.marginLeft = Math.max(0, Math.min(r.left - grid.parentNode.getBoundingClientRect().left - 12, window.innerWidth - 700)) + "px"; } else grid.style.marginLeft = ""; }
+    var hover = window.matchMedia && window.matchMedia("(hover: hover)").matches;
+    if (hover) {
+      btn.addEventListener("mouseenter", open); btn.addEventListener("mouseleave", later);
+      drop.addEventListener("mouseenter", function () { clearTimeout(timer); }); drop.addEventListener("mouseleave", later);
+    }
+    btn.addEventListener("click", function (e) { if (hover && !drop.hidden) return; e.preventDefault(); if (drop.hidden) open(); else close(); });
+    btn.addEventListener("keydown", function (e) { if (e.key === "ArrowDown") { e.preventDefault(); open(); var a = grid.querySelector("a"); if (a) a.focus(); } });
+    drop.addEventListener("keydown", function (e) { if (e.key === "Escape") { close(); btn.focus(); } });
+    drop.addEventListener("click", function (e) { if (e.target.closest("a")) close(); });
+    document.addEventListener("click", function (e) { if (!drop.hidden && !drop.contains(e.target) && !btn.contains(e.target)) close(); });
+    window.addEventListener("hashchange", close);
   }
-  function bindSearch() {
-    var f = document.getElementById("sf");
-    if (f) f.onsubmit = function (e) { e.preventDefault(); var q = document.getElementById("q").value.trim(); go(q ? "#/s/" + encodeURIComponent(q) : "#/"); };
-  }
+  function syncSearch(query) { var q = document.getElementById("hq"); if (q && document.activeElement !== q) q.value = query || ""; }
   function card(p) {
     return '<div class="cardwrap"><a class="card" href="' + prodUrl(p) + '"><div class="pic">' + pic(p) + '</div><div class="body"><div class="name">' + esc(p.n) + "</div>" +
       (p.rf ? '<span class="chip rfchip">Refurbished' + (p.gr ? " · " + esc(p.gr.length === 1 ? "Grade " + p.gr : p.gr) : "") + "</span>" : "") +
@@ -188,7 +209,7 @@
     var p = BYID[id];
     if (!p) { app.innerHTML = '<div class="empty" style="margin-top:30px"><h2>That product has sold out</h2><p>Stock changes every day. <a href="/#/">See what\'s available</a>, or <a href="' + esc(CFG.site.smsHref) + '">text Tony</a> and I\'ll find you an equivalent.</p></div>' + guarantee(); return; }
     var h = '<div class="crumbs"><a href="/#/">Shop</a> › <a href="/#/c/' + p.c + '">' + esc(catName(p.c)) + "</a></div>";
-    h += '<div class="prod"><div class="gallery">' + pic(p) + "</div><div>";
+    h += '<div class="prod"><div class="gallery">' + pic(p) + (p.ims ? '<p class="hint photonote">Photo shows this model. Colour, keyboard and ports can vary by configuration.</p>' : "") + "</div><div>";
     h += "<h2>" + esc(p.n) + "</h2>";
     h += '<div class="price" style="font-size:2.2rem">' + money(p.p) + '</div><div class="hint">Includes GST. Delivery and setup options are in the cart.</div>';
     h += '<div class="meta">';
@@ -1058,6 +1079,7 @@
   function render() {
     var h = location.hash.replace(/^#/, "") || "/";
     var parts = h.split("/").filter(Boolean);
+    syncSearch(parts[0] === "s" ? decodeURIComponent(parts.slice(1).join("/")) : "");
     if (parts[0] === "done") { var o = load("tts-last-order", null); if (o && app.querySelector(".paybox")) return; if (o) { viewConfirm(o, true); return; } }
     if (parts[0] === "paid") { var po = load("tts-last-order", null); if (po) { po.paid = true; viewConfirm(po, true); } else viewHome(); return; }
     if (parts[0] === "picker") { viewPicker(); return; }
@@ -1069,6 +1091,7 @@
     if (parts[0] === "p") viewProduct(decodeURIComponent(parts[1] || ""));
     else if (parts[0] === "c") viewHome(parts[1]);
     else if (parts[0] === "s") viewHome(null, decodeURIComponent(parts.slice(1).join("/")));
+    else if (parts[0] === "all") viewHome(null, null, true);
     else if (parts[0] === "cart") viewCart();
     else if (parts[0] === "checkout") viewCheckout();
     else viewHome();
@@ -1096,7 +1119,7 @@
       document.getElementById("fAbn").textContent = s.abn;
       document.getElementById("fUpdated").textContent = "Prices and stock updated " + CFG.updated + ".";
       var fv = document.getElementById("fVer"); if (fv) fv.textContent = APP_VERSION;
-      persist(); render(); cmpBar();
+      setupHeader(); persist(); render(); cmpBar();
     })
     .catch(function () { app.innerHTML = '<div class="empty" style="margin-top:30px"><h2>The shop is being updated</h2><p>Please try again in a few minutes, or call Tony.</p></div>'; });
 })();

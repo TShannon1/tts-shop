@@ -301,6 +301,7 @@ def read_leader(text):
             "stock": qty(g(r, "total")),
             "perth": qty(g(r, "perth")),
             "image": g(r, "image").strip(),
+            "gtin": re.sub(r"\D", "", g(r, "barcode")),
             "desc": g(r, "long"),
             "warranty": g(r, "warranty"),
             "src": 1,
@@ -342,9 +343,12 @@ def short_title(t):
     return t[:140]
 
 
-def icecat_lookup(brand, mpn):
+def icecat_lookup(brand, mpn, gtin=""):
     mpn = re.sub(r"^\d*(PROMO|BONUS)-", "", mpn or "", flags=re.I)
-    q = urllib.parse.urlencode({"UserName": ICECAT_USER, "Language": "en", "Brand": brand, "ProductCode": mpn})
+    if gtin:  # barcode lookups (from Leader's feed) find many products the part number doesn't
+        q = urllib.parse.urlencode({"UserName": ICECAT_USER, "Language": "en", "GTIN": gtin})
+    else:
+        q = urllib.parse.urlencode({"UserName": ICECAT_USER, "Language": "en", "Brand": brand, "ProductCode": mpn})
     req = urllib.request.Request("https://live.icecat.biz/api?" + q, headers={"User-Agent": "TTS-shop-builder/1.0"})
     try:
         with urllib.request.urlopen(req, timeout=20) as r:
@@ -374,10 +378,14 @@ def icecat_variants(brand, mpn):
     return out
 
 
-def lookup_with_variants(brand, mpn):
+def lookup_with_variants(brand, mpn, gtin=""):
     c = icecat_lookup(brand, mpn)
     if c.get("ok"):
         return c
+    if gtin and len(gtin) in (8, 12, 13, 14):
+        g = icecat_lookup(brand, mpn, gtin)
+        if g.get("ok"):
+            return g
     for code, reliable in icecat_variants(brand, mpn):
         v = icecat_lookup(brand, code)
         if v.get("ok"):
@@ -401,6 +409,10 @@ def enrich_from_icecat(products):
     for pr in products:
         c = cache.get(pr["id"])
         fresh = c and (c.get("ok") or c.get("v") == 2) and today - c.get("d", 0) < (60 if c.get("ok") else 21)
+        if fresh and not c.get("ok") and pr.get("_gtin") and not c.get("g"):
+            fresh = False  # we now have a barcode for it: try again
+        if not fresh and pr.get("_gtin"):
+            pr["_tried_gtin"] = 1
         if not fresh and not pr["img"]:
             todo.append(pr)
     todo = todo[:ICECAT_MAX]
@@ -408,10 +420,11 @@ def enrich_from_icecat(products):
     def work(pr):
         brand = BRAND_ALIASES.get(norm_mpn(pr["_brand"]), pr["_brand"] or pr["b"])
         try:
-            return pr["id"], lookup_with_variants(brand, pr["_mpn"])
+            return pr["id"], lookup_with_variants(brand, pr["_mpn"], pr.get("_gtin", ""))
         except Exception as e:
             return pr["id"], {"ok": 0, "err": str(e)[:80]}
 
+    by_id = {pr["id"]: pr for pr in todo}
     errors = 0
     with ThreadPoolExecutor(max_workers=6) as ex:
         for key, c in ex.map(work, todo):
@@ -420,6 +433,8 @@ def enrich_from_icecat(products):
                 continue  # network trouble: try again next run
             c["d"] = today
             c["v"] = 2
+            if by_id.get(key, {}).get("_gtin"):
+                c["g"] = 1
             cache[key] = c
     hits = 0
     for pr in products:
@@ -491,7 +506,7 @@ def write_seo_pages(products, out_dir, now):
             f.write(f"<url><loc>{html.escape(u)}</loc><lastmod>{day}</lastmod><changefreq>{freq}</changefreq></url>\n")
         f.write("</urlset>\n")
     with open(os.path.join(out_dir, "robots.txt"), "w") as f:
-        f.write(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n")
+        f.write(f"User-agent: *\nAllow: /\nDisallow: /missing-photos.csv\nSitemap: {base}/sitemap.xml\n")
     with open(os.path.join(out_dir, "404.html"), "w", encoding="utf-8") as f:
         f.write(tpl.replace("<script src=\"/app.js\">", "<script>window.TTS_VIEW=\"gone\";</script><script src=\"/app.js\">").replace("<p style=\"padding:40px 0\">Loading the shop…</p>",
                             "<div class=\"empty\" style=\"margin-top:30px\"><h2>That product has sold out</h2><p>Stock changes every day. <a href=\"/\">See what's available</a>.</p></div>"))
@@ -540,6 +555,46 @@ def curated_refurbs():
         })
     print(f"Added {len(out)} refurbished machines from refurbished.json", file=sys.stderr)
     return out
+
+
+def model_family(pr):
+    """Brand + model name without the processor/memory/storage/OS details, e.g. 'HP ELITEBOOK 8 G1I 14'.
+    Different configurations of the same model look the same, so they can share a photo."""
+    n = (pr["b"] + " " + pr["n"]).upper()
+    n = re.sub(r"SAVE \$\d+EX WHEN YOU PURCHASE", "", n)
+    n = re.split(r",|\(|\bI[3579]-|\bU[579]-|\bR[3579]-|\bULTRA\b|\bCORE\b|\bRYZEN\b|\b\d+ ?GB\b|\b\d+ ?TB\b|\bW1[01]|\bWIN|"
+                 r"\b\d{3,4}[A-Z]?\d*[HUPV]\b|\bN\d{3}\b|\bC[57]-\d", n)[0]
+    words = re.sub(r"[^A-Z0-9 ]", " ", n).split()
+    return pr["c"] + "|" + " ".join(words[:7]) if len(words) >= 3 else ""
+
+
+def borrow_sibling_photos(products):
+    """A product with no photo borrows one from another configuration of the same model."""
+    donors = {}
+    for pr in products:
+        k = model_family(pr) if pr["img"] and not pr.get("ims") else ""
+        if k and k not in donors:
+            donors[k] = pr["img"]
+    n = 0
+    for pr in products:
+        if pr["img"] or pr.get("rf"):
+            continue
+        k = model_family(pr)
+        if k in donors:
+            pr["img"], pr["ims"] = donors[k], 1
+            n += 1
+    print(f"Photos borrowed from the same model in another configuration: {n}", file=sys.stderr)
+
+
+def write_missing_photos(products, out_dir):
+    """A list of products still without a photo, most important first, for Tony to fill in (photos/ folder)."""
+    order = {"laptops": 0, "desktops": 1, "handhelds": 2, "tablets": 3, "monitors": 4, "printers": 5, "backup": 6, "networking": 7, "accessories": 8}
+    miss = sorted((p for p in products if not p["img"]), key=lambda p: (order.get(p["c"], 9), -p["p"]))
+    with open(os.path.join(out_dir, "missing-photos.csv"), "w", encoding="utf-8") as f:
+        f.write("part_number,photo_file_name,brand,category,price,name\n")
+        for p in miss:
+            f.write(",".join([p["id"], "photos/" + p["id"] + ".jpg", p["b"], p["c"], str(p["p"]), '"' + p["n"].replace('"', "'") + '"']) + "\n")
+    print(f"Products without a photo: {len(miss)} (list: /missing-photos.csv)", file=sys.stderr)
 
 
 def apply_discount_limits(products):
@@ -607,8 +662,8 @@ def build(leader_text, dicker_text, out_dir):
             winner = a if a["costEx"] <= b["costEx"] else b
         loser = b if winner is a else a
         # Keep the best content (image/description) from either supplier.
-        for f in ("image", "desc", "warranty"):
-            if not winner[f] and loser[f]:
+        for f in ("image", "desc", "warranty", "gtin"):
+            if not winner.get(f) and loser.get(f):
                 winner[f] = loser[f]
         best[key] = winner
 
@@ -620,7 +675,7 @@ def build(leader_text, dicker_text, out_dir):
         desc = re.sub(r"\s+", " ", desc).strip()[:1500]
         products.append({
             "id": key,
-            "_raw": it["name"], "_brand": it["brand"], "_mpn": it["mpn"], "_path": it["path"],
+            "_raw": it["name"], "_brand": it["brand"], "_mpn": it["mpn"], "_path": it["path"], "_gtin": it.get("gtin", ""),
             "b": nice_case(it["brand"]) if it["brand"] else "",
             "c": it["cat"],
             "p": it["price"],
@@ -678,6 +733,9 @@ def build(leader_text, dicker_text, out_dir):
             pr["img"] = "/photos/" + overrides[pr["id"]]
         pr["os"] = pr["os"] or os_for(brand_raw, name, pr["c"])
         pr["s"] = slug(pr["id"])
+    borrow_sibling_photos(products)
+    for pr in products:
+        pr.pop("_gtin", None); pr.pop("_tried_gtin", None)
     apply_discount_limits(products)
     if CFG["pricing"].get("hideWithoutPhoto"):
         before = len(products)
@@ -709,6 +767,7 @@ def build(leader_text, dicker_text, out_dir):
     with open(os.path.join(out_dir, "CNAME"), "w") as f:
         f.write(CFG["site"]["url"].split("//", 1)[1] + "\n")
     write_seo_pages(products, out_dir, now)
+    write_missing_photos(products, out_dir)
     counts = {}
     for p in products:
         counts[p["c"]] = counts.get(p["c"], 0) + 1

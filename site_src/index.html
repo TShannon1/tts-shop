@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Tony's Tech Support Shop v6.0 · 2026-11-14 -->
+<!-- Tony's Tech Support Shop v6.1 · 2026-11-14 -->
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
@@ -21,14 +21,20 @@
       <img id="logo" alt="" width="56" height="56">
       <span>Tony's Tech Support<small>Shop</small></span>
     </a>
+    <form class="hsearch" id="hsf" role="search" action="/" onsubmit="return false">
+      <label class="sr" for="hq">Search products</label>
+      <input id="hq" type="search" placeholder="Search products" autocomplete="off">
+      <button class="btn small" aria-label="Search">Search</button>
+    </form>
     <nav class="top" aria-label="Main">
-      <a href="/">Shop</a>
+      <a href="/#/all" id="shopBtn" aria-haspopup="true" aria-expanded="false" aria-controls="shopDrop">Shop <span aria-hidden="true" class="caret">▾</span></a>
       <a href="/picker.html">Help me choose</a>
       <a id="mainSiteLink" href="https://www.tonystechsupport.com.au" target="_blank" rel="noopener">Main website</a>
       <a href="https://www.tonystechsupport.com.au/contact" target="_blank" rel="noopener">Contact Tony</a>
       <a class="btn small cartbtn" href="/#/cart">Cart <span class="count" id="cartCount">0</span></a>
     </nav>
   </div>
+  <div class="shopdrop" id="shopDrop" hidden><div class="wrap"><div class="dropgrid" id="dropGrid"></div></div></div>
 </header>
 <main id="app" class="wrap" tabindex="-1">
   <p style="padding:40px 0">Loading the shop…</p>
