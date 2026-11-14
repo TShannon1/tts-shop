@@ -1,5 +1,21 @@
 # Changelog – Tony's Tech Support Shop
 
+## v7.0 · 14 Nov 2026
+- New shop sections: USB Hubs & Docks, Adapters, Bags & Cases, Keyboards & Mice (everything still shows in Accessories too)
+- Hubs & Docks and Adapters have a "What do you want to plug into what?" filter: pick your computer's port, then tick what you want to connect (HDMI, DisplayPort, Ethernet, SD card…)
+- "All items" tile at the start of the category list, and first in the Shop menu
+- Sort options change with the section, and every sort can be reversed with one tap:
+  - computers: price, name, memory, storage, processor speed, screen size
+  - monitors: screen size, resolution, refresh rate
+  - backup drives: capacity
+  - hubs, docks and adapters: number of ports
+- The "Suits any use" filter only appears (and only applies) on computer pages
+- Product pages show extra photos (different angles) when available, with arrows, thumbnails and swipe on phones
+- Products without a photo now show a drawing that matches the product (hub, adapter, bag, keyboard, mouse, headset, webcam, charger, stand, lock, ink…)
+- Search box placeholder simply says "Search"
+- On phones, the category tiles scroll sideways so products appear sooner
+- More adapters are included from the supplier feeds (display, USB-C and network adapters)
+
 ## v6.1 · 14 Nov 2026
 - Search bar moved into the top menu, so it stays at the top of every page as you scroll (phones too)
 - Shop button opens a menu of all categories (with item counts), Refurbished, "View all items" and Help me choose; it opens on hover with a mouse, and on tap on phones and tablets

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Version v5.0 · 2026-11-13
+# Version v7.0 · 2026-11-14
 """Build Tony's Tech Support shop from distributor price/stock feeds.
 
 Reads the Leader Computers and Dicker Data reseller feeds, keeps the product
@@ -40,7 +40,9 @@ CATEGORIES = [
         r"^networking > (router|routers|unmanaged switch)$", r"^network - consumer", r"^network - modem/router"]),
     ("accessories", "Accessories", [
         r"^peripherals > (docking solutions|docking|usb-c docks|usb-c hubs|hubs|usb-a hubs|keyboard|ergonomics|speakers|audio video|laptop stand|usb-c multiport adap.*)$",
-        r"^bags and cases > \d+ inch$",
+        r"^peripherals > (adapters|dp and mdp display a.*|hdmi and dvi display.*|usb-c display adapte.*|display and video ad.*|usb and thunderbolt.*|thunderbolt 3 displa.*)$",
+        r"^networking > (adapters|laptop network adapt.*)$",
+        r"^bags and cases > (\d+ inch|accessories|apple devices|surface devices|samsung devices|tablets|fitted cases)$",
         r"^(keyboards|mouse|notebook accessories|web cams|speakers, headsets & mic|dvd & bluray drives|macbook accessories)"]),
 ]
 EXCLUDE_NAME = re.compile(
@@ -177,7 +179,85 @@ def derive(name, cat):
     if re.search(r"RTX|GTX|RADEON RX|\bRX ?\d{4}|ARC A\d|QUADRO", t): d["gpu"] = 1
     if (re.search(r"TOUCH", t) and not re.search(r"NON[- ]?TOUCH", t)) or (cat == "laptops" and re.search(r"\bTS\b", t)): d["tch"] = 1
     if re.search(r"FLIP|X360|2-IN-1|2 IN 1|YOGA|DETACHABLE", t): d["flip"] = 1
+    if cat == "monitors":
+        res = 0
+        if re.search(r"\b5K\b|5120 ?X ?2880", t): res = 2880
+        elif re.search(r"\b4K\b|UHD|3840 ?X ?2160|2160P", t): res = 2160
+        elif re.search(r"WQHD|QHD|2560 ?X ?1440|3440 ?X ?1440|1440P|2K\b", t): res = 1440
+        elif re.search(r"WUXGA|1920 ?X ?1200", t): res = 1200
+        elif re.search(r"FHD|FULL ?HD|1920 ?X ?1080|1080P", t): res = 1080
+        elif re.search(r"1366 ?X ?768|\bHD\b", t): res = 768
+        if res: d["res"] = res
+        hz = re.search(r"(\d{2,3}) ?HZ", t)
+        if hz and 50 <= int(hz.group(1)) <= 540: d["hz"] = int(hz.group(1))
+    if cat == "backup" and gbs:
+        caps = [a * (1000 if u == "TB" else 1) for a, u in gbs]
+        d["sto"] = max(caps)
     return d
+
+
+# ---------------------------------------------------------------- shop sections inside Accessories, and connectors
+SECTIONS = [  # (id, name) — products stay in Accessories as well
+    ("hubs", "USB Hubs & Docks"), ("adapters", "Adapters"), ("bags", "Bags & Cases"), ("kbm", "Keyboards & Mice"),
+]
+CONNECTORS = [  # (label, pattern) in the order shown to clients
+    ("USB-C", r"USB[- ]?C\b|TYPE[- ]?C|USB4"), ("Thunderbolt", r"THUNDERBOLT|\bTB ?[345]\b"), ("USB-A", r"USB[- ]?A\b|USB ?[23]\.\d(?![- ]?(C|TYPE))(?! TO)|\d ?X ?USB\b(?![- ]?C)|USB ?\(\d\)|USB PORTS?\b|USB HUB"),
+    ("HDMI", r"HDMI"), ("DisplayPort", r"DISPLAYPORT|\bDP\b(?!S)|\bDP ?1\.\d"), ("Mini DisplayPort", r"MINI ?DISPLAYPORT|\bMDP\b|MINI ?DP"),
+    ("VGA", r"\bVGA\b"), ("DVI", r"\bDVI\b"), ("Ethernet", r"ETHERNET|\bRJ-?45\b|GBE\b|\bLAN\b|GIGABIT|NIC\b"),
+    ("SD card", r"\bSD\b|MICRO ?SD|CARD READER"), ("Audio (3.5mm)", r"3\.5 ?MM|AUDIO"), ("Lightning", r"LIGHTNING"), ("Micro-USB", r"MICRO[- ]?USB|MICRO[- ]?B\b"),
+]
+
+
+def sections_for(cat, name, path):
+    """Which extra shop sections an accessory also appears in."""
+    if cat != "accessories":
+        return []
+    n, pth = name.upper(), path.upper()
+    out = []
+    kbm = re.search(r"KEYBOARD|\bMOUSE\b|\bMICE\b|KEYPAD|TRACKBALL|TRACKPAD", n) and not re.search(r"\bBAG\b|CASE\b|SLEEVE|MOUSE ?PAD|MOUSEPAD|WRIST ?REST|TRAY\b|DOCK", n)
+    if kbm:
+        out.append("kbm")
+    if re.search(r"\bHUB\b|DOCK|MULTIPORT|MULTI-PORT|PORT REPLICATOR|\d ?-?IN-?1\b", n) and not re.search(r"DRIVE DOCK|DUPLICATOR|ENCLOSURE|HARD DRIVE|SSD DOCK|\bBAG\b|CASE\b", n) and not kbm:
+        out.append("hubs")
+    named = re.search(r"ADAPT|CONVERTER|DONGLE", n)
+    internal = re.search(r"PCIE|PCI EXPRESS|PCI-E|SLOT PLATE|BRACKET|HEADER|INTERNAL", n)
+    if not internal and (named or ("hubs" not in out and re.search(r"\bTO\b.*(HDMI|DISPLAYPORT|VGA|DVI|ETHERNET|USB)", n))) and not ("hubs" in out and re.search(r"\bHUB\b", n)) \
+            and not kbm and not re.search(r"POWER ADAPT|\bAC ADAPT|CHARGER|\bW\b ADAPT|\d+W\b", n):
+        out.append("adapters")
+    if re.search(r"\bBAG\b|BACKPACK|SLEEVE|BRIEFCASE|MESSENGER|TOPLOAD|TOP LOAD|TOTE\b|CARRY ?CASE|LAPTOP CASE|NOTEBOOK CASE|\bCASE\b|FOLIO|POUCH", n) or pth.startswith("BAGS AND CASES"):
+        if not re.search(r"CASE FAN|PHONE CASE", n):
+            out.append("bags")
+    return out
+
+
+def connectors_for(name):
+    """For hubs, docks and adapters: what it plugs into (ci) and what you can connect to it (co)."""
+    n = name.upper().replace("TYPE-C", "USB-C")
+    def found(text):
+        f = [lab for lab, pat in CONNECTORS if re.search(pat, text)]
+        if "Mini DisplayPort" in f and not re.search(r"(?<!MINI )(?<!MINI)DISPLAYPORT|(?<!M)\bDP\b", text.replace("MINI DISPLAYPORT", "").replace("MINI DP", "")):
+            f.remove("DisplayPort") if "DisplayPort" in f else None
+        return f
+    m = re.search(r"\bTO\b", n)
+    if m:
+        ci, co = found(n[:m.start()]), found(n[m.end():])
+        ci = [c for c in ci if c not in ("SD card", "Audio (3.5mm)", "Ethernet")][:2]
+        if re.search(r"WITH USB-?A (ADAPT|CONVERT)", n):
+            ci.append("USB-A"); co = [c for c in co if c != "USB-A"]
+    else:
+        allc = found(n)
+        if "Thunderbolt" in allc: ci = ["Thunderbolt", "USB-C"] if "USB-C" in allc else ["Thunderbolt"]
+        elif "USB-C" in allc: ci = ["USB-C"]
+        else: ci = ["USB-A"]
+        co = [c for c in allc if c not in ci]
+        if re.search(r"\bHUB\b", n) and not co:
+            co = ["USB-A"]
+    if "Thunderbolt" in ci and "USB-C" not in ci:
+        ci.append("USB-C")  # Thunderbolt 3/4 devices plug into USB-C shaped ports
+    if not ci and co:
+        ci = ["USB-A"] if "USB" in n else []
+    ports = [int(x) for x in re.findall(r"(\d{1,2}) ?-?(?:PORTS?\b|IN-?1\b)", n) if 1 < int(x) <= 20]
+    return {"ci": ci, "co": [c for c in co if c not in ci or len(set(co)) == 1], "pt": max(ports) if ports else 0}
 
 
 def use_cases(cat, d):
@@ -359,7 +439,12 @@ def icecat_lookup(brand, mpn, gtin=""):
     gi, img = data.get("GeneralInfo") or {}, data.get("Image") or {}
     summ = (gi.get("SummaryDescription") or {})
     pic = img.get("Pic500x500") or img.get("HighPic") or img.get("LowPic") or ""
-    return {"ok": 1, "t": short_title(gi.get("Title") or ""), "img": pic,
+    gal = []
+    for g in data.get("Gallery") or []:
+        u = g.get("Pic500x500") or g.get("Pic") or g.get("LowPic") or ""
+        if u and u != pic and u not in gal:
+            gal.append(u)
+    return {"ok": 1, "t": short_title(gi.get("Title") or ""), "img": pic, "gal": gal[:7],
             "sum": summ.get("LongSummaryDescription") or summ.get("ShortSummaryDescription") or ""}
 
 
@@ -409,11 +494,13 @@ def enrich_from_icecat(products):
     for pr in products:
         c = cache.get(pr["id"])
         fresh = c and (c.get("ok") or c.get("v") == 2) and today - c.get("d", 0) < (60 if c.get("ok") else 21)
+        if fresh and c.get("ok") and "gal" not in c:
+            fresh = False  # found before extra photos were collected: fetch again for the gallery
         if fresh and not c.get("ok") and pr.get("_gtin") and not c.get("g"):
             fresh = False  # we now have a barcode for it: try again
         if not fresh and pr.get("_gtin"):
             pr["_tried_gtin"] = 1
-        if not fresh and not pr["img"]:
+        if not fresh:
             todo.append(pr)
     todo = todo[:ICECAT_MAX]
 
@@ -724,9 +811,22 @@ def build(leader_text, dicker_text, out_dir):
         d = derive(text + (f' {size.group(1)}"' if size else ""), pr["c"])
         pr.update(d)
         pr["u"] = use_cases(pr["c"], d)
+        secs = sections_for(pr["c"], name + " " + raw, path)
+        if secs:
+            pr["t"] = secs
+            if "hubs" in secs or "adapters" in secs:
+                cn = connectors_for(raw + " " + name)
+                if cn["ci"]: pr["ci"] = cn["ci"]
+                if cn["co"]: pr["co"] = cn["co"]
+                if cn["pt"]: pr["pt"] = cn["pt"]
         if ice:
             if not pr["img"] and ice.get("img"):
                 pr["img"] = ice["img"]
+            gal = [u for u in (ice.get("gal") or []) if u != pr["img"]]
+            if pr["img"] and ice.get("img") and ice["img"] != pr["img"]:
+                gal = [ice["img"]] + gal
+            if gal and pr["img"]:
+                pr["gal"] = gal[:7]
             if not pr["d"] and ice.get("sum"):
                 pr["d"] = ice["sum"][:1500]
         if pr["id"] in overrides:
@@ -758,6 +858,7 @@ def build(leader_text, dicker_text, out_dir):
         "multiBuy": {k: v for k, v in (CFG["pricing"].get("multiBuy") or {}).items() if k in ("tiers", "minItemPrice")},
         "quotes": CFG.get("quotes", {}),
         "categories": [{"id": c[0], "name": c[1]} for c in CATEGORIES],
+        "sections": [{"id": c[0], "name": c[1]} for c in SECTIONS],
         "updated": now.strftime("%A %-d %B %Y, %-I:%M %p").replace("AM", "am").replace("PM", "pm"),
     }
     with open(os.path.join(out_dir, "data", "products.json"), "w") as f:

@@ -326,3 +326,32 @@ header.site .shopdrop .wrap { display: block; min-height: 0; padding-top: 0; pad
 }
 .dropgrid a.extra { display: none; }
 @media (max-width: 1400px) { .dropgrid a.extra { display: flex; } }
+
+/* v7.0 */
+.prod .gallery:has(.gmain) { display: block; }
+.gmain { position: relative; display: grid; place-items: center; min-height: 300px; }
+.gmain img { max-height: 420px; max-width: 100%; object-fit: contain; }
+.gnav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: #fff; font-size: 1.6rem; line-height: 1; cursor: pointer; box-shadow: var(--shadow); }
+.gnav.prev { left: 0; } .gnav.next { right: 0; }
+.gcount { position: absolute; bottom: 0; right: 0; background: rgba(0,0,0,.6); color: #fff; font-size: .8rem; border-radius: 999px; padding: 2px 10px; }
+.gthumbs { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 4px; }
+.gthumb { flex: none; width: 64px; height: 64px; border: 2px solid var(--line); border-radius: var(--radius); background: #fff; padding: 4px; cursor: pointer; }
+.gthumb.on { border-color: var(--accent); }
+.gthumb img { width: 100%; height: 100%; object-fit: contain; }
+.cat.allcat { background: var(--ink); color: #fff; }
+.cat.allcat svg, .cat.allcat small { color: #fff; }
+.dropgrid a.allfirst { background: var(--accent-soft); }
+.toolbar .sortbox { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.toolbar .sortbox label { font-weight: 600; white-space: nowrap; }
+.toolbar .sortbox select { width: auto; }
+.connf .connrow { display: grid; grid-template-columns: minmax(200px, 300px) 1fr; gap: 12px 20px; align-items: start; }
+.connf .flabel { display: block; font-weight: 600; margin-bottom: 6px; }
+.connchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.connchips .bchip span { padding: 6px 12px; font-weight: 600; font-size: .92rem; }
+.connf .linkbtn, .toolbar + .hint .linkbtn { background: none; border: 0; color: var(--accent-dark); text-decoration: underline; font: inherit; cursor: pointer; padding: 0; }
+@media (max-width: 680px) { .connf .connrow { grid-template-columns: 1fr; } }
+@media (max-width: 680px) {
+  .cats { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 6px; scroll-snap-type: x proximity; }
+  .cats .cat { flex: 0 0 132px; scroll-snap-align: start; padding: 12px; }
+  .cats .cat svg { width: 28px; height: 28px; }
+}

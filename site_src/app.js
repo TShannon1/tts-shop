@@ -1,7 +1,7 @@
-/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v6.1 · 2026-11-14 */
+/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v7.0 · 2026-11-14 */
 (function () {
   "use strict";
-  var APP_VERSION = "v6.1";
+  var APP_VERSION = "v7.0";
   var P = [], CFG = null, BYID = {};
   var app = document.getElementById("app");
   var COMPUTER_CATS = { laptops: 1, desktops: 1, handhelds: 1 };
@@ -33,7 +33,7 @@
   // ---------------------------------------------------------------- helpers
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function money(n) { if (n < 0) return "−" + money(-n); return "$" + Number(n).toLocaleString("en-AU", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); }
-  function catName(id) { if (id === "refurbished") return "Refurbished"; var c = (CFG.categories || []).filter(function (x) { return x.id === id; })[0]; return c ? c.name : id; }
+  function catName(id) { if (id === "refurbished") return "Refurbished"; var sx = ((CFG && CFG.sections) || []).filter(function (x) { return x.id === id; })[0]; if (sx) return sx.name; var c = (CFG.categories || []).filter(function (x) { return x.id === id; })[0]; return c ? c.name : id; }
   function ICON(cat) {
     var paths = {
       laptops: '<rect x="12" y="12" width="40" height="26" rx="2"/><path d="M6 46h52l-4-6H10z"/>',
@@ -45,13 +45,48 @@
       networking: '<path d="M10 26a32 32 0 0 1 44 0M17 33a22 22 0 0 1 30 0M24 40a12 12 0 0 1 16 0"/><circle cx="32" cy="48" r="3"/>',
       handhelds: '<rect x="6" y="20" width="52" height="24" rx="10"/><rect x="22" y="24" width="20" height="16" rx="1"/><path d="M13 32h5M15.5 29.5v5"/><circle cx="49" cy="30" r="1.5"/><circle cx="49" cy="35" r="1.5"/>',
       refurbished: '<path d="M44 14a20 20 0 1 0 8 20"/><path d="M44 6v9h9"/><path d="M24 33l6 6 11-13"/>',
+      all: '<rect x="8" y="8" width="20" height="20" rx="3"/><rect x="36" y="8" width="20" height="20" rx="3"/><rect x="8" y="36" width="20" height="20" rx="3"/><rect x="36" y="36" width="20" height="20" rx="3"/>',
+      hubs: '<rect x="10" y="22" width="44" height="20" rx="4"/><path d="M18 32h4M28 32h4M38 32h8M32 22v-8h-6v-4"/>',
+      adapters: '<path d="M8 32h14M42 32h14"/><rect x="22" y="24" width="20" height="16" rx="3"/><path d="M8 28v8M56 26v12"/>',
+      bags: '<rect x="8" y="22" width="48" height="32" rx="4"/><path d="M24 22v-6a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v6M8 34h48"/>',
+      kbm: '<rect x="4" y="22" width="40" height="20" rx="3"/><path d="M10 28h2M16 28h2M22 28h2M28 28h2M34 28h2M12 36h20"/><rect x="48" y="24" width="12" height="20" rx="6"/><path d="M54 24v7"/>',
+      keyboard: '<rect x="6" y="20" width="52" height="24" rx="3"/><path d="M12 27h2M19 27h2M26 27h2M33 27h2M40 27h2M47 27h4M16 36h32"/>',
+      mouse: '<rect x="20" y="10" width="24" height="44" rx="12"/><path d="M32 10v14"/>',
+      audio: '<path d="M14 40V32a18 18 0 0 1 36 0v8"/><rect x="8" y="38" width="10" height="16" rx="3"/><rect x="46" y="38" width="10" height="16" rx="3"/>',
+      camera: '<circle cx="32" cy="28" r="14"/><circle cx="32" cy="28" r="5"/><path d="M24 50h16M32 42v8"/>',
+      power: '<path d="M24 8v12M40 8v12M18 20h28v10a14 14 0 0 1-28 0z"/><path d="M32 44v12"/>',
+      stand: '<path d="M10 20h44l-6 14H16z"/><path d="M22 34l-6 20M42 34l6 20M18 46h28"/>',
+      lock: '<rect x="14" y="28" width="36" height="26" rx="4"/><path d="M22 28v-8a10 10 0 0 1 20 0v8M32 38v6"/>',
+      ink: '<path d="M32 8c8 12 14 20 14 28a14 14 0 0 1-28 0c0-8 6-16 14-28z"/>',
+      phone: '<rect x="20" y="6" width="24" height="52" rx="4"/><path d="M28 50h8"/>',
       accessories: '<path d="M22 8h20v14H22zM18 22h28l-4 34H22z"/><path d="M32 30v10"/>'
     };
     return '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (paths[cat] || paths.accessories) + "</svg>";
   }
+  // The placeholder drawing matches what the product is, not just its category.
+  function iconFor(p) {
+    var n = p.n.toLowerCase();
+    if (p.c === "accessories" || p.c === "networking" || p.c === "backup" || p.c === "printers") {
+      if (/\bdock|\bhub\b|multiport|port replicator/.test(n) && !/drive dock|enclosure/.test(n)) return "hubs";
+      if (/keyboard/.test(n) && /mouse|mice/.test(n)) return "kbm";
+      if (/keyboard|keypad/.test(n)) return "keyboard";
+      if (/\bmouse\b|\bmice\b|trackball/.test(n)) return "mouse";
+      if (/\bbag\b|backpack|sleeve|briefcase|topload|\bcase\b|tote/.test(n)) return "bags";
+      if (/adapt|converter|dongle|cable/.test(n)) return "adapters";
+      if (/headset|headphone|speaker|earbud|soundbar|microphone/.test(n)) return "audio";
+      if (/webcam|camera/.test(n)) return "camera";
+      if (/charger|power bank|powerbank|\bups\b|power supply|surge/.test(n)) return "power";
+      if (/stand|mount|\barm\b|riser/.test(n)) return "stand";
+      if (/lock\b|security cable/.test(n)) return "lock";
+      if (/ink|toner|cartridge/.test(n)) return "ink";
+    }
+    if (p.c === "tablets" && /phone/.test(n)) return "phone";
+    return p.c;
+  }
   function pic(p, cls) {
-    if (p.img) return '<img src="' + esc(p.img) + '" alt="' + esc(p.n) + '" loading="lazy" class="' + (cls || "") + '" onerror="this.outerHTML=window.__icon(\'' + p.c + '\')">';
-    return ICON(p.c);
+    var ic = iconFor(p);
+    if (p.img) return '<img src="' + esc(p.img) + '" alt="' + esc(p.n) + '" loading="lazy" class="' + (cls || "") + '" onerror="this.outerHTML=window.__icon(\'' + ic + '\')">';
+    return ICON(ic);
   }
   window.__icon = ICON;
   function eta(p) { return p.lt[0] + "–" + p.lt[1] + " days"; }
@@ -99,33 +134,90 @@
   function faq(q, a) { return "<details><summary>" + esc(q) + "</summary><p>" + esc(a) + "</p></details>"; }
 
   // ---------------------------------------------------------------- views
+  // ---------------------------------------------------------------- categories, sections and sorting
+  function inCat(p, cat) {
+    if (!cat) return true;
+    if (cat === "refurbished") return !!p.rf;
+    if (p.c === cat) return true;
+    return (p.t || []).indexOf(cat) >= 0;
+  }
+  function catList() {
+    var counts = { all: P.length };
+    P.forEach(function (p) { counts[p.c] = (counts[p.c] || 0) + 1; if (p.rf) counts.refurbished = (counts.refurbished || 0) + 1; (p.t || []).forEach(function (t) { counts[t] = (counts[t] || 0) + 1; }); });
+    var L = [{ id: "all", name: "All items" }].concat(CFG.categories, [{ id: "refurbished", name: "Refurbished" }], CFG.sections || []);
+    return L.filter(function (c) { return counts[c.id]; }).map(function (c) { return { id: c.id, name: c.name, n: counts[c.id], href: c.id === "all" ? "/#/all" : "/#/c/" + c.id }; });
+  }
+  var COMPUTERISH = { laptops: 1, desktops: 1, handhelds: 1, tablets: 1, refurbished: 1 };
+  function sortOptions(cat) {
+    var o = [["p", "Price"], ["n", "Name"]];
+    if (COMPUTERISH[cat]) {
+      o.push(["ram", "Memory (RAM)"], ["sto", "Storage (GB)"], ["cpu", "Processor speed"]);
+      if (cat !== "desktops") o.push(["scr", "Screen size"]);
+    }
+    if (cat === "monitors") o.push(["scr", "Screen size"], ["res", "Screen resolution"], ["hz", "Refresh rate (Hz)"]);
+    if (cat === "backup") o.push(["sto", "Capacity (GB)"]);
+    if (cat === "hubs" || cat === "adapters") o.push(["pt", "Number of ports"]);
+    return o;
+  }
+  function getSort(cat) {
+    var st = load("tts-sort2", { k: "p", d: 1 });
+    if (typeof st !== "object") st = { k: "p", d: 1 };
+    if (!sortOptions(cat).some(function (o) { return o[0] === st.k; })) st = { k: "p", d: 1 };
+    return st;
+  }
+  function dirLabel(k, d) { return k === "p" ? (d > 0 ? "Lowest first" : "Highest first") : k === "n" ? (d > 0 ? "A to Z" : "Z to A") : (d > 0 ? "Smallest first" : "Largest first"); }
+  function sortList(list, st) {
+    var k = st.k, d = st.d;
+    return list.sort(function (a, b) {
+      if (k === "n") return d * a.n.localeCompare(b.n);
+      var x = a[k], y = b[k];
+      if (k !== "p") { if (!x && !y) return a.p - b.p; if (!x) return 1; if (!y) return -1; }
+      return d * (x - y) || a.p - b.p;
+    });
+  }
+  function connFilter(list, cat) {
+    if (cat !== "hubs" && cat !== "adapters") return { list: list, html: "" };
+    var f = load("tts-conn-" + cat, { ci: "", co: [] }), ins = {}, outs = {};
+    list.forEach(function (p) { (p.ci || []).forEach(function (c) { ins[c] = (ins[c] || 0) + 1; }); });
+    var byIn = list.filter(function (p) { return !f.ci || (p.ci || []).indexOf(f.ci) >= 0; });
+    byIn.forEach(function (p) { (p.co || []).forEach(function (c) { outs[c] = (outs[c] || 0) + 1; }); });
+    var out = byIn.filter(function (p) { return f.co.every(function (c) { return (p.co || []).indexOf(c) >= 0; }); });
+    var order = ["USB-C", "Thunderbolt", "USB-A", "HDMI", "DisplayPort", "Mini DisplayPort", "VGA", "DVI", "Ethernet", "SD card", "Audio (3.5mm)", "Lightning", "Micro-USB"];
+    var h = '<div class="panel connf"><h3>What do you want to plug into what?</h3><div class="connrow"><div class="field"><label for="cin">It plugs into my computer\'s…</label><select id="cin"><option value="">Any port</option>' +
+      order.filter(function (c) { return ins[c]; }).map(function (c) { return '<option value="' + esc(c) + '"' + (f.ci === c ? " selected" : "") + ">" + esc(c) + " port (" + ins[c] + ")</option>"; }).join("") + "</select></div>" +
+      '<div class="field"><span class="flabel">…and lets me connect</span><div class="connchips">' + order.filter(function (c) { return outs[c] || f.co.indexOf(c) >= 0; }).map(function (c) { return '<label class="bchip"><input type="checkbox" data-co="' + esc(c) + '"' + (f.co.indexOf(c) >= 0 ? " checked" : "") + "><span>" + esc(c) + "</span></label>"; }).join("") +
+      "</div></div></div>" + (f.ci || f.co.length ? '<button type="button" class="linkbtn" id="connClear">Clear these choices</button>' : '<p class="hint">Not sure which port you have? <a href="' + esc(CFG.site.smsHref) + '">Text me a photo</a> and I\'ll tell you.</p>') + "</div>";
+    return { list: out, html: h, key: "tts-conn-" + cat, f: f };
+  }
   function viewHome(cat, query, all) {
-    var list = P.filter(function (p) { return !cat || (cat === "refurbished" ? p.rf : p.c === cat); });
-    var useF = load("tts-use", ""), perthF = load("tts-perth", false);
+    var list = P.filter(function (p) { return inCat(p, cat); });
+    var compCtx = !cat || COMPUTERISH[cat];
+    var useF = compCtx && !all && !query ? load("tts-use", "") : "", perthF = load("tts-perth", false);
     if (useF) list = list.filter(function (p) { return (p.u || []).indexOf(useF) >= 0; });
     if (perthF) list = list.filter(function (p) { return p.pe; });
     if (query) {
       var words = query.toLowerCase().split(/\s+/).filter(Boolean);
-      list = list.filter(function (p) { var t = (p.n + " " + p.b + " " + p.sp.join(" ") + " " + catName(p.c)).toLowerCase(); return words.every(function (w) { return t.indexOf(w) >= 0; }); });
+      list = list.filter(function (p) { var t = (p.n + " " + p.b + " " + p.sp.join(" ") + " " + catName(p.c) + " " + (p.t || []).map(catName).join(" ") + " " + p.id).toLowerCase(); return words.every(function (w) { return t.indexOf(w) >= 0; }); });
     }
-    var sort = load("tts-sort", "low");
-    list.sort(function (a, b) { return sort === "high" ? b.p - a.p : sort === "name" ? a.n.localeCompare(b.n) : a.p - b.p; });
-    var counts = {}; P.forEach(function (p) { counts[p.c] = (counts[p.c] || 0) + 1; if (p.rf) counts.refurbished = (counts.refurbished || 0) + 1; });
-    var cats = CFG.categories.concat([{ id: "refurbished", name: "Refurbished" }]);
+    var cf = connFilter(list, cat); list = cf.list;
+    var st = getSort(cat);
+    sortList(list, st);
     var h = "";
     if (!cat && !query && !all) {
       h += '<section class="hero"><h1>Tech that\'s ready to use</h1><p class="lead">New and refurbished laptops, computers, monitors, printers and backup drives, checked, set up and delivered by Tony. Not sure what you need? <a href="' + esc(CFG.site.smsHref) + '">Send me a text</a> or <a href="' + esc(CFG.site.phoneHref) + '">give me a call</a> and I\'ll help you choose.</p></section>';
     } else {
       h += '<div class="crumbs"><a href="/#/">Shop</a> › ' + esc(cat ? catName(cat) : all ? "All items" : 'Search results for "' + query + '"') + "</div>";
       h += "<h2>" + esc(cat ? catName(cat) : all ? "All items" : "Search results" + (query ? " for \u201c" + query + "\u201d" : "")) + "</h2>";
+      if (cat && (CFG.sections || []).some(function (x) { return x.id === cat; })) h += '<p class="hint">These are also listed under <a href="/#/c/accessories">Accessories</a>.</p>';
     }
     if ((!cat && !query && !all) || COMPUTER_CATS[cat]) {
       h += '<section class="panel pickcta"><div><h2>Not sure which computer to get?</h2><p>Tell me what it\'s for and your budget, and I\'ll show you the best options. If nothing fits, I\'ll send you a free custom quote.</p></div>' +
         '<div class="quickuse"><span class="hint">Start with what it\'s for:</span>' + USES.slice(0, 4).map(function (u) { return '<button type="button" class="btn ghost small" data-quse="' + u[0] + '">' + esc(u[1].split(/[:,&]/)[0].trim()) + "</button>"; }).join("") +
         '<a class="btn" href="/picker.html">Help me choose</a></div></section>';
     }
-    h += '<nav class="cats" aria-label="Categories">' + cats.filter(function (c) { return counts[c.id]; }).map(function (c) {
-      return '<a class="cat' + (c.id === cat ? " on" : "") + '" href="/#/c/' + c.id + '">' + ICON(c.id) + "<b>" + esc(c.name) + "</b><small>" + counts[c.id] + " available</small></a>";
+    var cur = all ? "all" : cat;
+    h += '<nav class="cats" aria-label="Categories">' + catList().map(function (c) {
+      return '<a class="cat' + (c.id === cur ? " on" : "") + (c.id === "all" ? " allcat" : "") + '" href="' + c.href + '">' + ICON(c.id) + "<b>" + esc(c.name) + "</b><small>" + c.n + " available</small></a>";
     }).join("") + "</nav>";
     var home = !cat && !query && !all && !useF && !perthF;
     if (home) {
@@ -133,14 +225,30 @@
       h += "<h2>Popular picks</h2>";
       list = pickPopular();
     }
-    h += '<div class="toolbar"><span>' + list.length + ' products</span><label class="sr" for="use">Use</label><select id="use"><option value="">Any use</option>' + USES.map(function (u) { return '<option value="' + u[0] + '"' + (useF === u[0] ? " selected" : "") + ">" + esc(u[1]) + "</option>"; }).join("") + '</select><label class="sr" for="sort">Sort</label><select id="sort"><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="name">Name</option></select><label class="opt" style="border:0;padding:0"><input type="checkbox" id="perthOnly"' + (perthF ? " checked" : "") + '><span class="t">In stock in Perth only</span></label></div>';
-    if (useF) h += '<p class="hint">Showing laptops and desktops suited to: ' + esc(useName(useF)) + '. Other products are hidden while this filter is on.</p>';
+    h += cf.html;
+    var so = sortOptions(cat);
+    h += '<div class="toolbar"><span>' + list.length + " product" + (list.length === 1 ? "" : "s") + "</span>" +
+      (compCtx && !all && !query ? '<label class="sr" for="use">Suits</label><select id="use"><option value="">Suits any use</option>' + USES.map(function (u) { return '<option value="' + u[0] + '"' + (useF === u[0] ? " selected" : "") + ">" + esc(u[1]) + "</option>"; }).join("") + "</select>" : "") +
+      (home ? "" : '<span class="sortbox"><label for="sort">Sort by</label><select id="sort">' + so.map(function (o) { return '<option value="' + o[0] + '"' + (st.k === o[0] ? " selected" : "") + ">" + esc(o[1]) + "</option>"; }).join("") + '</select><button type="button" class="btn ghost small" id="sortDir" aria-label="Reverse the order">' + (st.d > 0 ? "↑ " : "↓ ") + dirLabel(st.k, st.d) + "</button></span>") +
+      '<label class="opt" style="border:0;padding:0"><input type="checkbox" id="perthOnly"' + (perthF ? " checked" : "") + '><span class="t">In stock in Perth only</span></label></div>';
+    if (useF) h += '<p class="hint">Showing computers suited to: ' + esc(useName(useF)) + '. <button type="button" class="linkbtn" id="useClear">Show all</button></p>';
     if (!list.length) h += '<div class="empty">Nothing matches that right now. Try another search, or <a href="' + esc(CFG.site.smsHref) + '">text Tony</a> and I\'ll find it for you.</div>';
     h += '<div class="grid" id="grid"></div><div class="sentinel" id="sentinel"></div><p class="loadingmore" id="more" hidden>Loading more…</p>';
     app.innerHTML = h;
-    var s = document.getElementById("sort"); s.value = sort;
-    s.onchange = function () { save("tts-sort", s.value); render(); };
-    document.getElementById("use").onchange = function (e) { save("tts-use", e.target.value); render(); };
+    var onCat = app.querySelector(".cats .cat.on"); if (onCat) onCat.parentNode.scrollLeft = onCat.offsetLeft - onCat.parentNode.offsetLeft - 16;
+    var s = document.getElementById("sort");
+    if (s) {
+      s.onchange = function () { var d = /^(p|n)$/.test(s.value) ? 1 : -1; save("tts-sort2", { k: s.value, d: d }); render(); };
+      document.getElementById("sortDir").onclick = function () { save("tts-sort2", { k: st.k, d: -st.d }); render(); };
+    }
+    var us = document.getElementById("use"); if (us) us.onchange = function (e) { save("tts-use", e.target.value); render(); };
+    var uc = document.getElementById("useClear"); if (uc) uc.onclick = function () { save("tts-use", ""); render(); };
+    if (cf.key) {
+      var cin = document.getElementById("cin");
+      cin.onchange = function () { save(cf.key, { ci: cin.value, co: [] }); render(); };
+      Array.prototype.forEach.call(app.querySelectorAll("[data-co]"), function (c) { c.onchange = function () { var co = [].filter.call(app.querySelectorAll("[data-co]"), function (x) { return x.checked; }).map(function (x) { return x.getAttribute("data-co"); }); save(cf.key, { ci: cf.f.ci, co: co }); render(); }; });
+      var cc = document.getElementById("connClear"); if (cc) cc.onclick = function () { save(cf.key, { ci: "", co: [] }); render(); };
+    }
     document.getElementById("perthOnly").onchange = function (e) { save("tts-perth", e.target.checked); render(); };
     Array.prototype.forEach.call(app.querySelectorAll("[data-quse]"), function (b) {
       b.onclick = function () { var q = load("tts-pick", null) || defaultPick(); q.uses = [b.getAttribute("data-quse")]; if (COMPUTER_CATS[cat]) q.type = cat; save("tts-pick", q); location.href = "/picker.html"; };
@@ -176,10 +284,9 @@
     f.onsubmit = function (e) { e.preventDefault(); var v = q.value.trim(); q.blur(); go(v ? "#/s/" + encodeURIComponent(v) : "#/all"); return false; };
     // Shop menu: categories + "View all items". Opens on hover (mouse) or tap/click/keyboard.
     var btn = document.getElementById("shopBtn"), drop = document.getElementById("shopDrop"), grid = document.getElementById("dropGrid"), timer;
-    var counts = {}; P.forEach(function (p) { counts[p.c] = (counts[p.c] || 0) + 1; if (p.rf) counts.refurbished = (counts.refurbished || 0) + 1; });
-    var cats = CFG.categories.concat([{ id: "refurbished", name: "Refurbished" }]).filter(function (c) { return counts[c.id]; });
-    grid.innerHTML = cats.map(function (c) { return '<a href="/#/c/' + c.id + '">' + ICON(c.id) + "<span>" + esc(c.name) + "<small>" + counts[c.id] + " items</small></span></a>"; }).join("") +
-      '<a href="/#/all" class="all"><span>View all items<small>' + P.length + ' items</small></span></a><a href="/picker.html" class="pick"><span>Help me choose<small>Answer a few questions</small></span></a>' +
+    var cl = catList();
+    grid.innerHTML = cl.map(function (c) { return '<a href="' + c.href + '"' + (c.id === "all" ? ' class="allfirst"' : "") + ">" + ICON(c.id) + "<span>" + esc(c.name) + "<small>" + c.n + " items</small></span></a>"; }).join("") +
+      '<a href="/picker.html" class="pick"><span>Help me choose<small>Answer a few questions</small></span></a>' +
       '<a class="extra" href="' + esc(CFG.site.mainSite) + '" target="_blank" rel="noopener"><span>Main website<small>tonystechsupport.com.au</small></span></a><a class="extra" href="' + esc(CFG.site.mainSite.replace(/\/$/, "")) + '/contact" target="_blank" rel="noopener"><span>Contact Tony<small>' + esc(CFG.site.phone) + "</small></span></a>";
     function open() { clearTimeout(timer); drop.hidden = false; btn.setAttribute("aria-expanded", "true"); place(); }
     function close() { clearTimeout(timer); drop.hidden = true; btn.setAttribute("aria-expanded", "false"); }
@@ -209,7 +316,7 @@
     var p = BYID[id];
     if (!p) { app.innerHTML = '<div class="empty" style="margin-top:30px"><h2>That product has sold out</h2><p>Stock changes every day. <a href="/#/">See what\'s available</a>, or <a href="' + esc(CFG.site.smsHref) + '">text Tony</a> and I\'ll find you an equivalent.</p></div>' + guarantee(); return; }
     var h = '<div class="crumbs"><a href="/#/">Shop</a> › <a href="/#/c/' + p.c + '">' + esc(catName(p.c)) + "</a></div>";
-    h += '<div class="prod"><div class="gallery">' + pic(p) + (p.ims ? '<p class="hint photonote">Photo shows this model. Colour, keyboard and ports can vary by configuration.</p>' : "") + "</div><div>";
+    h += '<div class="prod"><div class="gallery">' + galleryHtml(p) + (p.ims ? '<p class="hint photonote">Photo shows this model. Colour, keyboard and ports can vary by configuration.</p>' : "") + "</div><div>";
     h += "<h2>" + esc(p.n) + "</h2>";
     h += '<div class="price" style="font-size:2.2rem">' + money(p.p) + '</div><div class="hint">Includes GST. Delivery and setup options are in the cart.</div>';
     h += '<div class="meta">';
@@ -231,7 +338,30 @@
     h += guarantee();
     app.innerHTML = h;
     document.getElementById("add").onclick = function () { addToCart(p.id, 1); go("#/cart"); };
-    bindDriveButtons(); bindBundle(); cmpBar();
+    bindDriveButtons(); bindBundle(); bindGallery(p); cmpBar();
+  }
+  function galleryHtml(p) {
+    var imgs = p.img ? [p.img].concat(p.gal || []) : [];
+    if (imgs.length < 2) return pic(p);
+    return '<div class="gmain"><img id="gimg" src="' + esc(imgs[0]) + '" alt="' + esc(p.n) + ', photo 1 of ' + imgs.length + '">' +
+      '<button type="button" class="gnav prev" id="gprev" aria-label="Previous photo">‹</button><button type="button" class="gnav next" id="gnext" aria-label="Next photo">›</button><span class="gcount" id="gcount">1 / ' + imgs.length + "</span></div>" +
+      '<div class="gthumbs" role="list">' + imgs.map(function (u, i) { return '<button type="button" role="listitem" class="gthumb' + (i ? "" : " on") + '" data-gi="' + i + '" aria-label="Show photo ' + (i + 1) + '"><img src="' + esc(u) + '" alt="" loading="lazy"></button>'; }).join("") + "</div>";
+  }
+  function bindGallery(p) {
+    var im = document.getElementById("gimg"); if (!im) return;
+    var imgs = [p.img].concat(p.gal || []), i = 0;
+    function show(n) {
+      i = (n + imgs.length) % imgs.length; im.src = imgs[i]; im.alt = p.n + ", photo " + (i + 1) + " of " + imgs.length;
+      document.getElementById("gcount").textContent = (i + 1) + " / " + imgs.length;
+      Array.prototype.forEach.call(document.querySelectorAll(".gthumb"), function (t, k) { t.classList.toggle("on", k === i); });
+    }
+    im.onerror = function () { imgs.splice(i, 1); if (imgs.length) show(i); };
+    document.getElementById("gprev").onclick = function () { show(i - 1); };
+    document.getElementById("gnext").onclick = function () { show(i + 1); };
+    Array.prototype.forEach.call(document.querySelectorAll(".gthumb"), function (t) { t.onclick = function () { show(Number(t.getAttribute("data-gi"))); }; t.querySelector("img").onerror = function () { t.remove(); }; });
+    var x0 = null;
+    im.parentNode.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    im.parentNode.addEventListener("touchend", function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) show(i + (dx < 0 ? 1 : -1)); x0 = null; });
   }
   function backupDrives() {
     var d = P.filter(function (x) { return x.c === "backup" && /drive|hdd|ssd|canvio|passport|expansion|portable/i.test(x.n) && !/enclosure|dock|duplicator|nas|bay/i.test(x.n); })
