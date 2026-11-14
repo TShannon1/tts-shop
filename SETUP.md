@@ -1,4 +1,5 @@
 # Tony's Tech Support Shop – setup guide
+Version v6.0 (14 Nov 2026). See CHANGELOG.md for what changed.
 
 This folder builds **shop.tonystechsupport.com.au**. It is hosted free on GitHub Pages. Every night at about 1:40 am (Perth time), GitHub:
 
@@ -50,15 +51,15 @@ Then go to the **Actions** tab, click **Update shop → Run workflow** to build 
 ### 5. Delivery cost calculator
 Built in, so there's nothing to set up. It uses a table of every WA suburb (`site_src/suburbs.json`) with its distance from Hazelmere, and your callout rules: round trip × $1.45/km, rounded up to $5, $10 minimum, free within 2 km. Straight-line distance is multiplied by `callout.roadFactor` (1.3) to allow for real roads. That matches your calculator for Huntingdale ($80). Suburbs more than 120 km away show "I'll confirm the cost". Adjust these in `config.json` → `callout`.
 
-### 6. Get a text for every order (Tech Automation)
-1. In Tech Automation, go to **Automation → Workflows → Create workflow → Start from scratch**.
-2. Trigger: **Inbound Webhook**. Copy the webhook URL it shows.
-3. Paste that URL into `config.json` → `"orders": { "webhookUrl": "…" }` and commit the change.
-4. Place a test order on the shop, then in the workflow trigger click **Fetch sample request** so it sees the fields.
-5. Add action **Send SMS** (or Internal Notification → SMS) to your own number, with the message set to the `summary` field from the webhook (it contains the whole order in plain text). Optionally add **Create/Update Contact** using `customer.name`, `customer.phone` and `customer.email`.
-6. Publish the workflow and place one more test order to check the text arrives.
+### 6. Get a text for every order (Tech Automation) – done
+A workflow called **Shop order alert (shop.tonystechsupport.com.au)** is set up and published in Tech Automation (Automation → Workflows). Each order is sent to its Inbound Webhook, and it texts you (user Tony Shannon) the full order summary. The webhook URL is already in `config.json` → `orders.webhookUrl`.
 
-If no webhook is set, or the browser can't send it, the confirmation page asks the client to email or text the order to you instead.
+The order fields available in the workflow are: `ref`, `name`, `first_name`, `phone`, `email`, `address`, `total`, `payment`, `items`, `summary`. Inbound Webhook is a premium trigger, so Tech Automation charges a small fee for each order it receives.
+
+If the alert can't be reached, the confirmation page falls back to the "send your order to Tony" button.
+
+### 6b. Quote requests by email – done
+**Help me choose** sends custom quote requests, repair/upgrade quote requests and "send a copy to Tony" questions by **email only**, through a second workflow: **Shop quote request email (shop.tonystechsupport.com.au)**. It emails tony@tonystechsupport.com.au with the client's answers, the options they saw, their special requests and a link to their results. The webhook URL is in `config.json` → `quotes.webhookUrl`. The first test landed in Gmail's **Promotions** tab: drag it to Primary (or make a filter for "Help me choose page") so you don't miss them.
 
 ### 7. Payment details
 Already filled in from your payment options (PayID, UBank transfer, card via a Zeller link, PayPal, cash by arrangement). Bank details only appear on the order confirmation page, never in Google. Edit `config.json` → `payments` to change them.
@@ -73,6 +74,13 @@ Google usually starts showing new pages within a few days to a few weeks.
 
 ### 9. Card payments (optional)
 See `stripe-worker/README.md`. You'll need free Stripe and Cloudflare accounts (I can't create accounts for you). Once set up, a "Credit or debit card" option appears at checkout.
+
+### Refurbished machines
+- Refurbished and ex-demo computers in the supplier feeds are now included and labelled with their grade.
+- To add refurbs you source yourself, edit `refurbished.json` (instructions are at the top of the file). Enter the **selling price**, never your buy price: the repo is public.
+
+### Multi-buy discount
+`config.json` → `pricing.multiBuy`: 2% off 2 items, 4% off 3, 6% off 4, 8% off 5 or more (items $30+, across the whole shop). Each product is checked so it never drops below a 15% markup on its cost plus freight (`floorMarkup`). With your 25% markup, 8% is the most any tier can be.
 
 ### Product photos
 - **Automatic:** photos come from Open Icecat. Each night the shop looks up every product that doesn't have a photo yet, including other spellings of the part number (HP's Australian codes and Lenovo's other-region codes), six at a time. After the first couple of runs, every product will have been checked.

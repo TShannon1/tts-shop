@@ -12,7 +12,8 @@
     "email": "tony@tonystechsupport.com.au",
     "abn": "89 792 481 545",
     "address": "10 McMullan View, Hazelmere WA 6055",
-    "hours": "Monday to Friday, 9am to 5pm"
+    "hours": "Monday to Friday, 9am to 5pm",
+    "bookingUrl": "https://www.tonystechsupport.com.au/appointments"
   },
   "pricing": {
     "markup": 1.25,
@@ -28,7 +29,8 @@
       "backup": 8,
       "printers": 20,
       "networking": 10,
-      "accessories": 8
+      "accessories": 8,
+      "handhelds": 15
     },
     "_freightExGst": "Estimated freight from the distributor to you, per item, before GST. It is added to cost before the markup. Adjust to match your real freight charges.",
     "perthPreferencePct": 2,
@@ -36,7 +38,30 @@
     "roundTo": 5,
     "_roundTo": "All product prices and calculated charges are rounded up to the nearest $5.",
     "hideWithoutPhoto": false,
-    "_hideWithoutPhoto": "true hides products that have no photo yet. Add your own photos to the photos/ folder named after the part number, e.g. photos/B9GD4PT.jpg."
+    "_hideWithoutPhoto": "true hides products that have no photo yet. Add your own photos to the photos/ folder named after the part number, e.g. photos/B9GD4PT.jpg.",
+    "multiBuy": {
+      "minItemPrice": 30,
+      "floorMarkup": 1.15,
+      "tiers": [
+        {
+          "items": 2,
+          "pct": 2
+        },
+        {
+          "items": 3,
+          "pct": 4
+        },
+        {
+          "items": 4,
+          "pct": 6
+        },
+        {
+          "items": 5,
+          "pct": 8
+        }
+      ]
+    },
+    "_multiBuy": "Buy more, save more. Counts every item in the cart priced at minItemPrice or more. A product is never discounted below its cost (incl. freight and GST) x floorMarkup (1.15 = 15% markup). With the normal 25% markup, 8% is the most that keeps 15%."
   },
   "leadTimes": {
     "_comment": "Supplier days to reach Tony, before the extra handling days are added. Shown to clients as a range in calendar days.",
@@ -148,7 +173,13 @@
     "_stripeWorker": "Optional: URL of your Cloudflare Worker for instant card payments (see stripe-worker/README.md)."
   },
   "orders": {
-    "webhookUrl": "",
+    "webhookUrl": "https://services.leadconnectorhq.com/hooks/41zLVG05mW3KqtPbPBHo/webhook-trigger/23b98e1c-c469-43a6-afe8-51dff16d54f7",
     "_webhookUrl": "Paste your Tech Automation (GoHighLevel) Inbound Webhook URL here. Each order is sent there so the workflow can text you."
+  },
+  "quotes": {
+    "webhookUrl": "https://services.leadconnectorhq.com/hooks/41zLVG05mW3KqtPbPBHo/webhook-trigger/d0ec9301-fce5-4d88-a296-848f52fa5cea",
+    "email": "tony@tonystechsupport.com.au",
+    "responseTime": "1 business day",
+    "_webhookUrl": "Tech Automation inbound webhook that EMAILS Tony quote requests and saved picker results (workflow 'Shop quote request email')."
   }
 }

@@ -1,0 +1,18 @@
+{
+  "_help": "Refurbished machines you source yourself. Add one block per machine, then commit; it appears in the shop at the next update. price = what the client pays, including GST (your cost incl. GST and delivery x 1.25, rounded up to $5). Don't put your buy price here: this file is public. Set \"sold\": true (or delete the block) when it's gone. Photos: put a file in photos/ named after the part (e.g. photos/LAT7310-01.jpg) or paste an image link in \"image\". Never put the seller's name here; this file is public.",
+  "items": [
+    {
+      "part": "EXAMPLE-01",
+      "name": "Example: Dell Latitude 7310 13.3\" i5-10310U 16GB 256GB SSD Windows 11 Pro",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 400,
+      "grade": "A",
+      "warrantyMonths": 6,
+      "description": "Grade A refurbished business laptop. Checked, updated and set up by Tony. Light, fast SSD, backlit keyboard.",
+      "image": "",
+      "inPerth": true,
+      "sold": true
+    }
+  ]
+}

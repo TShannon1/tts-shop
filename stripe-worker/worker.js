@@ -49,20 +49,37 @@ async function createCheckout(order, env) {
   const res = await fetch(shop + "/data/products.json", { cf: { cacheTtl: 300 } });
   if (!res.ok) throw new Error("could not load shop prices");
   const catalogue = new Map((await res.json()).map((p) => [p.id, p]));
+  const cfgRes = await fetch(shop + "/data/config.json", { cf: { cacheTtl: 300 } });
+  const mb = cfgRes.ok ? ((await cfgRes.json()).multiBuy || {}) : {};
+  const tiers = Array.isArray(mb.tiers) ? mb.tiers : [];
+  const minItem = Number(mb.minItemPrice || 0);
 
-  const lines = [];
-  let total = 0;
+  // Same multi-buy maths as the shop: count qualifying items, pick the tier, never past a product's own limit.
+  const items = [];
+  let count = 0;
   for (const it of order.items) {
     const p = catalogue.get(String(it.part));
     const qty = Math.floor(Number(it.qty));
     if (!p) throw new Error("item no longer available: " + it.part);
     if (!(qty >= 1 && qty <= MAX_QTY)) throw new Error("bad quantity");
-    lines.push({ name: p.n.slice(0, 250), amount: Math.round(p.p * 100), qty });
-    total += p.p * qty;
+    items.push({ p, qty });
+    if (p.p >= minItem) count += qty;
+  }
+  let pct = 0;
+  for (const t of tiers) if (count >= t.items && t.pct > pct) pct = t.pct;
+
+  const lines = [];
+  let total = 0;
+  for (const { p, qty } of items) {
+    const ip = pct && p.p >= minItem ? Math.min(pct, p.md == null ? pct : p.md) : 0;
+    const unit = p.p - Math.floor((p.p * ip) / 100);
+    lines.push({ name: (p.n + (ip ? ` (${ip}% multi-buy)` : "")).slice(0, 250), amount: Math.round(unit * 100), qty });
+    total += unit * qty;
   }
   for (const ex of order.extras || []) {
     const price = Number(ex.price);
     if (typeof ex.price !== "number" || price === 0) continue; // free items and "to be confirmed"
+    if (/multi-buy discount/i.test(String(ex.item)) && price < 0) continue; // already applied to the item prices above
     if (!(price > 0 && price <= MAX_EXTRA)) throw new Error("bad service price");
     lines.push({ name: String(ex.item).slice(0, 250), amount: Math.round(price * 100), qty: 1 });
     total += price;

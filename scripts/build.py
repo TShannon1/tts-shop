@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Version v5.0 · 2026-11-13
 """Build Tony's Tech Support shop from distributor price/stock feeds.
 
 Reads the Leader Computers and Dicker Data reseller feeds, keeps the product
@@ -27,6 +28,8 @@ CATEGORIES = [
         r"^desktops > (desktops|all.?in.?one|small form fac.*|micro.*|tiny|24 inch|mini tower|ultra.*form.*)$",
         r"^systems - "]),
     ("tablets", "Tablets", [r"^tablets > \d+ inch$", r"^tablets$", r"^tablets > tablets"]),
+    # Handheld gaming PCs are found by name (see HANDHELD_NAME), whatever category the supplier files them under.
+    ("handhelds", "Handheld Gaming PCs", []),
     ("monitors", "Monitors", [r"^displays > (19|21|22|23|24|25|27|28|31|32|34|38) inch$", r"^monitors"]),
     ("backup", "Backup Drives & Storage", [
         r"^storage > portable hdd$", r"^storage media > (portable hdd|usb drives)$", r"^storage > nas$",
@@ -41,9 +44,14 @@ CATEGORIES = [
         r"^(keyboards|mouse|notebook accessories|web cams|speakers, headsets & mic|dvd & bluray drives|macbook accessories)"]),
 ]
 EXCLUDE_NAME = re.compile(
-    r"warranty|care ?pack|\bservice|licen[cs]e|subscription|training|\bedu\b|education only|"
-    r"soh only|refurb|demo unit|ex-?demo|\bspare\b|replacement part|cleaning|rack ?mount|"
+    r"warranty|care ?pack|next business day|\bnbd\b|hardware support|support plan|travel coverage|accidental damage|\bservice|licen[cs]e|subscription|training|\bedu\b|education only|"
+    r"soh only|\bspare\b|replacement part|cleaning|rack ?mount|"
     r"\bpoe\b|enterprise|server|buy [2-9]\b|buy two|\b[2-9] ?x ?bonus|\b\d+ ?x ?bundle|\bpack of \d+|smartnet|software upgrade|pc kit|barebone|\(0/\d\)", re.I)
+# Handheld gaming PCs (most can plug into a dock to become a desktop).
+HANDHELD_NAME = re.compile(r"legion go|rog ally|xbox ally|\bmsi claw|steam deck|zotac zone|ayaneo|onexplayer|gpd win|handheld (gaming )?pc|game console", re.I)
+# Refurbished / ex-demo stock is kept for computers, tablets and handhelds only, and labelled clearly.
+REFURB_NAME = re.compile(r"refurb|renewed|pre-?owned|demo unit|ex-?demo|\bdemo\b|\bgrade [abc]\b", re.I)
+REFURB_CATS = {"laptops", "desktops", "tablets", "handhelds"}
 # Accessories this broad need a sanity filter so the shop stays home/small-business friendly.
 MAX_PRICE_BY_CAT = {"networking": 800, "backup": 2500, "accessories": 1200, "monitors": 2500, "printers": 2000}
 
@@ -174,6 +182,8 @@ def derive(name, cat):
 
 def use_cases(cat, d):
     """Which everyday uses a device suits, based on its specs."""
+    if cat == "handhelds":
+        return ["everyday", "gaming", "portable"]
     if cat not in ("laptops", "desktops"):
         return []
     ram, cpu, sto = d.get("ram", 0), d.get("cpu", 0), d.get("sto", 0)
@@ -439,13 +449,13 @@ def write_seo_pages(products, out_dir, now):
         url = f"{base}/p/{pr['s']}.html"
         urls.append((url, "daily"))
         title = f"{pr['n']} | {money(pr['p'])} | Tony's Tech Support Perth"
-        desc = (f"{pr['n']} for {money(pr['p'])}, checked, set up and delivered in Perth by Tony's Tech Support. "
+        desc = (("Refurbished " if pr.get("rf") else "") + f"{pr['n']} for {money(pr['p'])}, checked, set up and delivered in Perth by Tony's Tech Support. "
                 + ", ".join(pr["sp"]))[:300]
         ld = {
             "@context": "https://schema.org", "@type": "Product", "name": pr["n"], "sku": pr["id"], "mpn": pr["id"],
             "category": cats.get(pr["c"], ""), "description": (pr["d"] or desc)[:500],
             "offers": {"@type": "Offer", "url": url, "priceCurrency": "AUD", "price": f"{pr['p']:.2f}",
-                       "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/NewCondition",
+                       "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/" + ("RefurbishedCondition" if pr.get("rf") else "NewCondition"),
                        "seller": {"@type": "LocalBusiness", "name": "Tony's Tech Support", "telephone": CFG["site"]["phone"],
                                   "address": {"@type": "PostalAddress", "streetAddress": "10 McMullan View", "addressLocality": "Hazelmere",
                                               "addressRegion": "WA", "postalCode": "6055", "addressCountry": "AU"}}},
@@ -491,6 +501,68 @@ def money(n):
     return "$" + (f"{n:,.0f}" if n == int(n) else f"{n:,.2f}")
 
 
+# ---------------------------------------------------------------- refurbished machines Tony sources himself
+def refurb_grade(name):
+    m = re.search(r"\bgrade ([abc])\b", name, re.I)
+    if m:
+        return m.group(1).upper()
+    return "Ex-demo" if re.search(r"demo", name, re.I) else ""
+
+
+def curated_refurbs():
+    """Machines listed by hand in refurbished.json (e.g. quality refurbs Tony buys in)."""
+    path = os.path.join(ROOT, "refurbished.json")
+    if not os.path.exists(path):
+        return []
+    try:
+        items = json.load(open(path, encoding="utf-8")).get("items", [])
+    except Exception as e:
+        print(f"refurbished.json could not be read: {e}", file=sys.stderr)
+        return []
+    p = CFG["pricing"]
+    step = p.get("roundTo", 1) or 1
+    out = []
+    for r in items:
+        if not r.get("name") or not r.get("price") or r.get("sold"):
+            continue
+        part = norm_mpn(r.get("part") or r["name"])[:24]
+        cat = r.get("category", "laptops")
+        price = math.ceil(float(r["price"]) / step - 1e-9) * step
+        buy = price / p["markup"]  # assumed: priced at the normal markup (the repo is public, so no buy prices here)
+        lt = r.get("leadDays") or [2, 5]  # Tony already has it, or it's a short trip away
+        out.append({
+            "id": "R" + part, "_raw": r["name"], "_brand": r.get("brand", ""), "_mpn": "", "_path": "",
+            "_noicecat": True,
+            "b": r.get("brand", ""), "c": cat, "p": price, "img": r.get("image", ""),
+            "d": r.get("description", ""), "w": (str(r["warrantyMonths"]) + " months") if r.get("warrantyMonths") else "",
+            "lt": lt, "low": 1, "pe": 1 if r.get("inPerth", True) else 0,
+            "os": "", "k": "T", "rf": 1, "gr": r.get("grade", ""), "_floor": buy,
+        })
+    print(f"Added {len(out)} refurbished machines from refurbished.json", file=sys.stderr)
+    return out
+
+
+def apply_discount_limits(products):
+    """Multi-buy discount: work out the most each product may be discounted while keeping
+    the minimum markup (pricing.multiBuy.floorMarkup) on that product. Only a coarse step
+    is published (never the buy price)."""
+    mb = CFG["pricing"].get("multiBuy") or {}
+    tiers = sorted(t["pct"] for t in mb.get("tiers", []))
+    if not tiers:
+        for pr in products:
+            pr.pop("_floor", None)
+        return
+    floor_markup = mb.get("floorMarkup", 1.15)
+    top = tiers[-1]
+    for pr in products:
+        floor = pr.pop("_floor", 0) * floor_markup
+        allowed = 1 - floor / pr["p"] if pr["p"] else 0
+        if allowed * 100 + 1e-6 >= top:
+            continue  # full discount fine
+        ok = [t for t in tiers if t <= allowed * 100 + 1e-9]
+        pr["md"] = ok[-1] if ok else 0
+
+
 # ---------------------------------------------------------------- main build
 def build(leader_text, dicker_text, out_dir):
     raw = []
@@ -504,9 +576,14 @@ def build(leader_text, dicker_text, out_dir):
     stats = {"kept": 0, "aboveRRP": 0, "both": 0}
     for it in raw:
         cat = cat_for(it["path"])
+        if HANDHELD_NAME.search(it["name"]) and (cat or re.search(r"notebook|gaming|console|tablet", it["path"], re.I)):
+            cat = "handhelds"
         if not cat or it["stock"] <= 0 or not (it["costEx"] > 0):
             continue
         if EXCLUDE_NAME.search(it["name"]):
+            continue
+        it["rf"] = bool(REFURB_NAME.search(it["name"]))
+        if it["rf"] and cat not in REFURB_CATS:
             continue
         key = norm_mpn(it["mpn"])
         if not key:
@@ -555,9 +632,15 @@ def build(leader_text, dicker_text, out_dir):
             "pe": 1 if it["perth"] > 0 else 0,
             "os": os_for(it["brand"], it["name"], it["cat"]),
             "k": it["src"],
+            "_floor": (it["costEx"] + CFG["pricing"]["freightExGst"].get(it["cat"], 10)) * (1 + CFG["pricing"]["gst"]),
+            **({"rf": 1, "gr": refurb_grade(it["name"])} if it.get("rf") else {}),
         })
 
-    enrich_from_icecat(products)
+    products += curated_refurbs()
+
+    enrich_from_icecat([p for p in products if not p.get("_noicecat")])
+    for p in products:
+        p.pop("_noicecat", None)
     overrides = {}
     pdir = os.path.join(ROOT, "photos")
     if os.path.isdir(pdir):
@@ -576,6 +659,9 @@ def build(leader_text, dicker_text, out_dir):
             brand = pr["b"]
             if brand and norm_mpn(brand) not in norm_mpn(" ".join(name.split()[:3])):
                 name = f"{brand} {name}"
+        if pr.get("rf"):  # the "Refurbished" badge and grade are shown separately
+            name = re.sub(r"\s*\b(refurbished|refurb|renewed|pre-?owned|ex-?demo|demo unit|demo|grade [abc])\b\s*", " ", name, flags=re.I)
+            name = re.sub(r"^(\w+) \1\b", r"\1", re.sub(r"\s+", " ", name).strip(), flags=re.I)
         pr["n"] = name
         text = name + " " + raw
         pr["sp"] = specs_for(text, pr["c"])
@@ -592,6 +678,7 @@ def build(leader_text, dicker_text, out_dir):
             pr["img"] = "/photos/" + overrides[pr["id"]]
         pr["os"] = pr["os"] or os_for(brand_raw, name, pr["c"])
         pr["s"] = slug(pr["id"])
+    apply_discount_limits(products)
     if CFG["pricing"].get("hideWithoutPhoto"):
         before = len(products)
         products = [p for p in products if p["img"]]
@@ -610,6 +697,8 @@ def build(leader_text, dicker_text, out_dir):
     public_cfg = {
         "site": CFG["site"], "services": CFG["services"], "payments": CFG["payments"],
         "orders": CFG["orders"], "callout": CFG["callout"], "roundTo": CFG["pricing"].get("roundTo", 1),
+        "multiBuy": {k: v for k, v in (CFG["pricing"].get("multiBuy") or {}).items() if k in ("tiers", "minItemPrice")},
+        "quotes": CFG.get("quotes", {}),
         "categories": [{"id": c[0], "name": c[1]} for c in CATEGORIES],
         "updated": now.strftime("%A %-d %B %Y, %-I:%M %p").replace("AM", "am").replace("PM", "pm"),
     }
