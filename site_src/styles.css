@@ -71,7 +71,7 @@ label { font-weight: 600; }
 .cat small { color: var(--muted); }
 .toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 8px 0 16px; }
 .toolbar select { width: auto; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15em), 1fr)); gap: 16px; }
 .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden; text-decoration: none; color: var(--ink); border: 2px solid transparent; }
 .card:hover { border-color: var(--accent); }
 .card .pic { aspect-ratio: 4/3; background: #fafaf8; display: grid; place-items: center; padding: 12px; }
@@ -151,7 +151,7 @@ footer.site a { color: var(--ink); }
 }
 @media (max-width: 480px) {
   html { font-size: 17px; }
-  .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 10em), 1fr)); gap: 10px; }
   .card .body { padding: 10px; }
   .price { font-size: 1.3rem; }
   .line { grid-template-columns: 56px 1fr; }
@@ -381,3 +381,9 @@ header.site .shopdrop .wrap { display: block; min-height: 0; padding-top: 0; pad
 #printdoc .pd-picks th:nth-child(2), #printdoc .pd-picks td:nth-child(2) { text-align: left; white-space: normal; }
 #printdoc .pd-h2 { break-after: avoid; page-break-after: avoid; }
 #cantfind, #send, #bundle { scroll-margin-top: 100px; }
+/* v7.2: card grids size by text, so larger phone text settings get one card per row instead of squashed pairs */
+.tiers { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16em), 1fr)); }
+.toolbar select, .toolbar .sortbox, .connf select { max-width: 100%; min-width: 0; }
+.toolbar .sortbox select { flex: 1 1 8em; }
+@media (max-width: 820px) { nav.top { flex-wrap: wrap; justify-content: flex-end; min-width: 0; } header.site .brand { flex: none; } }
+footer.site a, .pd-head, .card .name { overflow-wrap: anywhere; }

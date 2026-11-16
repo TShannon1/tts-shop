@@ -1,5 +1,10 @@
 # Changelog – Tony's Tech Support Shop
 
+## v7.2 · 15 Nov 2026
+- Street address removed everywhere (footer, invoices, quotes, Google product data); the shop now only shows "Hazelmere WA 6055"
+- Product cards size themselves by text size: with larger text on a phone they drop to one card per row instead of squashing two side by side
+- Fixed things that pushed the page sideways with large text (the "Suits any use" box, top menu, long email address)
+
 ## v7.1 · 15 Nov 2026
 - Every page now ends with "Can't find what you're looking for?": clients describe what they want (with any special requests and an optional budget) and it's emailed to Tony, who replies within 1 business day, including items not in the shop yet
 - Help me choose: "Special requests" moved into that custom quote form; the old "Send a copy to Tony" section and its three options are gone. "Get a free custom quote" opens the form and includes the client's answers and the options they were shown

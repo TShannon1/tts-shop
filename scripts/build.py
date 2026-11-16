@@ -559,7 +559,7 @@ def write_seo_pages(products, out_dir, now):
             "offers": {"@type": "Offer", "url": url, "priceCurrency": "AUD", "price": f"{pr['p']:.2f}",
                        "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/" + ("RefurbishedCondition" if pr.get("rf") else "NewCondition"),
                        "seller": {"@type": "LocalBusiness", "name": "Tony's Tech Support", "telephone": CFG["site"]["phone"],
-                                  "address": {"@type": "PostalAddress", "streetAddress": "10 McMullan View", "addressLocality": "Hazelmere",
+                                  "address": {"@type": "PostalAddress", "addressLocality": "Hazelmere",
                                               "addressRegion": "WA", "postalCode": "6055", "addressCountry": "AU"}}},
         }
         if pr["b"]:
