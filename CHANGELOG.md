@@ -1,5 +1,11 @@
 # Changelog – Tony's Tech Support Shop
 
+## v7.3 · 16 Nov 2026
+- Leader's data feed is now switched on and read correctly: stock columns AT (total) and AW (Perth), short description as the product name, barcodes and photos
+- "In stock in Perth" now works for Leader products (about 1,770 items had Perth stock on 16 Nov)
+- Leader's categories mapped: laptops, desktops (commercial, AIO, NUC), tablets, monitors, external drives and USB sticks, printers, home/small-office networking, keyboards, mice, docks, hubs, adapters, webcams, headsets, tablet keyboards and cases
+- Leader items that don't suit the shop are left out: warranties, spare parts, servers, kiosks, signage, surveillance PCs, thin clients and barebone kits
+
 ## v7.2 · 15 Nov 2026
 - Street address removed everywhere (footer, invoices, quotes, Google product data); the shop now only shows "Hazelmere WA 6055"
 - Product cards size themselves by text size: with larger text on a phone they drop to one card per row instead of squashing two side by side

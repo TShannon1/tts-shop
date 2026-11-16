@@ -1,5 +1,5 @@
 # Tony's Tech Support Shop – setup guide
-Version v7.2 (15 Nov 2026). See CHANGELOG.md for what changed.
+Version v7.3 (16 Nov 2026). See CHANGELOG.md for what changed.
 
 This folder builds **shop.tonystechsupport.com.au**. It is hosted free on GitHub Pages. Every night at about 1:40 am (Perth time), GitHub:
 
@@ -33,7 +33,7 @@ In the repository, go to **Settings → Secrets and variables → Actions → Ne
 
 Secrets are hidden from everyone, even on a public repository.
 
-> **Leader feed note:** at the moment Leader's link returns "Cannot generate file". Leader only activates the feed after your first purchase through the Dealershop. Ask Andoni (08 6369 6017) to switch it on. Until then, the shop runs on Dicker Data alone and picks up Leader automatically once the feed works.
+> **Leader feed:** switched on by Leader on 16 Nov 2026. Its stock columns are AT (total) and AW (Western Australia), which the shop uses for "In stock in Perth".
 
 ### 3. Turn on GitHub Pages
 **Settings → Pages → Build and deployment → Source: GitHub Actions.**

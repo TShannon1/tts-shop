@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Version v7.0 · 2026-11-14
+# Version v7.3 · 2026-11-16
 """Build Tony's Tech Support shop from distributor price/stock feeds.
 
 Reads the Leader Computers and Dicker Data reseller feeds, keeps the product
@@ -23,27 +23,33 @@ CFG = json.load(open(os.path.join(ROOT, "config.json")))
 CATEGORIES = [
     ("laptops", "Laptops", [
         r"^notebooks > (\d+(\.\d)? inch|notebooks|)$", r"^notebooks/2-in-1", r"^notebooks$",
+        r"^notebooks > .*notebook$", r"^notebooks > (asus commercial|msi t1)$",
         r"^notebooks - resistance"]),
     ("desktops", "Desktops & All-in-Ones", [
         r"^desktops > (desktops|all.?in.?one|small form fac.*|micro.*|tiny|24 inch|mini tower|ultra.*form.*)$",
-        r"^systems - "]),
-    ("tablets", "Tablets", [r"^tablets > \d+ inch$", r"^tablets$", r"^tablets > tablets"]),
+        r"^systems - desktop \(leader\) > ", r"^systems - nuc/sff/aio > (aio.*|asus nuc|desktop - commercial|gaming)$",
+        r"^systems nuc/pc-stick/aio \(leader\) > (aio.*|nuc.*)$"]),
+    ("tablets", "Tablets", [r"^tablets > \d+ inch$", r"^tablets$", r"^tablets > tablets", r"^tablets > .*tablets$"]),
     # Handheld gaming PCs are found by name (see HANDHELD_NAME), whatever category the supplier files them under.
     ("handhelds", "Handheld Gaming PCs", []),
     ("monitors", "Monitors", [r"^displays > (19|21|22|23|24|25|27|28|31|32|34|38) inch$", r"^monitors"]),
     ("backup", "Backup Drives & Storage", [
         r"^storage > portable hdd$", r"^storage media > (portable hdd|usb drives)$", r"^storage > nas$",
-        r"^hard drives - external", r"^backup, nas & storage", r"^flash memory"]),
+        r"^hard drives - external", r"^backup, nas & storage", r"^flash memory",
+        r"^usb, bluetooth & ieee > (usb flash drives|usb[23]\.0 memory thumb drive)$"]),
     ("printers", "Printers & Scanners", [
-        r"^printers > (laser mono|laser colour|inkjet|ink|ecotanks|printers)$", r"^printer hardware", r"^scanner"]),
+        r"^printers > (laser mono|laser colour|inkjet|ink|ecotanks|printers)$", r"^printer hardware > (?!.*(options|crafting|accessor))", r"^printer hardware$", r"^scanner"]),
     ("networking", "Wi-Fi & Networking", [
-        r"^networking > (router|routers|unmanaged switch)$", r"^network - consumer", r"^network - modem/router"]),
+        r"^networking > (router|routers|unmanaged switch)$", r"^network - consumer > (3g/4g capable routers|mesh networking|nbn vdsl modem routers|network switches|unmanaged switches|range extenders|wireless access points|wireless routers|powerline|usb network adapters)$",
+        r"^network - modem/router"]),
     ("accessories", "Accessories", [
         r"^peripherals > (docking solutions|docking|usb-c docks|usb-c hubs|hubs|usb-a hubs|keyboard|ergonomics|speakers|audio video|laptop stand|usb-c multiport adap.*)$",
         r"^peripherals > (adapters|dp and mdp display a.*|hdmi and dvi display.*|usb-c display adapte.*|display and video ad.*|usb and thunderbolt.*|thunderbolt 3 displa.*)$",
         r"^networking > (adapters|laptop network adapt.*)$",
         r"^bags and cases > (\d+ inch|accessories|apple devices|surface devices|samsung devices|tablets|fitted cases)$",
-        r"^(keyboards|mouse|notebook accessories|web cams|speakers, headsets & mic|dvd & bluray drives|macbook accessories)"]),
+        r"^(keyboards|mouse|notebook accessories|web cams|speakers, headsets & mic|dvd & bluray drives|macbook accessories)",
+        r"^usb, bluetooth & ieee > (usb hubs|usb adapters & accessories|card readers|usb3\.0 connect & charge)$",
+        r"^cables > (convertors|usb-c cables converters adapters)$", r"^ipad, tablet & surface (keyboard|cases)"]),
 ]
 EXCLUDE_NAME = re.compile(
     r"warranty|care ?pack|next business day|\bnbd\b|hardware support|support plan|travel coverage|accidental damage|\bservice|licen[cs]e|subscription|training|\bedu\b|education only|"
@@ -58,8 +64,13 @@ REFURB_CATS = {"laptops", "desktops", "tablets", "handhelds"}
 MAX_PRICE_BY_CAT = {"networking": 800, "backup": 2500, "accessories": 1200, "monitors": 2500, "printers": 2000}
 
 
+EXCLUDE_PATH = re.compile(r"warranty|onsie|spare parts|server|rackmount|kiosk|signage|surveillance|thin client|barebone", re.I)
+
+
 def cat_for(path):
     p = path.strip().lower()
+    if EXCLUDE_PATH.search(p):
+        return None
     for cid, _name, pats in CATEGORIES:
         for pat in pats:
             if re.search(pat, p):
@@ -356,6 +367,10 @@ def read_leader(text):
                 if hit:
                     idx[key] = hit[0]
                     break
+        # Leader's current feed uses short stock columns: AT = total available, AW = Western Australia (Perth).
+        for key, exact in (("total", "at"), ("perth", "aw")):
+            if exact in header:
+                idx[key] = header.index(exact)
         body = rows[1:]
     else:
         idx = {k: i for i, k in enumerate(LEADER_POSITIONAL)}
