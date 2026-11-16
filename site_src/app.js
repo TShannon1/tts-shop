@@ -1,7 +1,7 @@
-/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v7.3 · 2026-11-16 */
+/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v7.7 · 2026-11-17 */
 (function () {
   "use strict";
-  var APP_VERSION = "v7.3";
+  var APP_VERSION = "v7.7";
   var P = [], CFG = null, BYID = {};
   var app = document.getElementById("app");
   var COMPUTER_CATS = { laptops: 1, desktops: 1, handhelds: 1 };
@@ -127,6 +127,7 @@
       faq("What condition will a refurbished device be in?", "Refurbished computers are clearly labelled with their grade. They're restored to factory settings and graded: A grade (Excellent) shows no signs of cosmetic damage when held 30cm away; B grade (Good) has light scratches, barely visible when held 30cm away; C grade (Acceptable) has scratches visible when held 30cm away that you can feel. I'll tell you the battery health on the quote, and accessories may be compatible rather than original.") +
       faq("What if the item sells out before I order?", "Stock and prices are updated every day, and I confirm stock with my supplier before ordering. If your item has sold out, I'll offer you an equivalent replacement or a full refund.") +
       faq("What if I'm not satisfied with the product I receive?", "I want you to be delighted with your purchase. Products come with a minimum twelve-month warranty, in addition to your rights under the Australian Consumer Law. If any defect arises within twelve months of receipt, you'll be given a replacement or refund. Just call or text me.") +
+      faq("Can I return something if I change my mind?", "Most items can be returned within " + retDays() + " days of delivery if they're unopened and in their original packaging, less a " + retPct() + "% restocking fee. If I've set up a computer for you at your request, it can't be returned for a change of mind, but if it isn't right for you, I'll work with you to find a machine you're happy with. Faulty items are always covered with no fee. See my returns and refunds policy for the details.") +
       faq("How does delivery work?", "My standard delivery uses Uber Courier. Once your product is ready to go, you'll get a text from me, and we'll choose the best place and time so you receive it where and when you want it. That way no expensive devices are left on a porch or next to a mailbox. Or I can deliver it in person and set it up with you.") +
       faq("Can I buy it somewhere else?", "Of course. People expect to pay a little more with a sole trader, and there are no hard feelings if you buy from another shop. I'm still happy to set it up and help you with it.") +
       "</section>";
@@ -327,6 +328,14 @@
     if (p.w) h += "<div><b>Manufacturer's warranty:</b> " + esc(p.w) + "</div>";
     if (p.low) h += '<div class="low">Only a few left. I\'ll confirm stock before ordering.</div>';
     h += '<div class="hint">Part number: ' + esc(p.id) + "</div>" + cmpBox(p) + "</div>";
+    var ups = (p.up || []).filter(function (u) { return BYID[u.id]; });
+    if (ups.length) {
+      h += '<fieldset class="upopts"><legend>Options</legend>' +
+        '<label class="opt"><input type="radio" name="upopt" value="' + esc(p.id) + '" checked><span class="t"><b>As listed</b></span><span class="amt">' + money(p.p) + "</span></label>" +
+        ups.map(function (u) { return '<label class="opt"><input type="radio" name="upopt" value="' + esc(u.id) + '"><span class="t"><b>' + esc(u.t) + '</b><br><span class="hint">Fitted and tested by the supplier before it ships</span></span><span class="amt">+' + money(u.d) + "</span></label>"; }).join("") + "</fieldset>";
+    }
+    if (COMPUTER_CATS[p.c] && /LPDDR|soldered|on-?board memory/i.test(p.n + " " + (p.d || ""))) h += '<p class="hint"><b>Good to know:</b> this model\'s memory is built in, so it can\'t be upgraded later. Choose the amount of memory you\'ll need now.</p>';
+    else if (COMPUTER_CATS[p.c]) h += '<p class="hint">Need more memory or storage? You can ask me to price an upgrade in the cart.</p>';
     h += '<p><button class="btn" id="add">Add to cart</button> <a class="btn ghost" href="' + esc(CFG.site.smsHref) + '">Text Tony a question</a></p>';
     h += "</div></div>";
     if (p.d) h += '<div class="panel"><h3>Product details</h3><p class="desc">' + esc(p.d) + "</p></div>";
@@ -337,7 +346,7 @@
     h += '<div class="panel" style="margin-top:28px"><h3>What you get when you buy from Tony</h3>' + supportList() + "</div>";
     h += guarantee();
     app.innerHTML = h;
-    document.getElementById("add").onclick = function () { addToCart(p.id, 1); go("#/cart"); };
+    document.getElementById("add").onclick = function () { var r = document.querySelector("input[name=upopt]:checked"); addToCart(r ? r.value : p.id, 1); go("#/cart"); };
     bindDriveButtons(); bindBundle(); bindGallery(p); cmpBar();
   }
   function galleryHtml(p) {
@@ -866,7 +875,7 @@
     lines.forEach(function (x) { t.items += x.p.p * x.q; });
     var comps = computersIn(lines), win = computersIn(lines, "windows");
     var call = opts.callout;
-    var onsite = opts.migration === "onsite";
+    var onsite = opts.migration === "onsite" && comps > 0; // data transfer only applies when a computer is in the cart
     var label, amt;
     if (onsite) { label = "Delivery, setup & on-site data transfer"; amt = call == null ? null : r5(s.migration.onsiteBase + call); }
     else if (opts.delivery === "setup") { label = "Hand delivery & 1-hour setup"; amt = call == null ? null : r5(s.setupBase + call); }
@@ -900,6 +909,7 @@
     var lines = inCart();
     if (!lines.length) { app.innerHTML = '<div class="empty" style="margin-top:30px"><h2>Your cart is empty</h2><p><a class="btn" href="/#/">Browse the shop</a></p></div>' + guarantee(); return; }
     var s = CFG.services, comps = computersIn(lines), win = computersIn(lines, "windows");
+    if (!comps && opts.migration !== "none") { if (opts.migration === "onsite") opts.delivery = "courier"; opts.migration = "none"; persist(); } // left over from an earlier cart with a computer
     var h = "<h2 style=\"margin-top:24px\">Your cart</h2><div class=\"layout\"><div>";
     h += '<div class="panel">';
     lines.forEach(function (x) {
@@ -930,6 +940,11 @@
       s.addons.forEach(function (a) { if (a.windowsOnly && !win) return; h += optCheck("addons", a.id, "<b>" + esc(a.name) + "</b>" + (a.note ? ' <span class="hint">(' + esc(a.note) + ")</span>" : ""), money(r5(a.price))); });
       h += "</fieldset>";
 
+      var upg = opts.upg || {};
+      h += "<fieldset><legend>Upgrades (optional)</legend><p class=\"hint\">Not every computer can be upgraded. Tick what you'd like and I'll check what's possible for your model and text you a price before I order. Nothing is added to your total now.</p>" +
+        '<label class="opt"><input type="checkbox" data-upg="ram"' + (upg.ram ? " checked" : "") + '><span class="t">I\'d like more memory (RAM). Please let me know the price to upgrade it.</span></label>' +
+        '<label class="opt"><input type="checkbox" data-upg="sto"' + (upg.sto ? " checked" : "") + '><span class="t">I\'d like more storage. Please let me know the price to upgrade it.</span></label>' +
+        '<div class="field" style="margin-top:8px"><label for="upgOther">Anything else you\'d like upgraded or added?</label><input id="upgOther" type="text" placeholder="e.g. a bigger SSD for my photos, a second screen" value="' + esc(upg.other || "") + '"></div></fieldset>';
       h += "<fieldset><legend>Data transfer from your old computer</legend>";
       h += optRadio("migration", "none", "<b>No thanks</b>", "");
       h += optRadio("migration", "sendin", "<b>Send me your old device</b><br><span class=\"hint\">Drop it off or post it to me and I'll copy your files, photos and settings across before delivery.</span>", money(r5(s.migration.sendIn)));
@@ -956,7 +971,15 @@
   function optCheck(group, id, label, amt) {
     return '<label class="opt"><input type="checkbox" data-group="' + group + '" value="' + id + '"' + (opts[group][id] ? " checked" : "") + '><span class="t">' + label + '</span><span class="amt">' + amt + "</span></label>";
   }
+  function upgText(lines) {
+    var u = opts.upg || {}, L = [];
+    if (!computersIn(lines || inCart())) return "";
+    if (u.ram) L.push("more memory (RAM)"); if (u.sto) L.push("more storage"); if (u.other) L.push(u.other);
+    return L.length ? "Please quote upgrades: " + L.join("; ") : "";
+  }
   function bindCart() {
+    Array.prototype.forEach.call(app.querySelectorAll("[data-upg]"), function (c) { c.onchange = function () { opts.upg = opts.upg || {}; opts.upg[c.getAttribute("data-upg")] = c.checked; persist(); }; });
+    var uo = document.getElementById("upgOther"); if (uo) uo.onchange = function () { opts.upg = opts.upg || {}; opts.upg.other = uo.value.trim(); persist(); };
     Array.prototype.forEach.call(app.querySelectorAll("[data-q]"), function (b) {
       b.onclick = function () { var id = b.getAttribute("data-id"); cart.forEach(function (l) { if (l.id === id) l.q = Math.max(1, l.q + Number(b.getAttribute("data-q"))); }); persist(); render(); };
     });
@@ -1047,7 +1070,7 @@
     var sel = methods.some(function (x) { return x[0] === d.pm && !x[2]; }) ? d.pm : first;
     h += "<fieldset><legend>How would you like to pay?</legend>" + methods.map(function (m) { return '<label class="opt"><input type="radio" name="pm" value="' + m[0] + '"' + (sel === m[0] ? " checked" : "") + (m[2] ? " disabled" : "") + '><span class="t">' + m[1] + "</span></label>"; }).join("") +
       '<p class="hint" style="margin:8px 0 0">Payment details are shown after you place your order. Please send me a screenshot once you\'ve paid.</p></fieldset>';
-    h += '<div class="note">I confirm stock with my supplier before ordering. If something has sold out, I\'ll offer you an equivalent replacement or a full refund.</div>';
+    h += '<div class="note">I confirm stock with my supplier before ordering. If something has sold out, I\'ll offer you an equivalent replacement or a full refund. By placing your order you agree to my <a href="/#/returns" target="_blank">returns and refunds policy</a>.</div>';
     h += '<p><button class="btn" id="place">Place order</button></p><div class="status" id="coStatus" role="status"></div></form>';
     h += summaryHtml(lines, t) + "</div></div></div>" + guarantee();
     app.innerHTML = h;
@@ -1086,8 +1109,8 @@
       ref: ref, placed: now.toISOString(), customer: cust,
       items: lines.map(function (x) { return { part: x.p.id, name: x.p.n, qty: x.q, price: x.p.p, supplier: x.p.k }; }),
       extras: t.rows.map(function (r) { return { item: r[0], price: r[1] }; }),
-      options: { suburb: opts.suburb, roundTripKm: opts.calloutKm, delivery: opts.migration === "onsite" ? "onsite-migration" : opts.delivery, extraHours: opts.extraHours,
-        freeApps: CFG.services.freeApps.filter(function (a) { return opts.apps[a.id]; }).map(function (a) { return a.name; }), browser: opts.browser, emailApp: opts.emailApp, migration: opts.migration },
+      options: { suburb: opts.suburb, roundTripKm: opts.calloutKm, delivery: opts.migration === "onsite" && computersIn(lines) ? "onsite-migration" : opts.delivery, extraHours: opts.extraHours,
+        upgrades: upgText(lines), freeApps: CFG.services.freeApps.filter(function (a) { return opts.apps[a.id]; }).map(function (a) { return a.name; }), browser: opts.browser, emailApp: opts.emailApp, migration: opts.migration },
       total: t.total, deliveryToConfirm: t.tbc
     };
     order.summary = orderText(order);
@@ -1128,6 +1151,7 @@
     if (o.options.freeApps.length) L.push("Apps: " + o.options.freeApps.join(", "));
     if (o.options.browser) L.push("Browser: " + o.options.browser);
     if (o.options.emailApp) L.push("Email app: " + o.options.emailApp);
+    if (o.options.upgrades) L.push(o.options.upgrades);
     L.push("Total: " + money(o.total) + (o.deliveryToConfirm ? " + delivery TBC" : ""));
     L.push("Payment: " + (PM_NAMES[o.customer.pm] || o.customer.pm));
     if (o.customer.notes) L.push("Notes: " + o.customer.notes);
@@ -1201,6 +1225,7 @@
     if (o.options && (o.options.freeApps.length || o.options.browser || o.options.emailApp)) {
       h += '<p class="pd-note"><b>Set up for you:</b> ' + esc(o.options.freeApps.concat(o.options.browser ? ["Default browser: " + o.options.browser] : []).concat(o.options.emailApp ? ["Email app: " + o.options.emailApp] : []).join(", ")) + "</p>";
     }
+    if (o.options && o.options.upgrades) h += '<p class="pd-note"><b>Upgrade quote requested:</b> ' + esc(o.options.upgrades.replace(/^Please quote upgrades: /, "")) + ". I'll confirm the price before ordering.</p>";
     if (!o.paid) {
       var p = [];
       if (pay.payId) p.push("PayID: " + pay.payId);
@@ -1260,9 +1285,42 @@
       placed: now.toISOString(), customer: { name: d.name || "", phone: d.phone || "", email: d.email || "", addr: d.addr || "" },
       items: lines.map(function (x) { return { part: x.p.id, name: x.p.n, qty: x.q, price: x.p.p }; }),
       extras: t.rows.map(function (r) { return { item: r[0], price: r[1] }; }),
-      options: { suburb: opts.suburb, freeApps: CFG.services.freeApps.filter(function (a) { return opts.apps[a.id]; }).map(function (a) { return a.name; }), browser: opts.browser, emailApp: opts.emailApp },
+      options: { suburb: opts.suburb, upgrades: upgText(lines), freeApps: CFG.services.freeApps.filter(function (a) { return opts.apps[a.id]; }).map(function (a) { return a.name; }), browser: opts.browser, emailApp: opts.emailApp },
       total: t.total, deliveryToConfirm: t.tbc
     };
+  }
+
+  // ---------------------------------------------------------------- returns and refunds policy
+  function retDays() { return (CFG.returns && CFG.returns.days) || 14; }
+  function retPct() { return (CFG.returns && CFG.returns.restockPct) || 20; }
+  function viewReturns() {
+    var d = retDays(), pct = retPct();
+    var h = '<div class="crumbs"><a href="/">Shop</a> › Returns and refunds</div><article class="panel policy"><h1>Returns and refunds</h1>' +
+      '<p class="lead">I want you to be happy with everything you buy from me. Here\'s how returns work.</p>' +
+      "<h2>If something is faulty</h2>" +
+      "<p>If a product is faulty, not as described or doesn't do what it should, contact me and I'll sort it out with a repair, replacement or refund. There's no restocking fee, and I handle the warranty claim with the supplier or manufacturer for you.</p>" +
+      '<div class="note"><b>Australian Consumer Law:</b> Our goods come with guarantees that cannot be excluded under the Australian Consumer Law. You are entitled to a replacement or refund for a major failure and compensation for any other reasonably foreseeable loss or damage. You are also entitled to have the goods repaired or replaced if the goods fail to be of acceptable quality and the failure does not amount to a major failure.</div>' +
+      "<h2>If you change your mind</h2>" +
+      "<p>You can return most products for a change of mind within <b>" + d + " days</b> of delivery, as long as:</p><ul>" +
+      "<li>it's <b>unopened</b>, in its original sealed packaging, with everything it came with</li>" +
+      "<li>you contact me first so I can arrange the return.</li></ul>" +
+      "<p>A <b>" + pct + "% restocking fee</b> applies. My suppliers charge me to take goods back, and this covers that cost. You'll get the rest back to your original payment method once the item is back with me and checked, usually within 5 business days.</p>" +
+      "<h2>Computers</h2>" +
+      "<p>If you have asked me to set it up for you, I don't accept change-of-mind returns on computers (laptops, desktops, all-in-ones, tablets and handheld PCs). Instead, if it isn't right for you, <b>I'll work with you to find a machine you're happy with</b>.</p>" +
+      "<p>Like everything I sell, if the package is unopened and is less than " + d + " days old, in some special cases, I may accept a computer back at my discretion, less the " + pct + "% restocking fee.</p>" +
+      "<h2>What can't be returned for a change of mind</h2><ul>" +
+      "<li>Computers I've set up for you at your request</li>" +
+      "<li>Items that have been opened, used or set up</li>" +
+      "<li>Software and licences once installed or activated (for example Microsoft Office or antivirus)</li>" +
+      "<li>Items I've ordered in specially for you that aren't normally listed in the shop</li>" +
+      "<li>Services that have already been done, such as delivery, setup and data transfer</li></ul>" +
+      "<p>None of this affects your rights under the Australian Consumer Law. If a product turns out to be faulty, you're covered whether it's been opened or not.</p>" +
+      "<h2>Getting the item back to me</h2>" +
+      "<p>For change-of-mind returns, you cover the cost of getting the item back to me. You can drop it off by arrangement, send it by courier, or I can collect it for the usual callout fee. For faulty items, I'll cover the cost.</p>" +
+      "<h2>Orders that haven't arrived yet</h2>" +
+      "<p>If you change your mind before I've ordered your item from my supplier, I'll cancel the order and give you a full refund. Once it's on its way to me, the change-of-mind terms above apply.</p>" +
+      '<h2>Questions?</h2><p>Call or text me on <a href="' + esc(CFG.site.phoneHref) + '">' + esc(CFG.site.phone) + '</a>, or email <a href="mailto:' + esc(CFG.site.email) + '">' + esc(CFG.site.email) + "</a>.</p></article>";
+    app.innerHTML = h;
   }
 
   // ---------------------------------------------------------------- router
@@ -1277,6 +1335,7 @@
     if (parts[0] === "paid") { var po = load("tts-last-order", null); if (po) { po.paid = true; viewConfirm(po, true); } else viewHome(); return; }
     if (parts[0] === "picker") { viewPicker(); return; }
     if (parts[0] === "compare") { viewCompare(); return; }
+    if (parts[0] === "returns") { viewReturns(); return; }
     if (parts[0] === "u") { save("tts-use", parts[1] || ""); viewHome(); return; }
     if (!parts.length && window.TTS_PRODUCT) { viewProduct(window.TTS_PRODUCT); return; }
     if (window.TTS_VIEW === "picker" && (!parts.length || /^a=/.test(parts[0]))) { viewPicker(); return; }
@@ -1300,8 +1359,9 @@
   // ---------------------------------------------------------------- start
   Promise.all([fetch("/data/products.json").then(function (r) { return r.json(); }), fetch("/data/config.json").then(function (r) { return r.json(); })])
     .then(function (res) {
-      P = res[0]; CFG = res[1];
-      P.forEach(function (p) { BYID[p.id] = p; });
+      CFG = res[1];
+      res[0].forEach(function (p) { BYID[p.id] = p; });
+      P = res[0].filter(function (p) { return !p.hid; }); // upgrade bundles are options on their standard product
       cart = cart.filter(function (l) { return BYID[l.id]; });
       var s = CFG.site;
       document.getElementById("logo").src = s.logo;

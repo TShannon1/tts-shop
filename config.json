@@ -181,5 +181,10 @@
     "email": "tony@tonystechsupport.com.au",
     "responseTime": "1 business day",
     "_webhookUrl": "Tech Automation inbound webhook that EMAILS Tony quote requests and saved picker results (workflow 'Shop quote request email')."
+  },
+  "returns": {
+    "days": 14,
+    "restockPct": 20,
+    "_returns": "Change-of-mind returns: days allowed after delivery, and the restocking fee (%) taken off the refund. Faulty items are never charged a fee."
   }
 }

@@ -1,10 +1,27 @@
 # Changelog – Tony's Tech Support Shop
 
+## v7.7 · 17 Nov 2026
+- Returns policy wording for computers updated to Tony's version: no change-of-mind returns on computers he has set up at the client's request; he'll work with them to find a machine they're happy with; special cases (unopened, under 14 days) at his discretion, less 20%
+- Supplier upgrade bundles (e.g. "RAM In-House Upgrade to 32GB") now appear as an option on the standard computer's page ("Upgrade memory to 32GB +$275") instead of a separate listing; choosing it orders the upgraded version
+- Cart: new "Upgrades (optional)" section for computers: tick "more memory" or "more storage" (or describe something else) and Tony checks what's possible and texts a price before ordering; nothing is added to the total. The request appears in the order text and on printed quotes/invoices
+- Product pages: computers with built-in (soldered) memory say it can't be upgraded later; others mention the upgrade option in the cart
+
+## v7.6 · 16 Nov 2026
+- Returns policy: computers (laptops, desktops, all-in-ones, tablets, handheld PCs) can't be returned for a change of mind, set up or not; Tony works with the client to find a machine they're happy with, and may accept one back in special cases less the 20% restocking fee
+- Promotional duplicates hidden: supplier listings of the same product with a freebie or add-on ("plus Bonus mouse", "plus Eaton UPS for $79", "Bundle … for $100", "Save $25EX When You Purchase …") are dropped when the plain product is listed; if only promotions exist, the cheapest one is kept
+
+## v7.5 · 16 Nov 2026
+- Fixed: "Delivery, setup & on-site data transfer" stayed in the cart after the computer was removed; data transfer now only applies when a computer is in the cart, and the delivery choice goes back to Uber Courier
+- New Returns & refunds page (footer link, checkout note and FAQ): faulty items always covered with no fee (with the Australian Consumer Law statement); change-of-mind returns within 14 days if unopened, less a 20% restocking fee. Days and fee are set in config.json → returns
+
+## v7.4 · 16 Nov 2026
+- Surveillance PCs and thin clients from Leader are back in Desktops & All-in-Ones
+
 ## v7.3 · 16 Nov 2026
 - Leader's data feed is now switched on and read correctly: stock columns AT (total) and AW (Perth), short description as the product name, barcodes and photos
 - "In stock in Perth" now works for Leader products (about 1,770 items had Perth stock on 16 Nov)
 - Leader's categories mapped: laptops, desktops (commercial, AIO, NUC), tablets, monitors, external drives and USB sticks, printers, home/small-office networking, keyboards, mice, docks, hubs, adapters, webcams, headsets, tablet keyboards and cases
-- Leader items that don't suit the shop are left out: warranties, spare parts, servers, kiosks, signage, surveillance PCs, thin clients and barebone kits
+- Leader items that don't suit the shop are left out: warranties, spare parts, servers, kiosks, signage and barebone kits
 
 ## v7.2 · 15 Nov 2026
 - Street address removed everywhere (footer, invoices, quotes, Google product data); the shop now only shows "Hazelmere WA 6055"

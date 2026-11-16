@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Version v7.3 · 2026-11-16
+# Version v7.7 · 2026-11-17
 """Build Tony's Tech Support shop from distributor price/stock feeds.
 
 Reads the Leader Computers and Dicker Data reseller feeds, keeps the product
@@ -27,7 +27,7 @@ CATEGORIES = [
         r"^notebooks - resistance"]),
     ("desktops", "Desktops & All-in-Ones", [
         r"^desktops > (desktops|all.?in.?one|small form fac.*|micro.*|tiny|24 inch|mini tower|ultra.*form.*)$",
-        r"^systems - desktop \(leader\) > ", r"^systems - nuc/sff/aio > (aio.*|asus nuc|desktop - commercial|gaming)$",
+        r"^systems - desktop \(leader\) > ", r"^systems - nuc/sff/aio > (aio.*|asus nuc|desktop - commercial|gaming|surveillance|thin client)$",
         r"^systems nuc/pc-stick/aio \(leader\) > (aio.*|nuc.*)$"]),
     ("tablets", "Tablets", [r"^tablets > \d+ inch$", r"^tablets$", r"^tablets > tablets", r"^tablets > .*tablets$"]),
     # Handheld gaming PCs are found by name (see HANDHELD_NAME), whatever category the supplier files them under.
@@ -64,7 +64,7 @@ REFURB_CATS = {"laptops", "desktops", "tablets", "handhelds"}
 MAX_PRICE_BY_CAT = {"networking": 800, "backup": 2500, "accessories": 1200, "monitors": 2500, "printers": 2000}
 
 
-EXCLUDE_PATH = re.compile(r"warranty|onsie|spare parts|server|rackmount|kiosk|signage|surveillance|thin client|barebone", re.I)
+EXCLUDE_PATH = re.compile(r"warranty|onsie|spare parts|server|rackmount|kiosk|signage|barebone", re.I)
 
 
 def cat_for(path):
@@ -563,6 +563,8 @@ def write_seo_pages(products, out_dir, now):
     e = html.escape
     urls = [(base + "/", "daily"), (base + "/picker.html", "weekly")]
     for pr in products:
+        if pr.get("hid"):
+            continue  # upgrade bundles are shown as options on the standard product
         url = f"{base}/p/{pr['s']}.html"
         urls.append((url, "daily"))
         title = f"{pr['n']} | {money(pr['p'])} | Tony's Tech Support Perth"
@@ -659,6 +661,79 @@ def curated_refurbs():
     return out
 
 
+# Supplier promotions list the same computer again with a freebie or add-on ("... plus Bonus HP mouse",
+# "Bundle ... for $100", "Save $25EX When You Purchase ..."). Show each computer once.
+PROMO_SPLIT = re.compile(r"\s(?:plus|\+)\s|\bbonus\b|^\s*bundle\b|\bsave \$\d+ ?ex when you purchase\b|\bfor \$\d|\bin-house upgrade\b|\$\d+ \w+ bundle", re.I)
+
+
+def promo_base(name, brand=""):
+    """The product name with the promotion part removed, normalised for matching."""
+    n = re.sub(r"(?i)^\s*bundle\s+|save \$\d+ ?ex when you purchase\s*", "", name)
+    m = re.search(r"(?i)\s(?:plus|\+)\s|\s-?\s*bonus\b|\s&\s.*upgrade|\sfor \$\d|\$\d+ \w+ bundle", n)
+    if m:
+        n = n[:m.start()]
+    n = norm_mpn(n)
+    b = norm_mpn(brand)
+    if b and n.startswith(b + b):
+        n = n[len(b):]
+    return n
+
+
+def drop_promo_duplicates(products):
+    """Hide promotional bundle listings when the plain product is listed too, and keep only the
+    cheapest of several promotions for the same product. Supplier "upgrade" bundles (e.g. RAM
+    upgraded to 32GB) become an option on the standard product's page instead of a separate listing."""
+    plain = [p for p in products if not p.get("_promo")]
+    plain_names = {norm_mpn(p["n"]) for p in plain}
+    plain_by_name = {}
+    for q in plain:
+        plain_by_name.setdefault(norm_mpn(q["n"]), []).append(q)
+    plain_ids = sorted({p["id"] for p in plain if len(p["id"]) >= 6}, key=len, reverse=True)
+    keep, best, dropped, upgrades = [], {}, 0, 0
+    for p in products:
+        base = p.pop("_promo", None)
+        upg = p.pop("_upg", None)
+        if not base:
+            keep.append(p)
+            continue
+        matches = [q for n, qs in plain_by_name.items() if n == base or (len(base) >= 10 and n.startswith(base)) for q in qs]
+        matches += [q for q in plain if q["id"] != p["id"] and len(q["id"]) >= 6 and p["id"].startswith(q["id"]) and q not in matches]
+        matches = [q for q in matches if q["c"] == p["c"]]
+        if upg and matches:
+            # keep the bundle as a hidden, orderable option on each matching standard product
+            kind = "memory" if re.search(r"(?i)\bram\b|memory", p.get("_rawname", "") + " " + p["n"]) else "storage" if "TB" in upg else "memory"
+            used = False
+            for q in matches:
+                diff = p["p"] - q["p"]
+                if diff > 0:
+                    q.setdefault("up", []).append({"id": p["id"], "t": "Upgrade " + kind + " to " + upg, "d": diff})
+                    used = True
+            if used:
+                p["hid"] = 1
+                p["n"] = matches[0]["n"] + " + " + kind + " upgrade to " + upg
+                if not p["img"] and matches[0]["img"]:
+                    p["img"] = matches[0]["img"]
+                upgrades += 1
+                keep.append(p)
+                continue
+        if matches or base in plain_names or any(p["id"] != i and p["id"].startswith(i) for i in plain_ids):
+            dropped += 1
+            continue
+        key = (p["c"], base)
+        if key in best:
+            dropped += 1
+            if p["p"] < best[key]["p"]:
+                keep[keep.index(best[key])] = p
+                best[key] = p
+            continue
+        best[key] = p
+        keep.append(p)
+    for p in keep:
+        p.pop("_rawname", None)
+    print(f"Promotional duplicates hidden: {dropped}; upgrade bundles turned into product options: {upgrades}", file=sys.stderr)
+    return keep
+
+
 def model_family(pr):
     """Brand + model name without the processor/memory/storage/OS details, e.g. 'HP ELITEBOOK 8 G1I 14'.
     Different configurations of the same model look the same, so they can share a photo."""
@@ -691,7 +766,7 @@ def borrow_sibling_photos(products):
 def write_missing_photos(products, out_dir):
     """A list of products still without a photo, most important first, for Tony to fill in (photos/ folder)."""
     order = {"laptops": 0, "desktops": 1, "handhelds": 2, "tablets": 3, "monitors": 4, "printers": 5, "backup": 6, "networking": 7, "accessories": 8}
-    miss = sorted((p for p in products if not p["img"]), key=lambda p: (order.get(p["c"], 9), -p["p"]))
+    miss = sorted((p for p in products if not p["img"] and not p.get("hid")), key=lambda p: (order.get(p["c"], 9), -p["p"]))
     with open(os.path.join(out_dir, "missing-photos.csv"), "w", encoding="utf-8") as f:
         f.write("part_number,photo_file_name,brand,category,price,name\n")
         for p in miss:
@@ -820,6 +895,14 @@ def build(leader_text, dicker_text, out_dir):
             name = re.sub(r"\s*\b(refurbished|refurb|renewed|pre-?owned|ex-?demo|demo unit|demo|grade [abc])\b\s*", " ", name, flags=re.I)
             name = re.sub(r"^(\w+) \1\b", r"\1", re.sub(r"\s+", " ", name).strip(), flags=re.I)
         pr["n"] = name
+        promo = PROMO_SPLIT.search(raw) or PROMO_SPLIT.search(name)
+        if promo:
+            src = raw if PROMO_SPLIT.search(raw) else name
+            pr["_promo"] = promo_base(src, pr["b"])
+            pr["_rawname"] = raw
+            up = re.search(r"(?i)upgrade(?:d)? to (\d+(?:\.\d)?\s?(?:GB|TB))", src)
+            if up:
+                pr["_upg"] = up.group(1).upper().replace(" ", "")
         text = name + " " + raw
         pr["sp"] = specs_for(text, pr["c"])
         size = re.search(r"(\d{2}(?:\.\d)?) INCH", path.upper())
@@ -848,6 +931,7 @@ def build(leader_text, dicker_text, out_dir):
             pr["img"] = "/photos/" + overrides[pr["id"]]
         pr["os"] = pr["os"] or os_for(brand_raw, name, pr["c"])
         pr["s"] = slug(pr["id"])
+    products = drop_promo_duplicates(products)
     borrow_sibling_photos(products)
     for pr in products:
         pr.pop("_gtin", None); pr.pop("_tried_gtin", None)
@@ -872,6 +956,7 @@ def build(leader_text, dicker_text, out_dir):
         "orders": CFG["orders"], "callout": CFG["callout"], "roundTo": CFG["pricing"].get("roundTo", 1),
         "multiBuy": {k: v for k, v in (CFG["pricing"].get("multiBuy") or {}).items() if k in ("tiers", "minItemPrice")},
         "quotes": CFG.get("quotes", {}),
+        "returns": CFG.get("returns", {}),
         "categories": [{"id": c[0], "name": c[1]} for c in CATEGORIES],
         "sections": [{"id": c[0], "name": c[1]} for c in SECTIONS],
         "updated": now.strftime("%A %-d %B %Y, %-I:%M %p").replace("AM", "am").replace("PM", "pm"),
