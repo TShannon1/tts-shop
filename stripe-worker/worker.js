@@ -61,6 +61,7 @@ async function createCheckout(order, env) {
     const p = catalogue.get(String(it.part));
     const qty = Math.floor(Number(it.qty));
     if (!p) throw new Error("item no longer available: " + it.part);
+    if (p.rq || (p.su && Date.now() >= p.su)) throw new Error("price for this item must be confirmed first: " + it.part);
     if (!(qty >= 1 && qty <= MAX_QTY)) throw new Error("bad quantity");
     items.push({ p, qty });
     if (p.p >= minItem) count += qty;

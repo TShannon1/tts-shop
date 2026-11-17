@@ -1,5 +1,5 @@
 # Tony's Tech Support Shop – setup guide
-Version v7.7 (17 Nov 2026). See CHANGELOG.md for what changed.
+Version v7.10 (17 Nov 2026). See CHANGELOG.md for what changed.
 
 This folder builds **shop.tonystechsupport.com.au**. It is hosted free on GitHub Pages. Every night at about 1:40 am (Perth time), GitHub:
 
@@ -77,6 +77,8 @@ See `stripe-worker/README.md`. You'll need free Stripe and Cloudflare accounts (
 
 ### Refurbished machines
 - Refurbished and ex-demo computers in the supplier feeds are now included and labelled with their grade.
+- Items you source only when asked (like the refurbished iPads) have `"onRequest": true`: clients see the price or price range and a "Request this item" button, which sends you a quote request instead of an order.
+- Limited-time prices: add `"specialUntil": "2026-11-20T22:59:00+11:00"` (and optionally `"specialLabel"`). After that time the item shows "Price on request" automatically, even before the next update.
 - To add refurbs you source yourself, edit `refurbished.json` (instructions are at the top of the file). Enter the **selling price**, never your buy price: the repo is public.
 
 ### Multi-buy discount

@@ -1,5 +1,5 @@
 {
-  "_help": "Refurbished machines you source yourself. Add one block per machine, then commit; it appears in the shop at the next update. price = what the client pays, including GST (your cost incl. GST and delivery x 1.25, rounded up to $5). Don't put your buy price here: this file is public. Set \"sold\": true (or delete the block) when it's gone. Photos: put a file in photos/ named after the part (e.g. photos/LAT7310-01.jpg) or paste an image link in \"image\". Never put the seller's name here; this file is public.",
+  "_help": "Refurbished machines you source yourself. Add one block per machine, then commit; it appears in the shop at the next update. price = what the client pays, including GST (your cost incl. GST and delivery x 1.25, rounded up to $5). Don't put your buy price here: this file is public. Set \"sold\": true (or delete the block) when it's gone. Photos: put a file in photos/ named after the part (e.g. photos/LAT7310-01.jpg) or paste an image link in \"image\". Never put the seller's name here; this file is public. For items you source on request (price and stock confirmed when a client asks), add \"onRequest\": true and an optional \"priceTo\" for a price range; clients see \"From $X\" and a \"Request this item\" button instead of Add to cart. Optional: \"specialUntil\" (date and time, e.g. 2026-11-20T22:59:00+11:00) and \"specialLabel\" for limited-time prices; after that time the item automatically shows \"Price and stock on request\" instead of a price. \"src\" is a private one-letter supplier code shown only in your order texts.",
   "items": [
     {
       "part": "EXAMPLE-01",
@@ -13,6 +13,4067 @@
       "image": "",
       "inPerth": true,
       "sold": true
+    },
+    {
+      "part": "IPAD6-32",
+      "name": "iPad 6th Gen (2018) 9.7\" 32GB Wi-Fi or Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 235,
+      "priceTo": 240,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (6th generation, 2018). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD6-128",
+      "name": "iPad 6th Gen (2018) 9.7\" 128GB Wi-Fi or Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 245,
+      "priceTo": 275,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (6th generation, 2018). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD7-32",
+      "name": "iPad 7th Gen (2019) 10.2\" 32GB Wi-Fi or Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 260,
+      "priceTo": 300,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (7th generation, 2019). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD7-128",
+      "name": "iPad 7th Gen (2019) 10.2\" 128GB Wi-Fi or Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 360,
+      "priceTo": 365,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (7th generation, 2019). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPADMINI5-64C",
+      "name": "iPad Mini 5 (2019) 7.9\" 64GB Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 340,
+      "priceTo": 350,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad mini (5th generation, 2019). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD8-32",
+      "name": "iPad 8th Gen (2020) 10.2\" 32GB Wi-Fi",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 290,
+      "priceTo": 325,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (8th generation, 2020). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD8-128",
+      "name": "iPad 8th Gen (2020) 10.2\" 128GB Wi-Fi",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 425,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (8th generation, 2020). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD9-64",
+      "name": "iPad 9th Gen (2021) 10.2\" 64GB Wi-Fi",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 415,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (9th generation, 2021). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD9-64C",
+      "name": "iPad 9th Gen (2021) 10.2\" 64GB Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 475,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (9th generation, 2021). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD9-256",
+      "name": "iPad 9th Gen (2021) 10.2\" 256GB Wi-Fi or Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 565,
+      "priceTo": 575,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (9th generation, 2021). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPADAIR4-64",
+      "name": "iPad Air 4 (2020) 10.9\" 64GB Wi-Fi",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 550,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad Air (4th generation, 2020). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPADMINI6-64C",
+      "name": "iPad Mini 6 (2021) 8.3\" 64GB Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 550,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad mini (6th generation, 2021). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD10-64",
+      "name": "iPad 10th Gen (2022) 10.9\" 64GB Wi-Fi",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 660,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (10th generation, 2022). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPAD10-64C",
+      "name": "iPad 10th Gen (2022) 10.9\" 64GB Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 675,
+      "priceTo": 680,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad (10th generation, 2022). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPADAIR5-64",
+      "name": "iPad Air 5 (2022) 10.9\" 64GB Wi-Fi or Wi-Fi + Cellular",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 750,
+      "priceTo": 780,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad Air (5th generation, 2022). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPADPRO129-3",
+      "name": "iPad Pro 12.9\" 3rd Gen (2018) 64GB to 256GB",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 890,
+      "priceTo": 1000,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad Pro 12.9-inch (3rd generation, 2018). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPADPRO129-56",
+      "name": "iPad Pro 12.9\" 5th or 6th Gen 128GB to 256GB",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 1425,
+      "priceTo": 1450,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad Pro 12.9-inch (5th or 6th generation). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "IPADPRO13M4-1TB",
+      "name": "iPad Pro 13\" M4 (2024) 1TB Wi-Fi",
+      "brand": "Apple",
+      "category": "tablets",
+      "price": 3190,
+      "onRequest": true,
+      "grade": "",
+      "description": "Refurbished Apple iPad Pro 13-inch (M4, 2024). Stock, condition and final price are confirmed when you ask, as these are sourced to order. Every iPad is checked, reset and set up by Tony before handover,.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ]
+    },
+    {
+      "part": "A001",
+      "name": "HP ProBook 440 G5, 14\", i5-8250U, 16GB RAM, 256GB SSD, GeForce 930MX, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 265,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP ProBook 440 G5: 14\", i5-8250U, 16GB RAM, 256GB SSD, GeForce 930MX, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A002",
+      "name": "Dell Latitude 5400, 14\" FHD Touch, i5-8365U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 315,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5400: 14\" FHD Touch, i5-8365U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A003",
+      "name": "Dell Latitude 3410, 14\", i5-10310U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 320,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 3410: 14\", i5-10310U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A004",
+      "name": "Dell Latitude 5410, 14\", i5-10310U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 320,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5410: 14\", i5-10310U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A005",
+      "name": "Dell Latitude 5410, 14\" Touch, i5-10210U / i5-10310U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 345,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5410: 14\" Touch, i5-10210U / i5-10310U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A006",
+      "name": "Dell Latitude 5310 2-in-1, 13.3\", i5-10210U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 345,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5310 2-in-1: 13.3\", i5-10210U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A007",
+      "name": "HP EliteBook 840 G7, 14\" Touch, i5-10310U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 345,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP EliteBook 840 G7: 14\" Touch, i5-10310U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A008",
+      "name": "Dell Latitude 7210 2-in-1, 12.3\" Touch, i5-10310U, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 345,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 7210 2-in-1: 12.3\" Touch, i5-10310U, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A009",
+      "name": "Microsoft Surface Pro 6, 12.3\" Tablet Only, i5-8350U, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Microsoft",
+      "category": "laptops",
+      "price": 355,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Microsoft Surface Pro 6: 12.3\" Tablet Only, i5-8350U, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A010",
+      "name": "Dell Latitude 7410 2-in-1, 14\" Touch, i5-10310U, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 360,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 7410 2-in-1: 14\" Touch, i5-10310U, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A011",
+      "name": "Microsoft Surface Laptop Go, 12.4\", i5-1035G1, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Microsoft",
+      "category": "laptops",
+      "price": 365,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Microsoft Surface Laptop Go: 12.4\", i5-1035G1, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A012",
+      "name": "Dell Latitude 5310, 13.3\" Touch, i5-10310U, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 365,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5310: 13.3\" Touch, i5-10310U, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A013",
+      "name": "Lenovo ThinkPad X1 Carbon 6th Gen, 14\" FHD, i5-8350U, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 370,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Lenovo ThinkPad X1 Carbon 6th Gen: 14\" FHD, i5-8350U, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A014",
+      "name": "Dell Latitude 3410, 14\", i5-10210U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 375,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 3410: 14\", i5-10210U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A015",
+      "name": "Dell Latitude 5411, 14\" Touch, i5-10300H, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 375,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 5411: 14\" Touch, i5-10300H, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A016",
+      "name": "Dell Latitude 7420, 14\" FHD, i5-1135G7 / i5-1145G7, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 380,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 7420: 14\" FHD, i5-1135G7 / i5-1145G7, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A017",
+      "name": "HP ProBook 635 Aero G8, 13.3\" FHD, Ryzen 5 Pro 5650U, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 385,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP ProBook 635 Aero G8: 13.3\" FHD, Ryzen 5 Pro 5650U, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A018",
+      "name": "Dell Latitude 7410 2-in-1, 14\", i5-10310U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 395,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 7410 2-in-1: 14\", i5-10310U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A019",
+      "name": "Lenovo ThinkPad L13 Yoga Gen 2, 13.3\" Touch, i5-1135G7, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 395,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Lenovo ThinkPad L13 Yoga Gen 2: 13.3\" Touch, i5-1135G7, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A020",
+      "name": "HP EliteBook 830 G8, 13.3\" Touch, i5-1145G7, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 395,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP EliteBook 830 G8: 13.3\" Touch, i5-1145G7, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A021",
+      "name": "Microsoft Surface Laptop Go, 12.4\", i5-1035G1, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Microsoft",
+      "category": "laptops",
+      "price": 400,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Microsoft Surface Laptop Go: 12.4\", i5-1035G1, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A022",
+      "name": "Dell Latitude 7210 2-in-1, 12.3\" Touch, i5-10310U, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 400,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 7210 2-in-1: 12.3\" Touch, i5-10310U, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A023",
+      "name": "HP ProBook 430 G8, 13.3\", i5-1135G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 405,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP ProBook 430 G8: 13.3\", i5-1135G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A024",
+      "name": "Dell Latitude 5320, 13.3\", i5-1145G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 430,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5320: 13.3\", i5-1145G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A025",
+      "name": "Dell Latitude 7210 2-in-1, 12.3\" FHD, i5-10310U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 440,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 7210 2-in-1: 12.3\" FHD, i5-10310U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A026",
+      "name": "HP EliteBook 840 G8, 14\" FHD, i5-1145G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 445,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP EliteBook 840 G8: 14\" FHD, i5-1145G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A027",
+      "name": "Microsoft Surface Pro 7, 12.3\", i5-1035G4, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Microsoft",
+      "category": "laptops",
+      "price": 445,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Microsoft Surface Pro 7: 12.3\", i5-1035G4, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A028",
+      "name": "Microsoft Surface Laptop 3, 13.5\", i5-1035G7, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Microsoft",
+      "category": "laptops",
+      "price": 445,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Microsoft Surface Laptop 3: 13.5\", i5-1035G7, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A029",
+      "name": "Dell Latitude 7410 2-in-1, 14\" Touch, i7-10610U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 480,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 7410 2-in-1: 14\" Touch, i7-10610U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A030",
+      "name": "Dell Latitude 5320 2-in-1, 13.3\" Touch, i5-1135G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 495,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5320 2-in-1: 13.3\" Touch, i5-1135G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A031",
+      "name": "Dell Latitude 5430, 14\" FHD, i5-1145G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 500,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 5430: 14\" FHD, i5-1145G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A032",
+      "name": "Dell Latitude 5520, 15.6\", i5-1145G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 505,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5520: 15.6\", i5-1145G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A033",
+      "name": "Dell Latitude 5320 2-in-1, 13.3\" Touch, i5-1135G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 550,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 5320 2-in-1: 13.3\" Touch, i5-1135G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A034",
+      "name": "Dell Latitude 5520, 15.6\", i5-1145G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 565,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 5520: 15.6\", i5-1145G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A035",
+      "name": "HP ProBook 430 G8, 13.3\", i7-1165G7, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 565,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP ProBook 430 G8: 13.3\", i7-1165G7, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A036",
+      "name": "Dell Latitude 7320 Detachable, 13.3\", i5-1140G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 565,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 7320 Detachable: 13.3\", i5-1140G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A037",
+      "name": "HP EliteBook 830 G8, 13.3\", i7-1185G7, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 590,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP EliteBook 830 G8: 13.3\", i7-1185G7, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A038",
+      "name": "Microsoft Surface Pro 7, 12.3\", i7-1065G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Microsoft",
+      "category": "laptops",
+      "price": 600,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Microsoft Surface Pro 7: 12.3\", i7-1065G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A039",
+      "name": "Dell Latitude 5430, 14\" Touch, i5-1235U, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 675,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5430: 14\" Touch, i5-1235U, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A040",
+      "name": "Lenovo ThinkPad X1 Carbon 9th Gen, 14\" Touch, i7-1165G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 680,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Lenovo ThinkPad X1 Carbon 9th Gen: 14\" Touch, i7-1165G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A041",
+      "name": "Dell Latitude 7420, 14\" Touch, i7-1165G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 690,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 7420: 14\" Touch, i7-1165G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A042",
+      "name": "Dell Latitude 5430, 14\", i7-1265U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 710,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Latitude 5430: 14\", i7-1265U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A043",
+      "name": "Microsoft Surface Book 2, 13.5\", i7-8650U, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "Microsoft",
+      "category": "laptops",
+      "price": 730,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Microsoft Surface Book 2: 13.5\", i7-8650U, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A044",
+      "name": "Lenovo ThinkPad X1 Carbon 9th Gen, 14\" Touch, i7-1165G7, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 740,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Lenovo ThinkPad X1 Carbon 9th Gen: 14\" Touch, i7-1165G7, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A045",
+      "name": "Dell Latitude 5430, 14\", i5-1235U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 750,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 5430: 14\", i5-1235U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A046",
+      "name": "Dell Latitude 5430, 14\" Touch, i5-1235U, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 805,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 5430: 14\" Touch, i5-1235U, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A047",
+      "name": "Lenovo ThinkPad X1 Yoga Gen 6/7, 14\" Touch, i5-1235U, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 815,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Lenovo ThinkPad X1 Yoga Gen 6/7: 14\" Touch, i5-1235U, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A048",
+      "name": "Dell Latitude 5430, 14\", i7-1265U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 845,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 5430: 14\", i7-1265U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A049",
+      "name": "Microsoft Surface Laptop 6, 13.5\", Core Ultra 5 135H, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Microsoft",
+      "category": "laptops",
+      "price": 1375,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Microsoft Surface Laptop 6: 13.5\", Core Ultra 5 135H, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A050",
+      "name": "Dell Latitude 7440, 14\" FHD+, i7-1365U, 32GB RAM, 512GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1495,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 7440: 14\" FHD+, i7-1365U, 32GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A051",
+      "name": "Dell Inspiron 14 7440 2-in-1, 14\" Touch, Core 7 150U, 16GB RAM, 1TB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1500,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Inspiron 14 7440 2-in-1: 14\" Touch, Core 7 150U, 16GB RAM, 1TB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A052",
+      "name": "Lenovo ThinkPad T14s Gen 5, 14\" WUXGA, Core Ultra 7 165U, 32GB RAM, 512GB SSD, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 1615,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Lenovo ThinkPad T14s Gen 5: 14\" WUXGA, Core Ultra 7 165U, 32GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A053",
+      "name": "Dell Latitude 7450, 14\" Touch, Core Ultra 7 165H, 32GB RAM, 512GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1745,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Latitude 7450: 14\" Touch, Core Ultra 7 165H, 32GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A054",
+      "name": "HP ZBook Firefly 14 G7 mobile workstation, 14\", i7-10610U, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 690,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished HP ZBook Firefly 14 G7 mobile workstation: 14\", i7-10610U, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A055",
+      "name": "Lenovo ThinkPad P14s Gen 2 mobile workstation, 14\", i7-1165G7, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 905,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Lenovo ThinkPad P14s Gen 2 mobile workstation: 14\", i7-1165G7, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A056",
+      "name": "Lenovo ThinkPad P15s Gen 2 mobile workstation, 15.6\", i7-1165G7, 16GB RAM, 512GB SSD, NVIDIA T500, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 985,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Lenovo ThinkPad P15s Gen 2 mobile workstation: 15.6\", i7-1165G7, 16GB RAM, 512GB SSD, NVIDIA T500, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A057",
+      "name": "Dell Precision 7760 mobile workstation, 17.3\", i5-11500H, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1160,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 7760 mobile workstation: 17.3\", i5-11500H, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A058",
+      "name": "Lenovo ThinkPad P16s Gen 1 mobile workstation, 16\" WUXGA, i7-1270P, 32GB RAM, 512GB SSD, NVIDIA T550, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 1350,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Lenovo ThinkPad P16s Gen 1 mobile workstation: 16\" WUXGA, i7-1270P, 32GB RAM, 512GB SSD, NVIDIA T550, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A059",
+      "name": "Dell Precision 7550 mobile workstation, 15.6\", i7-10750H, 32GB RAM, 512GB SSD, Quadro RTX 3000, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1500,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 7550 mobile workstation: 15.6\", i7-10750H, 32GB RAM, 512GB SSD, Quadro RTX 3000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A060",
+      "name": "Dell Precision 5560 mobile workstation, 15.6\", i7-11800H, 32GB RAM, 1TB SSD, RTX A2000, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1505,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 5560 mobile workstation: 15.6\", i7-11800H, 32GB RAM, 1TB SSD, RTX A2000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A061",
+      "name": "Dell Precision 7560 mobile workstation, 15.6\", i9-11950H, 32GB RAM, 512GB SSD, RTX A2000, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1505,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Precision 7560 mobile workstation: 15.6\", i9-11950H, 32GB RAM, 512GB SSD, RTX A2000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A062",
+      "name": "HP ZBook Power G9 mobile workstation, 15.6\", i7-12800H, 32GB RAM, 512GB SSD, NVIDIA T600, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 1505,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP ZBook Power G9 mobile workstation: 15.6\", i7-12800H, 32GB RAM, 512GB SSD, NVIDIA T600, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A063",
+      "name": "Lenovo ThinkPad P16s Gen 1 mobile workstation, 16\" WUXGA, i7-1270P, 32GB RAM, 512GB SSD, NVIDIA T550, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 1555,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Lenovo ThinkPad P16s Gen 1 mobile workstation: 16\" WUXGA, i7-1270P, 32GB RAM, 512GB SSD, NVIDIA T550, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A064",
+      "name": "Dell Precision 3571 mobile workstation, 15.6\", i7-12800H, 32GB RAM, 512GB SSD, NVIDIA T600, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1570,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Precision 3571 mobile workstation: 15.6\", i7-12800H, 32GB RAM, 512GB SSD, NVIDIA T600, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A065",
+      "name": "Dell Precision 3571 mobile workstation, 15.6\" Touch, i7-12800H, 32GB RAM, 1TB SSD, Quadro T600, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1655,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 3571 mobile workstation: 15.6\" Touch, i7-12800H, 32GB RAM, 1TB SSD, Quadro T600, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A066",
+      "name": "Lenovo ThinkPad P16s Gen 1 mobile workstation, 16\" WUXGA, i7-1270P, 32GB RAM, 256GB SSD, NVIDIA T550, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 1730,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Lenovo ThinkPad P16s Gen 1 mobile workstation: 16\" WUXGA, i7-1270P, 32GB RAM, 256GB SSD, NVIDIA T550, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A067",
+      "name": "Dell Precision 7550 mobile workstation, 15.6\", Xeon W-10885M, 32GB RAM, 512GB SSD, Quadro RTX 3000, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1745,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Precision 7550 mobile workstation: 15.6\", Xeon W-10885M, 32GB RAM, 512GB SSD, Quadro RTX 3000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A068",
+      "name": "HP ZBook Fury 15 G8 mobile workstation, 15.6\" FHD, i9-11950H, 64GB RAM, 1TB SSD, RTX A2000, Win 11",
+      "brand": "HP",
+      "category": "laptops",
+      "price": 1755,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished HP ZBook Fury 15 G8 mobile workstation: 15.6\" FHD, i9-11950H, 64GB RAM, 1TB SSD, RTX A2000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A069",
+      "name": "Dell Precision 3571 mobile workstation, 15.6\", i7-12800H, 32GB RAM, 512GB SSD, NVIDIA T600, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1800,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 3571 mobile workstation: 15.6\", i7-12800H, 32GB RAM, 512GB SSD, NVIDIA T600, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A070",
+      "name": "Lenovo ThinkPad P15v Gen 3 mobile workstation, 15.6\", i7-12700H, 32GB RAM, 512GB SSD, NVIDIA T600, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 1800,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Lenovo ThinkPad P15v Gen 3 mobile workstation: 15.6\", i7-12700H, 32GB RAM, 512GB SSD, NVIDIA T600, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A071",
+      "name": "Lenovo ThinkPad P16s Gen 1 mobile workstation, 16\" WUXGA, i7-1270P, 32GB RAM, 1TB SSD, NVIDIA T550, Win 11",
+      "brand": "Lenovo",
+      "category": "laptops",
+      "price": 1805,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Lenovo ThinkPad P16s Gen 1 mobile workstation: 16\" WUXGA, i7-1270P, 32GB RAM, 1TB SSD, NVIDIA T550, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A072",
+      "name": "Dell Precision 5560 mobile workstation, 15.6\" Touch, i9-11950H, 64GB RAM, 2TB SSD, RTX A2000, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1805,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Dell Precision 5560 mobile workstation: 15.6\" Touch, i9-11950H, 64GB RAM, 2TB SSD, RTX A2000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A073",
+      "name": "Dell Precision 5560 mobile workstation, 15.6\", i9-11950H, 64GB RAM, 1TB SSD, RTX A2000, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1815,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 5560 mobile workstation: 15.6\", i9-11950H, 64GB RAM, 1TB SSD, RTX A2000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A074",
+      "name": "Dell Precision 5560 mobile workstation, 15.6\" Touch, i9-11950H, 64GB RAM, 2TB SSD, RTX A2000, Win 11",
+      "brand": "Dell",
+      "category": "laptops",
+      "price": 1865,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 5560 mobile workstation: 15.6\" Touch, i9-11950H, 64GB RAM, 2TB SSD, RTX A2000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A075",
+      "name": "Apple MacBook Pro 16\" (2019), 16\", i7-9750H, 32GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 690,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Apple MacBook Pro 16\" (2019): 16\", i7-9750H, 32GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A076",
+      "name": "Apple MacBook Pro 13\" (2019), 13\", i5-8257U, 16GB RAM, 256GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 750,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Apple MacBook Pro 13\" (2019): 13\", i5-8257U, 16GB RAM, 256GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A077",
+      "name": "Apple MacBook Pro 13.3\" (2020), 13.3\", i7-1068NG7, 16GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 790,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Apple MacBook Pro 13.3\" (2020): 13.3\", i7-1068NG7, 16GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A078",
+      "name": "Apple MacBook Pro 13\" (2018), 13.3\", i7-8559U, 16GB RAM, 256GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 795,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Apple MacBook Pro 13\" (2018): 13.3\", i7-8559U, 16GB RAM, 256GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A079",
+      "name": "Apple MacBook Pro 13.3\" (2018), 13.3\", i7-8559U, 16GB RAM, 256GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 840,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Apple MacBook Pro 13.3\" (2018): 13.3\", i7-8559U, 16GB RAM, 256GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A080",
+      "name": "Apple MacBook Pro 15\" (2018), 15\", i9-8950HK, 16GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 935,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Apple MacBook Pro 15\" (2018): 15\", i9-8950HK, 16GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A081",
+      "name": "Apple MacBook Air 13.3\" (2020), 13.3\", i5-1030NG7, 8GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 935,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Apple MacBook Air 13.3\" (2020): 13.3\", i5-1030NG7, 8GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A082",
+      "name": "Apple MacBook Pro 15\" (2019), 15\", i7-9750H, 32GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1035,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Apple MacBook Pro 15\" (2019): 15\", i7-9750H, 32GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A083",
+      "name": "Apple MacBook Pro 15.4\" (2019), 15.4\", i7-9750H, 32GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1140,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Apple MacBook Pro 15.4\" (2019): 15.4\", i7-9750H, 32GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A084",
+      "name": "Apple MacBook Pro 14\" (2023), 14\", Apple M3 Pro, 18GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2310,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Apple MacBook Pro 14\" (2023): 14\", Apple M3 Pro, 18GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A085",
+      "name": "Apple MacBook Pro 16\" (2021), 16\", Apple M1 Max, 32GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2815,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Apple MacBook Pro 16\" (2021): 16\", Apple M1 Max, 32GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A086",
+      "name": "Apple MacBook Pro 16\" (2023), 16\", Apple M3 Pro, 36GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 3190,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Apple MacBook Pro 16\" (2023): 16\", Apple M3 Pro, 36GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A087",
+      "name": "Apple MacBook Pro 16\" (2023), 16\", Apple M2 Max, 64GB RAM, 1TB SSD, macOS",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 4250,
+      "grade": "B",
+      "src": "A",
+      "description": "Grade B refurbished Apple MacBook Pro 16\" (2023): 16\", Apple M2 Max, 64GB RAM, 1TB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A088",
+      "name": "HP ProDesk 600 G4 SFF, i3-8100, 4GB RAM, 256GB SSD, Win 11",
+      "brand": "HP",
+      "category": "desktops",
+      "price": 150,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished HP ProDesk 600 G4 SFF: i3-8100, 4GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A089",
+      "name": "Acer Veriton X2660G SFF, i3-9100, 8GB RAM, 128GB SSD, Win 11",
+      "brand": "Acer",
+      "category": "desktops",
+      "price": 200,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Acer Veriton X2660G SFF: i3-9100, 8GB RAM, 128GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A090",
+      "name": "HP ProDesk 600 G5 SFF, i3-9100, 4GB RAM, 256GB SSD, Win 11",
+      "brand": "HP",
+      "category": "desktops",
+      "price": 240,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished HP ProDesk 600 G5 SFF: i3-9100, 4GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A091",
+      "name": "Acer Veriton X6660G SFF, i5-8500, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Acer",
+      "category": "desktops",
+      "price": 240,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Acer Veriton X6660G SFF: i5-8500, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A092",
+      "name": "Acer Veriton X2660G SFF, i3-8100, 8GB RAM, 128GB SSD, Win 11",
+      "brand": "Acer",
+      "category": "desktops",
+      "price": 265,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Acer Veriton X2660G SFF: i3-8100, 8GB RAM, 128GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A093",
+      "name": "Acer Veriton X2660G SFF, i3-9100, 8GB RAM, 512GB SSD, Win 11",
+      "brand": "Acer",
+      "category": "desktops",
+      "price": 280,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Acer Veriton X2660G SFF: i3-9100, 8GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A094",
+      "name": "SFF Desktop PC (H310M motherboard), i5-9400, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "",
+      "category": "desktops",
+      "price": 295,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished SFF Desktop PC (H310M motherboard): i5-9400, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A095",
+      "name": "SFF Desktop PC, i5-9400, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "",
+      "category": "desktops",
+      "price": 325,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished SFF Desktop PC: i5-9400, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A096",
+      "name": "Dell OptiPlex 7070 SFF, i5-9500 / i5-9600, 8GB RAM, 256GB SSD (opt. GT 730), Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 325,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7070 SFF: i5-9500 / i5-9600, 8GB RAM, 256GB SSD (opt. GT 730), Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A097",
+      "name": "Acer Veriton X6660G SFF, i5-9500, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Acer",
+      "category": "desktops",
+      "price": 325,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Acer Veriton X6660G SFF: i5-9500, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A098",
+      "name": "Acer Veriton X6660G SFF, i5-8500, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Acer",
+      "category": "desktops",
+      "price": 350,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Acer Veriton X6660G SFF: i5-8500, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A099",
+      "name": "Dell OptiPlex 7060 Tower / SFF, i7-8700, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 365,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7060 Tower / SFF: i7-8700, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A100",
+      "name": "Dell OptiPlex 7070 SFF, i7-8700, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 365,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7070 SFF: i7-8700, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A101",
+      "name": "Dell OptiPlex 7070 SFF, i5-9500, 8GB RAM, 512GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 370,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7070 SFF: i5-9500, 8GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A102",
+      "name": "Acer Veriton X6660G SFF, i5-9500, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Acer",
+      "category": "desktops",
+      "price": 375,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Acer Veriton X6660G SFF: i5-9500, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A103",
+      "name": "Acer Veriton X6670G SFF, i5-10500, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Acer",
+      "category": "desktops",
+      "price": 405,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Acer Veriton X6670G SFF: i5-10500, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A104",
+      "name": "SFF Desktop PC, i5-10500, 8GB RAM, 512GB SSD, Win 11",
+      "brand": "",
+      "category": "desktops",
+      "price": 445,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished SFF Desktop PC: i5-10500, 8GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A105",
+      "name": "Dell OptiPlex 7070 Micro, i7-9700T, 8GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 450,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7070 Micro: i7-9700T, 8GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A106",
+      "name": "Dell OptiPlex 7080 / 7090 SFF, i5-10500 / i5-10505, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 450,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7080 / 7090 SFF: i5-10500 / i5-10505, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A107",
+      "name": "Acer Veriton X4670G SFF, i5-10400, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Acer",
+      "category": "desktops",
+      "price": 450,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Acer Veriton X4670G SFF: i5-10400, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A108",
+      "name": "SFF Desktop PC, i7-8700, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "",
+      "category": "desktops",
+      "price": 475,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished SFF Desktop PC: i7-8700, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A109",
+      "name": "Dell OptiPlex 7060 Tower, i7-8700, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 475,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7060 Tower: i7-8700, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A110",
+      "name": "Lenovo ThinkCentre M90q Tiny Gen 1, i5-10500T, 16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Lenovo",
+      "category": "desktops",
+      "price": 500,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Lenovo ThinkCentre M90q Tiny Gen 1: i5-10500T, 16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A111",
+      "name": "Dell OptiPlex 7080 Micro, i5-10500T, 16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 500,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7080 Micro: i5-10500T, 16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A112",
+      "name": "Dell OptiPlex 7060 Tower, i7-8700, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 520,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7060 Tower: i7-8700, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A113",
+      "name": "Dell OptiPlex 7070 Tower, i7-9700, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 545,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7070 Tower: i7-9700, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A114",
+      "name": "Dell OptiPlex 7080 Tower, i7-10700, 8GB RAM, 256GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 575,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7080 Tower: i7-10700, 8GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A115",
+      "name": "Dell OptiPlex 7060 i7 Desktop Package, i7 (8th Gen), 8GB RAM, 240GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 580,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7060 i7 Desktop Package: i7 (8th Gen), 8GB RAM, 240GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A116",
+      "name": "Dell OptiPlex 7090 Micro, i5-11500T, 16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 595,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7090 Micro: i5-11500T, 16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A117",
+      "name": "Dell OptiPlex 7000 Micro, i5-12500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 750,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7000 Micro: i5-12500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A118",
+      "name": "Ultra Small Form Factor Slim Desktop, i7-12700, 16GB RAM, 256GB SSD, Win 11",
+      "brand": "",
+      "category": "desktops",
+      "price": 900,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Ultra Small Form Factor Slim Desktop: i7-12700, 16GB RAM, 256GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A119",
+      "name": "Dell OptiPlex 7000 SFF, i7-12700, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 920,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7000 SFF: i7-12700, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A120",
+      "name": "Ultra Small Form Factor Slim Desktop, i7-12700, 16GB RAM, 512GB SSD, Win 11",
+      "brand": "",
+      "category": "desktops",
+      "price": 940,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Ultra Small Form Factor Slim Desktop: i7-12700, 16GB RAM, 512GB SSD, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A121",
+      "name": "Dell OptiPlex 7470 All-in-One, 23.8\" FHD (No Stand), i5-9500, 8GB RAM, 512GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 370,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7470 All-in-One: 23.8\" FHD (No Stand), i5-9500, 8GB RAM, 512GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A122",
+      "name": "Dell OptiPlex 7480 All-in-One, 24\" FHD (No Stand), i5-10500 / i5-10600, 8GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 420,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7480 All-in-One: 24\" FHD (No Stand), i5-10500 / i5-10600, 8GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A123",
+      "name": "Dell OptiPlex 7470 All-in-One, 23.8\" FHD (No Stand), i5-9600, 16GB RAM, 512GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 420,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7470 All-in-One: 23.8\" FHD (No Stand), i5-9600, 16GB RAM, 512GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A124",
+      "name": "Dell OptiPlex 7490 All-in-One, 23.8\" FHD, i5-10505, 8GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 520,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7490 All-in-One: 23.8\" FHD, i5-10505, 8GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A125",
+      "name": "Dell OptiPlex 7400 All-in-One, 24\" FHD (No Stand), i5-12500, 8GB/16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 620,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7400 All-in-One: 24\" FHD (No Stand), i5-12500, 8GB/16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A126",
+      "name": "HP EliteOne 800 G6 All-in-One, 23.8\" FHD, i5-10500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "HP",
+      "category": "desktops",
+      "price": 625,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished HP EliteOne 800 G6 All-in-One: 23.8\" FHD, i5-10500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A127",
+      "name": "Dell OptiPlex 7400 All-in-One, 24\" FHD (With Stand), i5-12500, 8GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 670,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7400 All-in-One: 24\" FHD (With Stand), i5-12500, 8GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A128",
+      "name": "Dell OptiPlex 7490 All-in-One, 23.8\" Touch (No Stand), i5-11500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 690,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7490 All-in-One: 23.8\" Touch (No Stand), i5-11500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A129",
+      "name": "Dell OptiPlex 7490 All-in-One, 23.8\" FHD (With Stand), i5-11500, 8GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 700,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7490 All-in-One: 23.8\" FHD (With Stand), i5-11500, 8GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A130",
+      "name": "Dell OptiPlex 7490 All-in-One, 23.8\" Touch (No Stand), i5-11500, 16GB RAM, 512GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 730,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7490 All-in-One: 23.8\" Touch (No Stand), i5-11500, 16GB RAM, 512GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A131",
+      "name": "Dell OptiPlex 7490 All-in-One, 23.8\" Touch (With Stand), i5-11500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 750,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7490 All-in-One: 23.8\" Touch (With Stand), i5-11500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A132",
+      "name": "Dell OptiPlex 7400 All-in-One, 24\" Touch, i5-12500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 875,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7400 All-in-One: 24\" Touch, i5-12500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A133",
+      "name": "Apple iMac 21.5\" 4K (2019), 21.5\" 4K, i5-8500, 16GB RAM, 1TB SSD, macOS",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 925,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Apple iMac 21.5\" 4K (2019): 21.5\" 4K, i5-8500, 16GB RAM, 1TB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A134",
+      "name": "Dell OptiPlex AIO Plus 7410 All-in-One, 24\" Touch (No Stand), i5-13500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 940,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex AIO Plus 7410 All-in-One: 24\" Touch (No Stand), i5-13500, 16GB RAM, 256GB SSD, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A135",
+      "name": "Dell OptiPlex 7400 All-in-One, 24\" FHD, i7-12700, 16GB RAM, 256GB SSD, Radeon RX 6500M, Wi-Fi, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 1125,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell OptiPlex 7400 All-in-One: 24\" FHD, i7-12700, 16GB RAM, 256GB SSD, Radeon RX 6500M, Wi-Fi, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A136",
+      "name": "Apple iMac 24\" 4.5K (2021), 24\" 4.5K (Silver/Blue), Apple M1, 16GB RAM, 512GB SSD, macOS",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 1440,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Apple iMac 24\" 4.5K (2021): 24\" 4.5K (Silver/Blue), Apple M1, 16GB RAM, 512GB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A137",
+      "name": "Apple iMac 24\" 4.5K (2023), 24\" 4.5K, Apple M3, 8GB RAM, 1TB SSD, macOS",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 1875,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Apple iMac 24\" 4.5K (2023): 24\" 4.5K, Apple M3, 8GB RAM, 1TB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A138",
+      "name": "Lenovo ThinkStation P330 Tower workstation, i7-8700, 16GB RAM, 512GB SSD, Quadro P620, Win 11",
+      "brand": "Lenovo",
+      "category": "desktops",
+      "price": 520,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Lenovo ThinkStation P330 Tower workstation: i7-8700, 16GB RAM, 512GB SSD, Quadro P620, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A139",
+      "name": "Dell Precision Tower 5820 workstation, Xeon W-2123, 16GB RAM, 256GB SSD, Quadro P620, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 710,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision Tower 5820 workstation: Xeon W-2123, 16GB RAM, 256GB SSD, Quadro P620, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A140",
+      "name": "HP Z4 G4 Workstation Tower, Xeon W-2133, 16GB RAM, 256GB SSD, Quadro P1000, Win 11",
+      "brand": "HP",
+      "category": "desktops",
+      "price": 875,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished HP Z4 G4 Workstation Tower: Xeon W-2133, 16GB RAM, 256GB SSD, Quadro P1000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A141",
+      "name": "Dell Precision 5820 Tower workstation, Xeon W-2245, 32GB RAM, 256GB SSD, Quadro P1000, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 1125,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 5820 Tower workstation: Xeon W-2245, 32GB RAM, 256GB SSD, Quadro P1000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A142",
+      "name": "Dell Precision 5820 workstation, Xeon W-2245, 16GB RAM, 256GB SSD, Quadro P1000, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 1215,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 5820 workstation: Xeon W-2245, 16GB RAM, 256GB SSD, Quadro P1000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A143",
+      "name": "Lenovo ThinkStation P520 Tower workstation, Xeon W-2235, 64GB RAM, 1TB SSD, Quadro P400, Win 11",
+      "brand": "Lenovo",
+      "category": "desktops",
+      "price": 1375,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Lenovo ThinkStation P520 Tower workstation: Xeon W-2235, 64GB RAM, 1TB SSD, Quadro P400, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A144",
+      "name": "Dell Precision 5820 Tower workstation, Xeon W-2235, 64GB RAM, 512GB SSD, Quadro P2200, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 1800,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 5820 Tower workstation: Xeon W-2235, 64GB RAM, 512GB SSD, Quadro P2200, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A145",
+      "name": "Dell Precision 7820 Tower workstation, 2x Xeon Silver 4110, 32GB RAM, 512GB NVMe SSD, Quadro P2200, Win 11 Pro",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 1875,
+      "grade": "Good",
+      "src": "A",
+      "description": "Refurbished (good condition) Dell Precision 7820 Tower workstation: 2x Xeon Silver 4110, 32GB RAM, 512GB NVMe SSD, Quadro P2200, Win 11 Pro. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A146",
+      "name": "HP Z6 G4 Workstation, Xeon Silver 4114, 64GB RAM, 256GB SSD, Quadro RTX 4000, Win 11",
+      "brand": "HP",
+      "category": "desktops",
+      "price": 2375,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished HP Z6 G4 Workstation: Xeon Silver 4114, 64GB RAM, 256GB SSD, Quadro RTX 4000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A147",
+      "name": "HP Z6 G4 Workstation, Xeon Gold 5222, 64GB RAM, 512GB SSD, NVIDIA RTX A4000, Win 11",
+      "brand": "HP",
+      "category": "desktops",
+      "price": 2375,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished HP Z6 G4 Workstation: Xeon Gold 5222, 64GB RAM, 512GB SSD, NVIDIA RTX A4000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A148",
+      "name": "HP Z6 G4 Workstation, Xeon Silver 4114, 64GB RAM, 512GB SSD, Quadro RTX 4000, Win 11",
+      "brand": "HP",
+      "category": "desktops",
+      "price": 2500,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished HP Z6 G4 Workstation: Xeon Silver 4114, 64GB RAM, 512GB SSD, Quadro RTX 4000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A149",
+      "name": "Dell Precision 5820 Tower workstation, Xeon W-2245, 32GB RAM, 256GB SSD, Quadro RTX 4000, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 2500,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 5820 Tower workstation: Xeon W-2245, 32GB RAM, 256GB SSD, Quadro RTX 4000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A150",
+      "name": "Dell Precision 7920 Tower workstation, Xeon Gold 6226R, 64GB RAM, 512GB SSD, RTX 3070, Win 11",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 3150,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 7920 Tower workstation: Xeon Gold 6226R, 64GB RAM, 512GB SSD, RTX 3070, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A151",
+      "name": "Dell Precision 7920 Tower workstation, 2x Xeon Silver 4214, 64GB RAM, 480GB SSD, RTX 2070 Super, Win 11 Pro",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 3375,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Dell Precision 7920 Tower workstation: 2x Xeon Silver 4214, 64GB RAM, 480GB SSD, RTX 2070 Super, Win 11 Pro. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A152",
+      "name": "HP Z6 G4 Workstation, Xeon Gold 5222, 64GB RAM, 512GB SSD, Quadro RTX 4000, Win 11",
+      "brand": "HP",
+      "category": "desktops",
+      "price": 3500,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished HP Z6 G4 Workstation: Xeon Gold 5222, 64GB RAM, 512GB SSD, Quadro RTX 4000, Win 11. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A153",
+      "name": "Dell Precision 7920 Tower workstation, 2x Xeon Gold 6226R, 64GB RAM, 512GB SSD, Quadro RTX 5000, Win 11 Pro",
+      "brand": "Dell",
+      "category": "desktops",
+      "price": 3750,
+      "grade": "Good",
+      "src": "A",
+      "description": "Refurbished (good condition) Dell Precision 7920 Tower workstation: 2x Xeon Gold 6226R, 64GB RAM, 512GB SSD, Quadro RTX 5000, Win 11 Pro. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "A154",
+      "name": "Apple Mac Pro 7,1 Tower (2019), Xeon W-3245/3275M, 192GB RAM, 1TB SSD, macOS",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 5875,
+      "grade": "A",
+      "src": "A",
+      "description": "Grade A refurbished Apple Mac Pro 7,1 Tower (2019): Xeon W-3245/3275M, 192GB RAM, 1TB SSD, macOS. Checked, updated and set up by Tony before handover. Stock, condition and final price are confirmed when you ask.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        10,
+        16
+      ],
+      "warrantyMonths": 12,
+      "onRequest": true
+    },
+    {
+      "part": "M001",
+      "name": "Apple MacBook Air 13\" (M1, 2020), 8GB RAM, 256GB SSD, Space Grey (UK Keyboard)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 815,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 13\" (M1, 2020): 8GB RAM, 256GB SSD, Space Grey (UK Keyboard). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M002",
+      "name": "Apple MacBook Air 13\" (M1, 2020), 8GB RAM, 256GB SSD, Space Grey / Gold",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 875,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 13\" (M1, 2020): 8GB RAM, 256GB SSD, Space Grey / Gold. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M003",
+      "name": "Apple MacBook Air 13\" (M1, 2020), 16GB RAM, 256GB SSD, Space Grey",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1040,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 13\" (M1, 2020): 16GB RAM, 256GB SSD, Space Grey. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M004",
+      "name": "Apple MacBook Neo, 256GB SSD, Indigo",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1065,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Neo: 256GB SSD, Indigo. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M005",
+      "name": "Apple MacBook Air 13\" (M2, 2022), 8C CPU, 8C GPU, 8GB RAM, 256GB SSD, Midnight",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1190,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 13\" (M2, 2022): 8C CPU, 8C GPU, 8GB RAM, 256GB SSD, Midnight. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M006",
+      "name": "Apple MacBook Air 13\" (M2, 2022), 8C CPU, 8C GPU, 16GB RAM, 256GB SSD, Starlight",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1440,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 13\" (M2, 2022): 8C CPU, 8C GPU, 16GB RAM, 256GB SSD, Starlight. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M007",
+      "name": "Apple MacBook Neo, 8GB RAM, 512GB SSD, Touch ID, Indigo",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1440,
+      "grade": "Open box",
+      "src": "M",
+      "description": "Open box Apple MacBook Neo: 8GB RAM, 512GB SSD, Touch ID, Indigo. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M008",
+      "name": "Apple MacBook Air 13\" (M3, 2024), 8C CPU, 8C GPU, 16GB RAM, 256GB SSD, Starlight",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1690,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 13\" (M3, 2024): 8C CPU, 8C GPU, 16GB RAM, 256GB SSD, Starlight. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M009",
+      "name": "Apple MacBook Air 13\" (M4, 2025), 10C CPU, 8C GPU, 16GB RAM, 256GB SSD, Midnight (Battery: 99%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1750,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 13\" (M4, 2025): 10C CPU, 8C GPU, 16GB RAM, 256GB SSD, Midnight (Battery: 99%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M010",
+      "name": "Apple MacBook Air 15\" (M3), 8GB RAM, 256GB SSD, Midnight Blue",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1875,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 15\" (M3): 8GB RAM, 256GB SSD, Midnight Blue. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M011",
+      "name": "Apple MacBook Air 15\" (M3, 2024), 8C CPU, 10C GPU, 8GB RAM, 256GB SSD, Starlight (Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2125,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 15\" (M3, 2024): 8C CPU, 10C GPU, 8GB RAM, 256GB SSD, Starlight (Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M012",
+      "name": "Apple MacBook Air 15\" (M2, 2023), 8C CPU, 10C GPU, 8GB RAM, 2TB SSD, Midnight",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2315,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 15\" (M2, 2023): 8C CPU, 10C GPU, 8GB RAM, 2TB SSD, Midnight. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M013",
+      "name": "Apple MacBook Air 13\" (M5), 10C CPU, 8C GPU, 16GB RAM, 512GB SSD, Silver",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2315,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Air 13\" (M5): 10C CPU, 8C GPU, 16GB RAM, 512GB SSD, Silver. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M014",
+      "name": "Apple MacBook Pro 16\" (2019), 2.6GHz 6-Core Intel i7, UHD 630, 16GB RAM, 512GB SSD, Space Grey",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1165,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (2019): 2.6GHz 6-Core Intel i7, UHD 630, 16GB RAM, 512GB SSD, Space Grey. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M015",
+      "name": "Apple MacBook Pro 13\" (M1, 2020), 8C CPU, 8C GPU, 8GB RAM, 512GB SSD, Space Grey",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1190,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 13\" (M1, 2020): 8C CPU, 8C GPU, 8GB RAM, 512GB SSD, Space Grey. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M016",
+      "name": "Apple MacBook Pro 16\" (2019), 2.3GHz 8-Core Intel i9, UHD 630, 16GB RAM, 1TB SSD, Space Grey",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1225,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (2019): 2.3GHz 8-Core Intel i9, UHD 630, 16GB RAM, 1TB SSD, Space Grey. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M017",
+      "name": "Apple MacBook Pro 13\" (M2, 2022), 8GB RAM, 256GB SSD, Space Grey",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1375,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 13\" (M2, 2022): 8GB RAM, 256GB SSD, Space Grey. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M018",
+      "name": "Apple MacBook Pro 13\" (M2, 2022), 8C CPU, 10C GPU, 8GB RAM, 512GB SSD, Silver",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 1500,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 13\" (M2, 2022): 8C CPU, 10C GPU, 8GB RAM, 512GB SSD, Silver. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M019",
+      "name": "Apple MacBook Pro 14\" (M1 Pro, 2021), 16GB RAM, 512GB SSD, Silver",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2040,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 14\" (M1 Pro, 2021): 16GB RAM, 512GB SSD, Silver. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M020",
+      "name": "Apple MacBook Pro 16\" (M1 Pro), 10C CPU, 16C GPU, 16GB RAM, 512GB SSD, Space Grey (Battery: 91%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2065,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (M1 Pro): 10C CPU, 16C GPU, 16GB RAM, 512GB SSD, Space Grey (Battery: 91%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M021",
+      "name": "Apple MacBook Pro 13\" (M2), 16GB RAM, 512GB SSD, Space Grey",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2125,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 13\" (M2): 16GB RAM, 512GB SSD, Space Grey. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M022",
+      "name": "Apple MacBook Pro 14\" (M3 Pro, Nov 2023), 11C CPU, 14C GPU, 18GB RAM, 512GB SSD, Silver (Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2565,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 14\" (M3 Pro, Nov 2023): 11C CPU, 14C GPU, 18GB RAM, 512GB SSD, Silver (Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M023",
+      "name": "Apple MacBook Pro 14\" (M1 Max, 2021), 10C CPU, 32C GPU, 32GB RAM, 1TB SSD, Space Grey",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 2625,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 14\" (M1 Max, 2021): 10C CPU, 32C GPU, 32GB RAM, 1TB SSD, Space Grey. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M024",
+      "name": "Apple MacBook Pro 16\" (M2 Pro, 2023), 12C CPU, 19C GPU, 16GB RAM, 512GB SSD, Silver (Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 3125,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (M2 Pro, 2023): 12C CPU, 19C GPU, 16GB RAM, 512GB SSD, Silver (Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M025",
+      "name": "Apple MacBook Pro 14\" (M5, 2025), 10C CPU, 10C GPU, 16GB RAM, 512GB SSD, Space Black (Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 3190,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 14\" (M5, 2025): 10C CPU, 10C GPU, 16GB RAM, 512GB SSD, Space Black (Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M026",
+      "name": "Apple MacBook Pro 16\" (M1 Max, 2021), 10C CPU, 32C GPU, 32GB RAM, 1TB SSD, Space Grey (Battery: 98%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 3375,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (M1 Max, 2021): 10C CPU, 32C GPU, 32GB RAM, 1TB SSD, Space Grey (Battery: 98%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M027",
+      "name": "Apple MacBook Pro 14\" (M5, 2025), 10C CPU, 10C GPU, 16GB RAM, 1TB SSD, Space Black (Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 3500,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 14\" (M5, 2025): 10C CPU, 10C GPU, 16GB RAM, 1TB SSD, Space Black (Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M028",
+      "name": "Apple MacBook Pro 16\" (M3 Pro, Nov 2023), 12C CPU, 18C GPU, 18GB RAM, 512GB SSD, Silver (Battery: 97%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 3750,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (M3 Pro, Nov 2023): 12C CPU, 18C GPU, 18GB RAM, 512GB SSD, Silver (Battery: 97%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M029",
+      "name": "Apple MacBook Pro 14\" (M5, 2025), 10C CPU, 10C GPU, 32GB RAM, 1TB SSD, Space Black, Nano-Texture (Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 4500,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 14\" (M5, 2025): 10C CPU, 10C GPU, 32GB RAM, 1TB SSD, Space Black, Nano-Texture (Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M030",
+      "name": "Apple MacBook Pro 16\" (M5 Pro), 18C CPU, 20C GPU, 24GB RAM, 1TB SSD, Space Black (Apple Warranty to 12 Oct 2027)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 5750,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (M5 Pro): 18C CPU, 20C GPU, 24GB RAM, 1TB SSD, Space Black (Apple Warranty to 12 Oct 2027). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M031",
+      "name": "Apple MacBook Pro 16\" (M4 Max, 2024), 14C CPU, 32C GPU, 36GB RAM, 1TB SSD, Silver (Battery: 99%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 6000,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (M4 Max, 2024): 14C CPU, 32C GPU, 36GB RAM, 1TB SSD, Silver (Battery: 99%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M032",
+      "name": "Apple MacBook Pro 16\" (M4 Max, 2024), 14C CPU, 32C GPU, 36GB RAM, 1TB SSD, Black (Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 6125,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (M4 Max, 2024): 14C CPU, 32C GPU, 36GB RAM, 1TB SSD, Black (Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M033",
+      "name": "Apple MacBook Pro 16\" (M5 Pro), 18C CPU, 20C GPU, 48GB RAM, 1TB SSD, Space Black (Apple Warranty to 13 May 2027)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 7000,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (M5 Pro): 18C CPU, 20C GPU, 48GB RAM, 1TB SSD, Space Black (Apple Warranty to 13 May 2027). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M034",
+      "name": "Apple MacBook Pro 16\" (M3 Max, Nov 2023), 16C CPU, 40C GPU, 64GB RAM, 1TB SSD, Silver (Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 7500,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 16\" (M3 Max, Nov 2023): 16C CPU, 40C GPU, 64GB RAM, 1TB SSD, Silver (Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M035",
+      "name": "Apple MacBook Pro 14\" (M5 Max), 18C CPU, 32C GPU, 36GB RAM, 2TB SSD, Space Black, Nano-Texture (Apple Warranty to 31 Aug 2027)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 7875,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 14\" (M5 Max): 18C CPU, 32C GPU, 36GB RAM, 2TB SSD, Space Black, Nano-Texture (Apple Warranty to 31 Aug 2027). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M036",
+      "name": "Apple MacBook Pro 14\" (M5 Max), 18C CPU, 40C GPU, 48GB RAM, 2TB SSD, Space Black (Apple Warranty to 22 Aug 2027, Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 8250,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 14\" (M5 Max): 18C CPU, 40C GPU, 48GB RAM, 2TB SSD, Space Black (Apple Warranty to 22 Aug 2027, Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M037",
+      "name": "Apple MacBook Pro 14\" (M5 Max), 18C CPU, 40C GPU, 48GB RAM, 2TB SSD, Silver, Nano-Texture (Battery: 100%)",
+      "brand": "Apple",
+      "category": "laptops",
+      "price": 8750,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple MacBook Pro 14\" (M5 Max): 18C CPU, 40C GPU, 48GB RAM, 2TB SSD, Silver, Nano-Texture (Battery: 100%). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M038",
+      "name": "Apple iMac 24\" (M1, 2021, four ports), 8C CPU, 8C GPU, 16GB RAM, 256GB SSD, Orange",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 1750,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple iMac 24\" (M1, 2021, four ports): 8C CPU, 8C GPU, 16GB RAM, 256GB SSD, Orange. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M039",
+      "name": "Apple iMac 24\" (M3, 2023, four ports), 8C CPU, 10C GPU, 8GB RAM, 256GB SSD, Blue",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 2125,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple iMac 24\" (M3, 2023, four ports): 8C CPU, 10C GPU, 8GB RAM, 256GB SSD, Blue. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M040",
+      "name": "Apple iMac 24\" (M4, 2024, four ports), 10C CPU, 10C GPU, 16GB RAM, 256GB SSD, Blue",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 2375,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple iMac 24\" (M4, 2024, four ports): 10C CPU, 10C GPU, 16GB RAM, 256GB SSD, Blue. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M041",
+      "name": "Apple iMac 24\" (M3, 2023, four ports), 8C CPU, 10C GPU, 8GB RAM, 512GB SSD, Blue",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 2500,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple iMac 24\" (M3, 2023, four ports): 8C CPU, 10C GPU, 8GB RAM, 512GB SSD, Blue. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M042",
+      "name": "Apple iMac 24\" (M4, four ports), 8C CPU, 8C GPU, 16GB RAM, 256GB SSD, Silver",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 2500,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple iMac 24\" (M4, four ports): 8C CPU, 8C GPU, 16GB RAM, 256GB SSD, Silver. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M043",
+      "name": "Apple iMac 24\" (M3, 2023, four ports), 8C CPU, 10C GPU, 24GB RAM, 512GB SSD, Green",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 2875,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple iMac 24\" (M3, 2023, four ports): 8C CPU, 10C GPU, 24GB RAM, 512GB SSD, Green. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M044",
+      "name": "Apple Mac mini (M1), 8GB RAM, 512GB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 1125,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac mini (M1): 8GB RAM, 512GB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M045",
+      "name": "Apple Mac mini (M1), 16GB RAM, 512GB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 1315,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac mini (M1): 16GB RAM, 512GB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M046",
+      "name": "Apple Mac mini (M1), 8C CPU, 8C GPU, 16GB RAM, 1TB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 1440,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac mini (M1): 8C CPU, 8C GPU, 16GB RAM, 1TB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M047",
+      "name": "Apple Mac mini (M4), 10C CPU, 10C GPU, 16GB RAM, 256GB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 1500,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac mini (M4): 10C CPU, 10C GPU, 16GB RAM, 256GB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M048",
+      "name": "Apple Mac mini (M4 Pro), 12C CPU, 16C GPU, 24GB RAM, 512GB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 2815,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac mini (M4 Pro): 12C CPU, 16C GPU, 24GB RAM, 512GB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M049",
+      "name": "Apple Mac mini (M4 Pro), 14C CPU, 20C GPU, 24GB RAM, 1TB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 3500,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac mini (M4 Pro): 14C CPU, 20C GPU, 24GB RAM, 1TB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M050",
+      "name": "Apple Mac Studio (M1 Max), 10C CPU, 32C GPU, 32GB RAM, 1TB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 3250,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac Studio (M1 Max): 10C CPU, 32C GPU, 32GB RAM, 1TB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M051",
+      "name": "Apple Mac Studio (2022, M1 Max), 10C CPU, 32C GPU, 64GB RAM, 2TB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 3875,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac Studio (2022, M1 Max): 10C CPU, 32C GPU, 64GB RAM, 2TB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M052",
+      "name": "Apple Mac Studio (M1 Max), 10C CPU, 32C GPU, 32GB RAM, 4TB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 4000,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac Studio (M1 Max): 10C CPU, 32C GPU, 32GB RAM, 4TB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M053",
+      "name": "Apple Mac Studio (2025, M4 Max), 14C CPU, 32C GPU, 36GB RAM, 512GB SSD (Apple Warranty to 17 June 2027)",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 5000,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac Studio (2025, M4 Max): 14C CPU, 32C GPU, 36GB RAM, 512GB SSD (Apple Warranty to 17 June 2027). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M054",
+      "name": "Apple Mac Studio (2023, M2 Ultra), 24C CPU, 60C GPU, 64GB RAM, 1TB SSD",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 6250,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac Studio (2023, M2 Ultra): 24C CPU, 60C GPU, 64GB RAM, 1TB SSD. Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
+    },
+    {
+      "part": "M055",
+      "name": "Apple Mac Studio (2025, M4 Max), 16C CPU, 40C GPU, 64GB RAM, 1TB SSD (Apple Warranty to 31 May 2027)",
+      "brand": "Apple",
+      "category": "desktops",
+      "price": 6875,
+      "grade": "",
+      "src": "M",
+      "description": "Refurbished Apple Mac Studio (2025, M4 Max): 16C CPU, 40C GPU, 64GB RAM, 1TB SSD (Apple Warranty to 31 May 2027). Checked, updated and set up by Tony before handover. Stock is confirmed with my supplier before ordering.",
+      "image": "",
+      "inPerth": false,
+      "leadDays": [
+        7,
+        14
+      ],
+      "specialUntil": "2026-11-20T22:59:00+11:00",
+      "specialLabel": "Black Friday price"
     }
   ]
 }

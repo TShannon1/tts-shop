@@ -390,3 +390,6 @@ footer.site a, .pd-head, .card .name { overflow-wrap: anywhere; }
 .policy { max-width: 820px; }
 .policy h2 { margin-top: 1.2em; font-size: 1.4rem; }
 .policy li { margin: 4px 0; }
+.special { display: inline-block; align-self: flex-start; background: #111; color: #ffd54a; font-weight: 700; font-size: .82rem; border-radius: 999px; padding: 2px 10px; }
+.special.big { display: block; border-radius: var(--radius); padding: 10px 12px; font-size: .95rem; font-weight: 500; }
+.special.big b { color: #ffd54a; }

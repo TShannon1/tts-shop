@@ -1,7 +1,7 @@
-/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v7.7 · 2026-11-17 */
+/* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v7.10 · 2026-11-17 */
 (function () {
   "use strict";
-  var APP_VERSION = "v7.7";
+  var APP_VERSION = "v7.10";
   var P = [], CFG = null, BYID = {};
   var app = document.getElementById("app");
   var COMPUTER_CATS = { laptops: 1, desktops: 1, handhelds: 1 };
@@ -17,7 +17,22 @@
   ];
   function useName(id) { var u = USES.filter(function (x) { return x[0] === id; })[0]; return u ? u[1] : id; }
   function r5(n) { var step = (CFG && CFG.roundTo) || 1; return Math.ceil(n / step - 1e-9) * step; }
-  function availText(p) { return p.pe ? "In stock in Perth" : "Available to order"; }
+  function availText(p) { return p.rq ? "Price and stock on request" : p.pe ? "In stock in Perth" : "Available to order"; }
+  function priceText(p) { return p.exp ? "Price on request" : p.rq ? (p.pmax ? money(p.p) + "–" + money(p.pmax) : "From " + money(p.p)) : money(p.p); }
+  // Limited-time prices: once the end time passes, the item switches to "Price and stock on request" (also done at the nightly update).
+  function applyExpiry() {
+    var now = Date.now(), changed = false;
+    Object.keys(BYID).forEach(function (id) { var p = BYID[id]; if (p.su && now >= p.su) { p.rq = 1; p.exp = 1; delete p.su; changed = true; } });
+    return changed;
+  }
+  function specialText(p) {
+    if (!p.su) return "";
+    var d = new Date(p.su);
+    var perth = d.toLocaleString("en-AU", { timeZone: "Australia/Perth", weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" });
+    var east = d.toLocaleString("en-AU", { timeZone: "Australia/Sydney", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+    return (p.sl || "Special price") + " until " + perth.replace(/ (am|pm)$/i, " $1").replace(" at ", ", ") + " Perth time (" + east + ")";
+  }
+  function requestText(p) { return "I'm interested in the refurbished " + p.n + " (part " + p.id + "). Could you please check availability, condition and the price? "; }
 
   // ---------------------------------------------------------------- storage (best effort only)
   function load(key, def) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch (e) { return def; } }
@@ -92,7 +107,7 @@
   function eta(p) { return p.lt[0] + "–" + p.lt[1] + " days"; }
   function go(h) { if (location.pathname !== "/" && location.pathname !== "/index.html") location.href = "/" + h; else location.hash = h; }
   function prodUrl(p) { return "/p/" + p.s + ".html"; }
-  function inCart() { return cart.map(function (l) { return { p: BYID[l.id], q: l.q }; }).filter(function (x) { return x.p; }); }
+  function inCart() { return cart.map(function (l) { return { p: BYID[l.id], q: l.q }; }).filter(function (x) { return x.p && !x.p.rq; }); }
   function updateCount() { var n = 0; cart.forEach(function (l) { n += l.q; }); var el = document.getElementById("cartCount"); if (el) el.textContent = n; }
   function addToCart(id, q) {
     var l = cart.filter(function (x) { return x.id === id; })[0];
@@ -310,7 +325,7 @@
     return '<div class="cardwrap"><a class="card" href="' + prodUrl(p) + '"><div class="pic">' + pic(p) + '</div><div class="body"><div class="name">' + esc(p.n) + "</div>" +
       (p.rf ? '<span class="chip rfchip">Refurbished' + (p.gr ? " · " + esc(p.gr.length === 1 ? "Grade " + p.gr : p.gr) : "") + "</span>" : "") +
       (p.sp.length ? '<div class="chips">' + p.sp.slice(0, 3).map(function (s) { return '<span class="chip">' + esc(s) + "</span>"; }).join("") + "</div>" : "") +
-      '<div class="price">' + money(p.p) + "</div>" + '<div class="hint">' + availText(p) + "</div>" + (p.low && !p.rf ? '<div class="low">Only a few left</div>' : "") + "</div></a>" + cmpBox(p) + "</div>";
+      '<div class="price">' + priceText(p) + "</div>" + (p.su ? '<div class="special">' + esc(p.sl || "Special price") + "</div>" : "") + '<div class="hint">' + availText(p) + "</div>" + (p.low && !p.rf && !p.rq ? '<div class="low">Only a few left</div>' : "") + "</div></a>" + cmpBox(p) + "</div>";
   }
 
   function viewProduct(id) {
@@ -319,14 +334,17 @@
     var h = '<div class="crumbs"><a href="/#/">Shop</a> › <a href="/#/c/' + p.c + '">' + esc(catName(p.c)) + "</a></div>";
     h += '<div class="prod"><div class="gallery">' + galleryHtml(p) + (p.ims ? '<p class="hint photonote">Photo shows this model. Colour, keyboard and ports can vary by configuration.</p>' : "") + "</div><div>";
     h += "<h2>" + esc(p.n) + "</h2>";
-    h += '<div class="price" style="font-size:2.2rem">' + money(p.p) + '</div><div class="hint">Includes GST. Delivery and setup options are in the cart.</div>';
+    h += '<div class="price" style="font-size:2.2rem">' + priceText(p) + '</div><div class="hint">Includes GST.' + (p.rq ? " Final price confirmed on request." : " Delivery and setup options are in the cart.") + "</div>";
     h += '<div class="meta">';
     if (p.sp.length) h += '<div class="chips">' + p.sp.map(function (s) { return '<span class="chip">' + esc(s) + "</span>"; }).join("") + "</div>";
     if (p.rf) h += '<div class="rfinfo"><b>Refurbished' + (p.gr ? ", " + esc(gradeName(p.gr)) : "") + ".</b> Professionally checked and cleaned. I reset it, update it and set it up for you just like a new one, and it's covered by my 12-month guarantee.</div>";
     h += "<div><b>" + availText(p) + ".</b> Ready for you in about " + eta(p) + ".</div>";
     if (p.u && p.u.length) h += "<div><b>Good for:</b> " + p.u.map(useName).map(esc).join(", ") + "</div>";
     if (p.w) h += "<div><b>Manufacturer's warranty:</b> " + esc(p.w) + "</div>";
-    if (p.low) h += '<div class="low">Only a few left. I\'ll confirm stock before ordering.</div>';
+    if (p.low && !p.rq) h += '<div class="low">Only a few left. I\'ll confirm stock before ordering.</div>';
+    if (p.su) h += '<div class="special big"><b>' + esc(specialText(p)) + ".</b> After that, the price and stock will be confirmed on request.</div>";
+    if (p.exp) h += '<div class="note"><b>The special price for this item has ended.</b> Ask me and I\'ll confirm the current price and stock, usually within 1 business day.</div>';
+    else if (p.rq) h += '<div class="note"><b>Sourced on request.</b> This refurbished item isn\'t kept in stock. Ask me and I\'ll confirm availability, condition and the final price, usually within 1 business day.</div>';
     h += '<div class="hint">Part number: ' + esc(p.id) + "</div>" + cmpBox(p) + "</div>";
     var ups = (p.up || []).filter(function (u) { return BYID[u.id]; });
     if (ups.length) {
@@ -336,17 +354,17 @@
     }
     if (COMPUTER_CATS[p.c] && /LPDDR|soldered|on-?board memory/i.test(p.n + " " + (p.d || ""))) h += '<p class="hint"><b>Good to know:</b> this model\'s memory is built in, so it can\'t be upgraded later. Choose the amount of memory you\'ll need now.</p>';
     else if (COMPUTER_CATS[p.c]) h += '<p class="hint">Need more memory or storage? You can ask me to price an upgrade in the cart.</p>';
-    h += '<p><button class="btn" id="add">Add to cart</button> <a class="btn ghost" href="' + esc(CFG.site.smsHref) + '">Text Tony a question</a></p>';
+    h += '<p><button class="btn" id="add">' + (p.rq ? "Request this item" : "Add to cart") + '</button> <a class="btn ghost" href="' + esc(CFG.site.smsHref) + '">Text Tony a question</a></p>';
     h += "</div></div>";
     if (p.d) h += '<div class="panel"><h3>Product details</h3><p class="desc">' + esc(p.d) + "</p></div>";
-    h += mbBlurb();
+    if (!p.rq) h += mbBlurb();
     if (p.c === "desktops") h += bundlePanel([p]);
     else if (COMPUTER_CATS[p.c]) h += backupOffer();
     h += elsewhereNote();
     h += '<div class="panel" style="margin-top:28px"><h3>What you get when you buy from Tony</h3>' + supportList() + "</div>";
     h += guarantee();
     app.innerHTML = h;
-    document.getElementById("add").onclick = function () { var r = document.querySelector("input[name=upopt]:checked"); addToCart(r ? r.value : p.id, 1); go("#/cart"); };
+    document.getElementById("add").onclick = function () { if (p.rq) { openQuote(requestText(p)); return; } var r = document.querySelector("input[name=upopt]:checked"); addToCart(r ? r.value : p.id, 1); go("#/cart"); };
     bindDriveButtons(); bindBundle(); bindGallery(p); cmpBar();
   }
   function galleryHtml(p) {
@@ -441,7 +459,7 @@
     var rows = [
       ["", function (p) { return '<a href="' + prodUrl(p) + '" class="cmppic">' + pic(p) + "</a>"; }],
       ["", function (p) { return '<a href="' + prodUrl(p) + '"><b>' + esc(p.n) + "</b></a>"; }],
-      ["Price", function (p) { return '<span class="price">' + money(p.p) + "</span>"; }],
+      ["Price", function (p) { return '<span class="price">' + priceText(p) + "</span>"; }],
       ["Condition", function (p) { return p.rf ? "Refurbished" + (p.gr ? ", " + esc(gradeName(p.gr)) : "") : "Brand new"; }],
       ["Type", function (p) { return esc(catName(p.c)); }],
       ["Processor", function (p) { return esc(cpuText(p)) || "–"; }],
@@ -453,7 +471,7 @@
       ["Good for", function (p) { return (p.u || []).map(function (u) { return esc(useName(u).split(/[:,&(]/)[0].trim()); }).join(", ") || "–"; }],
       ["Availability", function (p) { return esc(availText(p)) + "<br><span class=\"hint\">Ready in about " + eta(p) + "</span>"; }],
       ["Warranty", function (p) { return esc(p.w || "Minimum 12 months"); }],
-      ["", function (p) { return '<button class="btn small" data-add="' + esc(p.id) + '">Add to cart</button><br><button class="linkbtn" data-uncmp="' + esc(p.id) + '">Remove</button>'; }]
+      ["", function (p) { return (p.rq ? '<a class="btn small" href="' + prodUrl(p) + '">Request this item</a>' : '<button class="btn small" data-add="' + esc(p.id) + '">Add to cart</button>') + '<br><button class="linkbtn" data-uncmp="' + esc(p.id) + '">Remove</button>'; }]
     ];
     h += '<p class="hint">Scroll sideways to see them all. Highlighted cells are the best in each row.</p><div class="cmpwrap"><table class="cmptable"><tbody>';
     var bestOf = { "Price": function (p) { return -p.p; }, "Memory (RAM)": function (p) { return p.ram || 0; }, "Storage": function (p) { return p.sto || 0; } };
@@ -1362,7 +1380,9 @@
       CFG = res[1];
       res[0].forEach(function (p) { BYID[p.id] = p; });
       P = res[0].filter(function (p) { return !p.hid; }); // upgrade bundles are options on their standard product
-      cart = cart.filter(function (l) { return BYID[l.id]; });
+      applyExpiry();
+      setInterval(function () { if (applyExpiry()) { cart = cart.filter(function (l) { return BYID[l.id] && !BYID[l.id].rq; }); persist(); render(); } }, 60000);
+      cart = cart.filter(function (l) { return BYID[l.id] && !BYID[l.id].rq; });
       var s = CFG.site;
       document.getElementById("logo").src = s.logo;
       document.getElementById("fAddr").textContent = s.address;

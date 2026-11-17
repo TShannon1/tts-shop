@@ -1,5 +1,19 @@
 # Changelog – Tony's Tech Support Shop
 
+## v7.10 · 17 Nov 2026
+- The 154 refurbished computers added on 17 Nov (supplier code A) now work like the iPads: "From $X", "Price and stock on request" and a "Request this item" button instead of Add to cart
+
+## v7.9 · 17 Nov 2026
+- Added 209 refurbished computers to Laptops, Desktops & All-in-Ones and Refurbished: Windows laptops and 2-in-1s, mobile workstations, MacBooks, desktops, all-in-ones, iMacs, desktop workstations, Mac minis and Mac Studios (client prices rounded up to the nearest $5; grades shown where known)
+- Limited-time prices: items can have an end date and time. Until then they show the special price, a "Black Friday price" badge and "until Friday 20 November, 7:59 pm Perth time (10:59 pm AEDT)"; afterwards they automatically switch to "Price on request" with a "Request this item" button, are removed from carts, and can't be paid for by card
+- Order texts show a private one-letter supplier code for each refurbished item
+- Xeon processors and 192GB memory are now recognised in specs and sorting
+
+## v7.8 · 17 Nov 2026
+- Added 18 refurbished iPads (iPad 6th–10th Gen, iPad Mini 5 and 6, iPad Air 4 and 5, iPad Pro 12.9" and 13" M4) to Tablets and Refurbished, priced at Tony's client prices rounded up to the nearest $5 (ranges shown as e.g. $565–$575)
+- New "on request" type of refurbished item: shows "Price and stock on request" and a "Request this item" button that opens the free quote form already filled in with the item, instead of Add to cart. Set "onRequest": true (and optional "priceTo") in refurbished.json
+- Tablets: storage and screen size are now read from the name, so sorting by storage and screen size works for them
+
 ## v7.7 · 17 Nov 2026
 - Returns policy wording for computers updated to Tony's version: no change-of-mind returns on computers he has set up at the client's request; he'll work with them to find a machine they're happy with; special cases (unopened, under 14 days) at his discretion, less 20%
 - Supplier upgrade bundles (e.g. "RAM In-House Upgrade to 32GB") now appear as an option on the standard computer's page ("Upgrade memory to 32GB +$275") instead of a separate listing; choosing it orders the upgraded version

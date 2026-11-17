@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Version v7.7 · 2026-11-17
+# Version v7.10 · 2026-11-17
 """Build Tony's Tech Support shop from distributor price/stock feeds.
 
 Reads the Leader Computers and Dicker Data reseller feeds, keeps the product
@@ -168,22 +168,24 @@ def derive(name, cat):
     t = name.upper()
     d = {}
     gbs = [(int(a), u) for a, u in re.findall(r"(\d{1,4})\s?(GB|TB)\b", t)]
-    ram = [a for a, u in gbs if u == "GB" and a in (4, 8, 12, 16, 18, 24, 32, 36, 48, 64, 96, 128)]
+    ram = [a for a, u in gbs if u == "GB" and a in (4, 8, 12, 16, 18, 24, 32, 36, 48, 64, 96, 128, 192)]
     sto = [a * (1000 if u == "TB" else 1) for a, u in gbs if u == "TB" or a >= 128]
     if ram: d["ram"] = ram[0]
     if sto: d["sto"] = max(sto)
     m = re.search(r"(\d{2}(?:\.\d)?)\s*(?:\"|''|INCH|IN\b|”|-INCH)", t)
+    if not m and cat == "tablets":
+        m = re.search(r"\b(\d{1,2}(?:\.\d)?)\s*(?:\"|''|INCH|IN\b|”|-INCH)", t)
     if not m and cat == "laptops":
         m = re.search(r"\b(1[1-8](?:\.\d)?)\b(?= ?(?:\"|WUXGA|WQXGA|FHD|QHD|UHD|OLED|2\.[58]K|3K|TOUCH|AI\b))", t)
     if m and cat in ("laptops", "tablets", "monitors", "desktops"):
         try:
             v = float(m.group(1))
-            if 10 <= v <= 34: d["scr"] = v
+            if 10 <= v <= 34 or (cat == "tablets" and 7 <= v < 10): d["scr"] = v
         except ValueError:
             pass
     tier = 0
     if re.search(r"I9|ULTRA ?9|\bU9|RYZEN ?(AI ?)?9|\bR9\b|HX\b|M[1-5] ?MAX", t): tier = 4
-    elif re.search(r"I7|CORE ?7|ULTRA ?7|\bU7|\bC7|RYZEN ?(AI ?)?7|\bR7\b|SNAPDRAGON X ?ELITE|M[1-5] ?PRO", t): tier = 3
+    elif re.search(r"I7|CORE ?7|ULTRA ?7|\bU7|\bC7|RYZEN ?(AI ?)?7|\bR7\b|SNAPDRAGON X ?ELITE|M[1-5] ?PRO|XEON", t): tier = 3
     elif re.search(r"I5|CORE ?5|ULTRA ?5|\bU5|\bC5|RYZEN ?(AI ?)?5|\bR5\b|SNAPDRAGON|\bM[1-5]\b", t): tier = 2
     elif re.search(r"I3|CORE ?3|\bC3|RYZEN ?3|\bR3\b|CELERON|PENTIUM|ATHLON|\bN\d{3}\b|\bN\d{4}\b", t): tier = 1
     if tier: d["cpu"] = tier
@@ -201,6 +203,8 @@ def derive(name, cat):
         if res: d["res"] = res
         hz = re.search(r"(\d{2,3}) ?HZ", t)
         if hz and 50 <= int(hz.group(1)) <= 540: d["hz"] = int(hz.group(1))
+    if cat == "tablets" and gbs:
+        d["sto"] = max(a * (1000 if u == "TB" else 1) for a, u in gbs if u == "TB" or a >= 16)
     if cat == "backup" and gbs:
         caps = [a * (1000 if u == "TB" else 1) for a, u in gbs]
         d["sto"] = max(caps)
@@ -567,14 +571,14 @@ def write_seo_pages(products, out_dir, now):
             continue  # upgrade bundles are shown as options on the standard product
         url = f"{base}/p/{pr['s']}.html"
         urls.append((url, "daily"))
-        title = f"{pr['n']} | {money(pr['p'])} | Tony's Tech Support Perth"
+        title = f"{pr['n']} | {'From ' if pr.get('rq') else ''}{money(pr['p'])} | Tony's Tech Support Perth"
         desc = (("Refurbished " if pr.get("rf") else "") + f"{pr['n']} for {money(pr['p'])}, checked, set up and delivered in Perth by Tony's Tech Support. "
                 + ", ".join(pr["sp"]))[:300]
         ld = {
             "@context": "https://schema.org", "@type": "Product", "name": pr["n"], "sku": pr["id"], "mpn": pr["id"],
             "category": cats.get(pr["c"], ""), "description": (pr["d"] or desc)[:500],
             "offers": {"@type": "Offer", "url": url, "priceCurrency": "AUD", "price": f"{pr['p']:.2f}",
-                       "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/" + ("RefurbishedCondition" if pr.get("rf") else "NewCondition"),
+                       "availability": "https://schema.org/" + ("LimitedAvailability" if pr.get("rq") else "InStock"), "itemCondition": "https://schema.org/" + ("RefurbishedCondition" if pr.get("rf") else "NewCondition"),
                        "seller": {"@type": "LocalBusiness", "name": "Tony's Tech Support", "telephone": CFG["site"]["phone"],
                                   "address": {"@type": "PostalAddress", "addressLocality": "Hazelmere",
                                               "addressRegion": "WA", "postalCode": "6055", "addressCountry": "AU"}}},
@@ -628,6 +632,22 @@ def refurb_grade(name):
     return "Ex-demo" if re.search(r"demo", name, re.I) else ""
 
 
+def special_fields(r, now):
+    """Limited-time prices: before "specialUntil" the item shows the special price and end time;
+    afterwards it becomes "Price and stock on request" (the shop also checks this live in the browser)."""
+    until = r.get("specialUntil")
+    if not until:
+        return {}
+    try:
+        end = datetime.datetime.fromisoformat(until)
+    except ValueError:
+        print(f"refurbished.json: bad specialUntil {until!r} for {r.get('part')}", file=sys.stderr)
+        return {}
+    if end <= now:
+        return {"rq": 1, "exp": 1}
+    return {"su": int(end.timestamp() * 1000), "sl": r.get("specialLabel", "Special price")}
+
+
 def curated_refurbs():
     """Machines listed by hand in refurbished.json (e.g. quality refurbs Tony buys in)."""
     path = os.path.join(ROOT, "refurbished.json")
@@ -641,6 +661,7 @@ def curated_refurbs():
     p = CFG["pricing"]
     step = p.get("roundTo", 1) or 1
     out = []
+    now = datetime.datetime.now(datetime.timezone.utc)
     for r in items:
         if not r.get("name") or not r.get("price") or r.get("sold"):
             continue
@@ -655,7 +676,10 @@ def curated_refurbs():
             "b": r.get("brand", ""), "c": cat, "p": price, "img": r.get("image", ""),
             "d": r.get("description", ""), "w": (str(r["warrantyMonths"]) + " months") if r.get("warrantyMonths") else "",
             "lt": lt, "low": 1, "pe": 1 if r.get("inPerth", True) else 0,
-            "os": "", "k": "T", "rf": 1, "gr": r.get("grade", ""), "_floor": buy,
+            "os": "", "k": r.get("src") or "T", "rf": 1, "gr": r.get("grade", ""), "_floor": buy,
+            **({"rq": 1} if r.get("onRequest") else {}),
+            **special_fields(r, now),
+            **({"pmax": math.ceil(float(r["priceTo"]) / step - 1e-9) * step} if r.get("priceTo") else {}),
         })
     print(f"Added {len(out)} refurbished machines from refurbished.json", file=sys.stderr)
     return out
@@ -895,7 +919,7 @@ def build(leader_text, dicker_text, out_dir):
             name = re.sub(r"\s*\b(refurbished|refurb|renewed|pre-?owned|ex-?demo|demo unit|demo|grade [abc])\b\s*", " ", name, flags=re.I)
             name = re.sub(r"^(\w+) \1\b", r"\1", re.sub(r"\s+", " ", name).strip(), flags=re.I)
         pr["n"] = name
-        promo = PROMO_SPLIT.search(raw) or PROMO_SPLIT.search(name)
+        promo = pr["k"] in (1, 2) and (PROMO_SPLIT.search(raw) or PROMO_SPLIT.search(name))  # supplier feeds only
         if promo:
             src = raw if PROMO_SPLIT.search(raw) else name
             pr["_promo"] = promo_base(src, pr["b"])
