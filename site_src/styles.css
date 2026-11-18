@@ -393,3 +393,11 @@ footer.site a, .pd-head, .card .name { overflow-wrap: anywhere; }
 .special { display: inline-block; align-self: flex-start; background: #111; color: #ffd54a; font-weight: 700; font-size: .82rem; border-radius: 999px; padding: 2px 10px; }
 .special.big { display: block; border-radius: var(--radius); padding: 10px 12px; font-size: .95rem; font-weight: 500; }
 .special.big b { color: #ffd54a; }
+.dealstrip { margin: 8px 0 18px; }
+.dealhead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.dealhead h2 { margin: 0; }
+.dealstrip > .hint { margin: 4px 0 10px; }
+nav.top a.dealslink { font-weight: 700; }
+nav.top a.dealslink::before { content: ""; display: inline-block; width: .55em; height: .55em; border-radius: 50%; background: #e0a800; margin-right: .35em; vertical-align: middle; }
+nav.top a.dealslink[hidden] { display: none; }
+@media (max-width: 480px) { nav.top a { padding: 6px 5px; } nav.top a.dealslink::before { display: none; } }

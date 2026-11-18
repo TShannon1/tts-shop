@@ -1,5 +1,5 @@
 # Tony's Tech Support Shop – setup guide
-Version v7.10 (17 Nov 2026). See CHANGELOG.md for what changed.
+Version v8.0 (17 Nov 2026). See CHANGELOG.md for what changed.
 
 This folder builds **shop.tonystechsupport.com.au**. It is hosted free on GitHub Pages. Every night at about 1:40 am (Perth time), GitHub:
 
@@ -30,6 +30,7 @@ In the repository, go to **Settings → Secrets and variables → Actions → Ne
 |---|---|
 | `DICKER_FEED_URL` | your Dicker Data "Datafeeds — CSV" link |
 | `LEADER_FEED_URL` | your Leader "Stock Data Feed - CSV with Heading and Long Description - No Compression" link |
+| `DEALS_FEED_URL` | (optional) the Web app link from your "Shop deals" Google script – see **Special deals from marketing emails** below |
 
 Secrets are hidden from everyone, even on a public repository.
 
@@ -80,6 +81,12 @@ See `stripe-worker/README.md`. You'll need free Stripe and Cloudflare accounts (
 - Items you source only when asked (like the refurbished iPads) have `"onRequest": true`: clients see the price or price range and a "Request this item" button, which sends you a quote request instead of an order.
 - Limited-time prices: add `"specialUntil": "2026-11-20T22:59:00+11:00"` (and optionally `"specialLabel"`). After that time the item shows "Price on request" automatically, even before the next update.
 - To add refurbs you source yourself, edit `refurbished.json` (instructions are at the top of the file). Enter the **selling price**, never your buy price: the repo is public.
+
+### Special deals from marketing emails
+- The separate "Shop deals" Google script (kept in your Google account, **not** in this repo, because it names your suppliers) reads every email you put in the Gmail label **marketing emails**, adds 25% (rounded up to $5) and lists the products in a private Google Sheet.
+- The shop reads the ticked rows from the script's web link (`DEALS_FEED_URL` secret) at every update. They appear under **Special deals** (header link, home page strip and category tile) with the end time, then switch to "Price on request" when the offer ends, just like the Black Friday refurbs.
+- Untick **Show** in the sheet to hide a deal. Setup steps are in the README that came with the script.
+- If the link can't be reached, the shop keeps the last deals it downloaded.
 
 ### Multi-buy discount
 `config.json` → `pricing.multiBuy`: 2% off 2 items, 4% off 3, 6% off 4, 8% off 5 or more (items $30+, across the whole shop). Each product is checked so it never drops below a 15% markup on its cost plus freight (`floorMarkup`). With your 25% markup, 8% is the most any tier can be.

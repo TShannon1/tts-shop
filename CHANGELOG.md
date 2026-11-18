@@ -1,5 +1,12 @@
 # Changelog – Tony's Tech Support Shop
 
+## v8.0 · 17 Nov 2026
+- New **Special deals** page (/#/c/deals) listing every limited-time price, soonest-ending first, with a "Deals" link in the header (only shown while there are deals), a deals strip on the home page and a category tile.
+- Deal cards show the end date ("Ends Fri, 20 Nov").
+- Deals from marketing emails: the shop reads a private feed (`DEALS_FEED_URL` secret) made by the new Google script, with client prices only. Same rules as the Black Friday refurbs: special price until the offer ends, then "Price on request".
+- Brand-new deal items are listed as new (not refurbished), with no "Only a few left" note.
+- An email deal that's already listed in refurbished.json isn't added twice. If the feed can't be reached, the last good copy is used.
+
 ## v7.10 · 17 Nov 2026
 - The 154 refurbished computers added on 17 Nov (supplier code A) now work like the iPads: "From $X", "Price and stock on request" and a "Request this item" button instead of Add to cart
 

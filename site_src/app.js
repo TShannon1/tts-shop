@@ -1,7 +1,7 @@
 /* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v7.10 · 2026-11-17 */
 (function () {
   "use strict";
-  var APP_VERSION = "v7.10";
+  var APP_VERSION = "v8.0";
   var P = [], CFG = null, BYID = {};
   var app = document.getElementById("app");
   var COMPUTER_CATS = { laptops: 1, desktops: 1, handhelds: 1 };
@@ -48,7 +48,7 @@
   // ---------------------------------------------------------------- helpers
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function money(n) { if (n < 0) return "−" + money(-n); return "$" + Number(n).toLocaleString("en-AU", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); }
-  function catName(id) { if (id === "refurbished") return "Refurbished"; var sx = ((CFG && CFG.sections) || []).filter(function (x) { return x.id === id; })[0]; if (sx) return sx.name; var c = (CFG.categories || []).filter(function (x) { return x.id === id; })[0]; return c ? c.name : id; }
+  function catName(id) { if (id === "refurbished") return "Refurbished"; if (id === "deals") return "Special deals"; var sx = ((CFG && CFG.sections) || []).filter(function (x) { return x.id === id; })[0]; if (sx) return sx.name; var c = (CFG.categories || []).filter(function (x) { return x.id === id; })[0]; return c ? c.name : id; }
   function ICON(cat) {
     var paths = {
       laptops: '<rect x="12" y="12" width="40" height="26" rx="2"/><path d="M6 46h52l-4-6H10z"/>',
@@ -59,6 +59,7 @@
       printers: '<path d="M18 22V8h28v14"/><rect x="8" y="22" width="48" height="20" rx="2"/><path d="M18 36h28v20H18z"/>',
       networking: '<path d="M10 26a32 32 0 0 1 44 0M17 33a22 22 0 0 1 30 0M24 40a12 12 0 0 1 16 0"/><circle cx="32" cy="48" r="3"/>',
       handhelds: '<rect x="6" y="20" width="52" height="24" rx="10"/><rect x="22" y="24" width="20" height="16" rx="1"/><path d="M13 32h5M15.5 29.5v5"/><circle cx="49" cy="30" r="1.5"/><circle cx="49" cy="35" r="1.5"/>',
+      deals: '<path d="M34 6H54v20L28 52 8 32z"/><circle cx="44" cy="16" r="4"/>',
       refurbished: '<path d="M44 14a20 20 0 1 0 8 20"/><path d="M44 6v9h9"/><path d="M24 33l6 6 11-13"/>',
       all: '<rect x="8" y="8" width="20" height="20" rx="3"/><rect x="36" y="8" width="20" height="20" rx="3"/><rect x="8" y="36" width="20" height="20" rx="3"/><rect x="36" y="36" width="20" height="20" rx="3"/>',
       hubs: '<rect x="10" y="22" width="44" height="20" rx="4"/><path d="M18 32h4M28 32h4M38 32h8M32 22v-8h-6v-4"/>',
@@ -154,18 +155,20 @@
   function inCat(p, cat) {
     if (!cat) return true;
     if (cat === "refurbished") return !!p.rf;
+    if (cat === "deals") return !!p.su;
     if (p.c === cat) return true;
     return (p.t || []).indexOf(cat) >= 0;
   }
   function catList() {
     var counts = { all: P.length };
-    P.forEach(function (p) { counts[p.c] = (counts[p.c] || 0) + 1; if (p.rf) counts.refurbished = (counts.refurbished || 0) + 1; (p.t || []).forEach(function (t) { counts[t] = (counts[t] || 0) + 1; }); });
-    var L = [{ id: "all", name: "All items" }].concat(CFG.categories, [{ id: "refurbished", name: "Refurbished" }], CFG.sections || []);
+    P.forEach(function (p) { counts[p.c] = (counts[p.c] || 0) + 1; if (p.rf) counts.refurbished = (counts.refurbished || 0) + 1; if (p.su) counts.deals = (counts.deals || 0) + 1; (p.t || []).forEach(function (t) { counts[t] = (counts[t] || 0) + 1; }); });
+    var L = [{ id: "all", name: "All items" }, { id: "deals", name: "Special deals" }].concat(CFG.categories, [{ id: "refurbished", name: "Refurbished" }], CFG.sections || []);
     return L.filter(function (c) { return counts[c.id]; }).map(function (c) { return { id: c.id, name: c.name, n: counts[c.id], href: c.id === "all" ? "/#/all" : "/#/c/" + c.id }; });
   }
   var COMPUTERISH = { laptops: 1, desktops: 1, handhelds: 1, tablets: 1, refurbished: 1 };
   function sortOptions(cat) {
     var o = [["p", "Price"], ["n", "Name"]];
+    if (cat === "deals") o.unshift(["su", "Offer ends"]);
     if (COMPUTERISH[cat]) {
       o.push(["ram", "Memory (RAM)"], ["sto", "Storage (GB)"], ["cpu", "Processor speed"]);
       if (cat !== "desktops") o.push(["scr", "Screen size"]);
@@ -176,12 +179,14 @@
     return o;
   }
   function getSort(cat) {
-    var st = load("tts-sort2", { k: "p", d: 1 });
-    if (typeof st !== "object") st = { k: "p", d: 1 };
-    if (!sortOptions(cat).some(function (o) { return o[0] === st.k; })) st = { k: "p", d: 1 };
+    var def = cat === "deals" ? { k: "su", d: 1 } : { k: "p", d: 1 };
+    var st = load(sortKey(cat), def);
+    if (typeof st !== "object" || !st) st = def;
+    if (!sortOptions(cat).some(function (o) { return o[0] === st.k; })) st = def;
     return st;
   }
-  function dirLabel(k, d) { return k === "p" ? (d > 0 ? "Lowest first" : "Highest first") : k === "n" ? (d > 0 ? "A to Z" : "Z to A") : (d > 0 ? "Smallest first" : "Largest first"); }
+  function sortKey(cat) { return cat === "deals" ? "tts-sort-deals" : "tts-sort2"; }
+  function dirLabel(k, d) { return k === "su" ? (d > 0 ? "Ending soonest" : "Ending last") : k === "p" ? (d > 0 ? "Lowest first" : "Highest first") : k === "n" ? (d > 0 ? "A to Z" : "Z to A") : (d > 0 ? "Smallest first" : "Largest first"); }
   function sortList(list, st) {
     var k = st.k, d = st.d;
     return list.sort(function (a, b) {
@@ -225,6 +230,7 @@
       h += '<div class="crumbs"><a href="/#/">Shop</a> › ' + esc(cat ? catName(cat) : all ? "All items" : 'Search results for "' + query + '"') + "</div>";
       h += "<h2>" + esc(cat ? catName(cat) : all ? "All items" : "Search results" + (query ? " for \u201c" + query + "\u201d" : "")) + "</h2>";
       if (cat && (CFG.sections || []).some(function (x) { return x.id === cat; })) h += '<p class="hint">These are also listed under <a href="/#/c/accessories">Accessories</a>.</p>';
+      if (cat === "deals") h += '<p class="lead">Limited-time prices on new and refurbished tech. Each price ends at the time shown on the product; after that, I\'ll confirm the price and stock on request. ' + (list.length ? "" : "There are no specials on right now, so check back soon or ask me for a free custom quote.") + "</p>";
     }
     if ((!cat && !query && !all) || COMPUTER_CATS[cat]) {
       h += '<section class="panel pickcta"><div><h2>Not sure which computer to get?</h2><p>Tell me what it\'s for and your budget, and I\'ll show you the best options. If nothing fits, I\'ll send you a free custom quote.</p></div>' +
@@ -238,6 +244,10 @@
     var home = !cat && !query && !all && !useF && !perthF;
     if (home) {
       h += '<div class="panel"><h2>Why buy from Tony?</h2>' + supportList() + "</div>" + elsewhereNote();
+      var deals = P.filter(function (p) { return p.su; }).sort(function (a, b) { return a.su - b.su; });
+      if (deals.length) {
+        h += '<section class="dealstrip"><div class="dealhead"><h2>Special deals</h2><a class="btn small" href="/#/c/deals">See all ' + deals.length + " deal" + (deals.length === 1 ? "" : "s") + ' ›</a></div><p class="hint">Limited-time prices, ending soonest first.</p><div class="grid">' + deals.slice(0, 4).map(card).join("") + "</div></section>";
+      }
       h += "<h2>Popular picks</h2>";
       list = pickPopular();
     }
@@ -254,8 +264,8 @@
     var onCat = app.querySelector(".cats .cat.on"); if (onCat) onCat.parentNode.scrollLeft = onCat.offsetLeft - onCat.parentNode.offsetLeft - 16;
     var s = document.getElementById("sort");
     if (s) {
-      s.onchange = function () { var d = /^(p|n)$/.test(s.value) ? 1 : -1; save("tts-sort2", { k: s.value, d: d }); render(); };
-      document.getElementById("sortDir").onclick = function () { save("tts-sort2", { k: st.k, d: -st.d }); render(); };
+      s.onchange = function () { var d = /^(p|n|su)$/.test(s.value) ? 1 : -1; save(sortKey(cat), { k: s.value, d: d }); render(); };
+      document.getElementById("sortDir").onclick = function () { save(sortKey(cat), { k: st.k, d: -st.d }); render(); };
     }
     var us = document.getElementById("use"); if (us) us.onchange = function (e) { save("tts-use", e.target.value); render(); };
     var uc = document.getElementById("useClear"); if (uc) uc.onclick = function () { save("tts-use", ""); render(); };
@@ -295,7 +305,13 @@
     return out;
   }
   function bindSearch() { /* search now lives in the header (see setupHeader) */ }
+  function syncDealsLink() {
+    var a = document.getElementById("dealsLink"); if (!a) return;
+    var n = P.filter(function (p) { return p.su; }).length;
+    a.hidden = !n;
+  }
   function setupHeader() {
+    syncDealsLink();
     var f = document.getElementById("hsf"), q = document.getElementById("hq");
     f.onsubmit = function (e) { e.preventDefault(); var v = q.value.trim(); q.blur(); go(v ? "#/s/" + encodeURIComponent(v) : "#/all"); return false; };
     // Shop menu: categories + "View all items". Opens on hover (mouse) or tap/click/keyboard.
@@ -325,7 +341,7 @@
     return '<div class="cardwrap"><a class="card" href="' + prodUrl(p) + '"><div class="pic">' + pic(p) + '</div><div class="body"><div class="name">' + esc(p.n) + "</div>" +
       (p.rf ? '<span class="chip rfchip">Refurbished' + (p.gr ? " · " + esc(p.gr.length === 1 ? "Grade " + p.gr : p.gr) : "") + "</span>" : "") +
       (p.sp.length ? '<div class="chips">' + p.sp.slice(0, 3).map(function (s) { return '<span class="chip">' + esc(s) + "</span>"; }).join("") + "</div>" : "") +
-      '<div class="price">' + priceText(p) + "</div>" + (p.su ? '<div class="special">' + esc(p.sl || "Special price") + "</div>" : "") + '<div class="hint">' + availText(p) + "</div>" + (p.low && !p.rf && !p.rq ? '<div class="low">Only a few left</div>' : "") + "</div></a>" + cmpBox(p) + "</div>";
+      '<div class="price">' + priceText(p) + "</div>" + (p.su ? '<div class="special">' + esc(p.sl || "Special price") + '</div><div class="hint ends">Ends ' + esc(new Date(p.su).toLocaleString("en-AU", { timeZone: "Australia/Perth", weekday: "short", day: "numeric", month: "short" })) + "</div>" : "") + '<div class="hint">' + availText(p) + "</div>" + (p.low && !p.rf && !p.rq ? '<div class="low">Only a few left</div>' : "") + "</div></a>" + cmpBox(p) + "</div>";
   }
 
   function viewProduct(id) {
@@ -1381,7 +1397,7 @@
       res[0].forEach(function (p) { BYID[p.id] = p; });
       P = res[0].filter(function (p) { return !p.hid; }); // upgrade bundles are options on their standard product
       applyExpiry();
-      setInterval(function () { if (applyExpiry()) { cart = cart.filter(function (l) { return BYID[l.id] && !BYID[l.id].rq; }); persist(); render(); } }, 60000);
+      setInterval(function () { if (applyExpiry()) { cart = cart.filter(function (l) { return BYID[l.id] && !BYID[l.id].rq; }); persist(); syncDealsLink(); render(); } }, 60000);
       cart = cart.filter(function (l) { return BYID[l.id] && !BYID[l.id].rq; });
       var s = CFG.site;
       document.getElementById("logo").src = s.logo;

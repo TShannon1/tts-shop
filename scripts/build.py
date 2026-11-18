@@ -648,6 +648,41 @@ def special_fields(r, now):
     return {"su": int(end.timestamp() * 1000), "sl": r.get("specialLabel", "Special price")}
 
 
+def curated_item(r, now, id_prefix="R"):
+    """One hand-listed item (refurbished.json or an email deal) in the shop's product format."""
+    p = CFG["pricing"]
+    step = p.get("roundTo", 1) or 1
+    part = norm_mpn(r.get("part") or r["name"])[:24]
+    cat = r.get("category", "laptops")
+    if cat not in {c[0] for c in CATEGORIES}:
+        cat = "accessories"
+    price = math.ceil(float(r["price"]) / step - 1e-9) * step
+    buy = price / p["markup"]  # assumed: priced at the normal markup (the repo is public, so no buy prices here)
+    new = r.get("condition") == "new"
+    lt = r.get("leadDays") or ([3, 7] if new else [2, 5])
+    brand = r.get("brand") or guess_brand(r["name"])
+    return {
+        "id": id_prefix + part, "_raw": r["name"], "_brand": brand, "_mpn": "", "_path": "",
+        "_noicecat": True,
+        "b": brand, "c": cat, "p": price, "img": r.get("image", ""),
+        "d": r.get("description", ""), "w": (str(r["warrantyMonths"]) + " months") if r.get("warrantyMonths") else "",
+        "lt": lt, "low": 0 if new else 1, "pe": 1 if r.get("inPerth", not new) else 0,
+        "os": "", "k": r.get("src") or "T", "_floor": buy,
+        **({} if new else {"rf": 1, "gr": r.get("grade", "")}),
+        **({"rq": 1} if r.get("onRequest") else {}),
+        **special_fields(r, now),
+        **({"pmax": math.ceil(float(r["priceTo"]) / step - 1e-9) * step} if r.get("priceTo") else {}),
+    }
+
+
+def guess_brand(name):
+    n = name.lower()
+    if re.search(r"\b(mac|macbook|imac|ipad|iphone|airpods|apple)\b", n):
+        return "Apple"
+    first = re.split(r"[\s,(]+", name.strip())[0]
+    return first if first[:1].isupper() and len(first) > 1 else ""
+
+
 def curated_refurbs():
     """Machines listed by hand in refurbished.json (e.g. quality refurbs Tony buys in)."""
     path = os.path.join(ROOT, "refurbished.json")
@@ -658,30 +693,58 @@ def curated_refurbs():
     except Exception as e:
         print(f"refurbished.json could not be read: {e}", file=sys.stderr)
         return []
-    p = CFG["pricing"]
-    step = p.get("roundTo", 1) or 1
-    out = []
     now = datetime.datetime.now(datetime.timezone.utc)
-    for r in items:
-        if not r.get("name") or not r.get("price") or r.get("sold"):
-            continue
-        part = norm_mpn(r.get("part") or r["name"])[:24]
-        cat = r.get("category", "laptops")
-        price = math.ceil(float(r["price"]) / step - 1e-9) * step
-        buy = price / p["markup"]  # assumed: priced at the normal markup (the repo is public, so no buy prices here)
-        lt = r.get("leadDays") or [2, 5]  # Tony already has it, or it's a short trip away
-        out.append({
-            "id": "R" + part, "_raw": r["name"], "_brand": r.get("brand", ""), "_mpn": "", "_path": "",
-            "_noicecat": True,
-            "b": r.get("brand", ""), "c": cat, "p": price, "img": r.get("image", ""),
-            "d": r.get("description", ""), "w": (str(r["warrantyMonths"]) + " months") if r.get("warrantyMonths") else "",
-            "lt": lt, "low": 1, "pe": 1 if r.get("inPerth", True) else 0,
-            "os": "", "k": r.get("src") or "T", "rf": 1, "gr": r.get("grade", ""), "_floor": buy,
-            **({"rq": 1} if r.get("onRequest") else {}),
-            **special_fields(r, now),
-            **({"pmax": math.ceil(float(r["priceTo"]) / step - 1e-9) * step} if r.get("priceTo") else {}),
-        })
+    out = [curated_item(r, now) for r in items if r.get("name") and r.get("price") and not r.get("sold")]
     print(f"Added {len(out)} refurbished machines from refurbished.json", file=sys.stderr)
+    return out
+
+
+DEALS_CACHE = os.path.join(ROOT, ".cache", "deals.json")
+
+
+def email_deals(text, existing):
+    """Specials read from Tony's marketing emails by the Google Apps Script (email-deals/Code.gs).
+    The feed only holds client prices. If it can't be downloaded, the last good copy is used."""
+    data = None
+    if text:
+        try:
+            data = json.loads(text)
+            os.makedirs(os.path.dirname(DEALS_CACHE), exist_ok=True)
+            open(DEALS_CACHE, "w", encoding="utf-8").write(text)
+        except Exception as e:
+            print(f"Email deals: feed was not valid JSON ({e}); using the last good copy", file=sys.stderr)
+    if data is None and os.path.exists(DEALS_CACHE):
+        try:
+            data = json.load(open(DEALS_CACHE, encoding="utf-8"))
+        except Exception:
+            data = None
+    if not data:
+        return []
+    key = lambda n: re.sub(r"[^a-z0-9]", "", (n or "").lower())
+    have = {key(p["_raw"]) for p in existing}
+    step = CFG["pricing"].get("roundTo", 1) or 1
+    words = lambda n: set(re.findall(r"[a-z0-9]+", re.sub(r"(\d+)[- ]?(inch|\")", r"\1in", (n or "").lower()))) - {"apple", "the", "with", "and", "ram", "ssd", "battery", "warranty"}
+    same_price = {}
+    for p in existing:
+        if p.get("su") or p.get("exp"):
+            same_price.setdefault((p["k"], p["p"]), []).append(words(p["_raw"]))
+
+    def listed_by_hand(r):
+        """The same special already in refurbished.json under a slightly different name (same supplier and price)."""
+        price = math.ceil(float(r["price"]) / step - 1e-9) * step
+        w = words(r["name"])
+        return any(len(w & o) / max(1, min(len(w), len(o))) >= 0.6 for o in same_price.get((r.get("src") or "T", price), []))
+    now = datetime.datetime.now(datetime.timezone.utc)
+    out, seen = [], set()
+    for r in data.get("items", []):
+        if not r.get("name") or not r.get("price") or key(r["name"]) in have or r.get("part") in seen or listed_by_hand(r):
+            continue  # already listed by hand (e.g. the same refurb in refurbished.json)
+        seen.add(r.get("part"))
+        try:
+            out.append(curated_item(r, now, id_prefix="E"))
+        except Exception as e:
+            print(f"Email deals: skipped {r.get('name')!r}: {e}", file=sys.stderr)
+    print(f"Added {len(out)} deals from marketing emails", file=sys.stderr)
     return out
 
 
@@ -820,7 +883,7 @@ def apply_discount_limits(products):
 
 
 # ---------------------------------------------------------------- main build
-def build(leader_text, dicker_text, out_dir):
+def build(leader_text, dicker_text, out_dir, deals_text=""):
     raw = []
     if leader_text:
         raw += read_leader(leader_text)
@@ -893,6 +956,7 @@ def build(leader_text, dicker_text, out_dir):
         })
 
     products += curated_refurbs()
+    products += email_deals(deals_text, products)
 
     enrich_from_icecat([p for p in products if not p.get("_noicecat")])
     for p in products:
@@ -1005,6 +1069,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--leader-file")
     ap.add_argument("--dicker-file")
+    ap.add_argument("--deals-file")
     ap.add_argument("--out", default=os.path.join(ROOT, "site"))
     a = ap.parse_args()
 
@@ -1025,7 +1090,8 @@ def main():
     dicker = get(a.dicker_file, "DICKER_FEED_URL", "Dicker Data")
     if not leader and not dicker:
         sys.exit("No feed data available; leaving the live site unchanged.")
-    products = build(leader, dicker, a.out)
+    deals = get(a.deals_file, "DEALS_FEED_URL", "Email deals")
+    products = build(leader, dicker, a.out, deals)
     if len(products) < 20:
         sys.exit(f"Only {len(products)} products built; something is wrong, not publishing.")
 
