@@ -1,5 +1,5 @@
 # Tony's Tech Support Shop – setup guide
-Version v8.0 (17 Nov 2026). See CHANGELOG.md for what changed.
+Version v8.1 (20 Nov 2026). See CHANGELOG.md for what changed.
 
 This folder builds **shop.tonystechsupport.com.au**. It is hosted free on GitHub Pages. Every night at about 1:40 am (Perth time), GitHub:
 

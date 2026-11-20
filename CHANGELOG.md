@@ -1,5 +1,8 @@
 # Changelog – Tony's Tech Support Shop
 
+## v8.1 · 20 Nov 2026
+- Product photos now line up: every photo sits in the same fixed-size box, whatever its shape, so names and prices start at the same height across each row.
+
 ## v8.0 · 17 Nov 2026
 - New **Special deals** page (/#/c/deals) listing every limited-time price, soonest-ending first, with a "Deals" link in the header (only shown while there are deals), a deals strip on the home page and a category tile.
 - Deal cards show the end date ("Ends Fri, 20 Nov").

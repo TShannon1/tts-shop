@@ -1,7 +1,7 @@
 /* Tony's Tech Support Shop – front end. Plain JavaScript, no build step. Version v7.10 · 2026-11-17 */
 (function () {
   "use strict";
-  var APP_VERSION = "v8.0";
+  var APP_VERSION = "v8.1";
   var P = [], CFG = null, BYID = {};
   var app = document.getElementById("app");
   var COMPUTER_CATS = { laptops: 1, desktops: 1, handhelds: 1 };

@@ -74,8 +74,9 @@ label { font-weight: 600; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15em), 1fr)); gap: 16px; }
 .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden; text-decoration: none; color: var(--ink); border: 2px solid transparent; }
 .card:hover { border-color: var(--accent); }
-.card .pic { aspect-ratio: 4/3; background: #fafaf8; display: grid; place-items: center; padding: 12px; }
-.card .pic img { max-height: 100%; object-fit: contain; }
+/* Every photo sits in the same fixed 4:3 box, whatever shape the supplier's photo is, so names and prices line up. */
+.card .pic { position: relative; aspect-ratio: 4/3; width: 100%; flex: none; overflow: hidden; background: #fff; display: grid; place-items: center; }
+.card .pic img { position: absolute; top: 8%; left: 8%; width: 84%; height: 84%; max-width: none; object-fit: contain; }
 .card .pic svg { width: 64px; height: 64px; color: #c9c9c4; }
 .card .body { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .card .name { font-size: 1rem; line-height: 1.35; }
